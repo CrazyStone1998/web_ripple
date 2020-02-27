@@ -4,7 +4,7 @@
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="redirectPath">首页</el-breadcrumb-item>
             <el-breadcrumb-item>电影管理</el-breadcrumb-item>
-            <el-breadcrumb-item>电影列表</el-breadcrumb-item>
+            <el-breadcrumb-item>导编列表</el-breadcrumb-item>
         </el-breadcrumb>
 
         <!-- 卡片视图区域 -->
@@ -12,28 +12,40 @@
             <!-- 搜索与添加区域 -->
             <el-row :gutter="20">
                 <el-col :span="8">
-                    <el-input placeholder="请输入内容" v-model="queryParams.query" clearable @clear="getMovieList">
-                        <el-button slot="append" icon="el-icon-search" @click="getMovieList"></el-button>
+                    <el-input placeholder="请输入内容" v-model="queryParams.query" clearable
+                              @clear="getDirectorScreenwriter">
+                        <el-button slot="append" icon="el-icon-search" @click="getDirectorScreenwriter"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
-                    <el-button type="primary" @click="addDialogVisible = true">添加电影</el-button>
+                    <el-button type="primary" @click="addDialogVisible = true">添加导编</el-button>
                 </el-col>
             </el-row>
             <!-- 用户列表区域 -->
-            <el-table :data="movieList" border stripe>
+            <el-table :data="directorScreenwriterList" border stripe>
                 <el-table-column label="id" prop="id"></el-table-column>
-                <el-table-column label="电影" prop="name"></el-table-column>
-                <el-table-column label="封面" prop="cover_url"></el-table-column>
+                <el-table-column label="导编" prop="name"></el-table-column>
                 <el-table-column label="外名" prop="foreign_name"></el-table-column>
-                <el-table-column label="长度" prop="length"></el-table-column>
-                <el-table-column label="语言" prop="language"></el-table-column>
-                <el-table-column label="地区" prop="area"></el-table-column>
-                <el-table-column label="发行" prop="release_date"></el-table-column>
-                <el-table-column label="票房" prop="box_office"></el-table-column>
-                <el-table-column label="评分" prop="rate"></el-table-column>
-                <el-table-column label="人数" prop="votes"></el-table-column>
+                <el-table-column label="海报" prop="cover_url"></el-table-column>
 
+                <el-table-column label="导演">
+                    <template slot-scope="scope">
+                        <el-switch
+                                v-model="scope.row.isDirector"
+                                active-color="#36c6d3">
+                            <!--@change="userStateChanged($event,scope.row)">-->
+                        </el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column label="编剧">
+                    <template slot-scope="scope">
+                        <el-switch
+                                v-model="scope.row.isScreenwriter"
+                                active-color="#36c6d3">
+                            <!--@change="userStateChanged($event,scope.row)">-->
+                        </el-switch>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作" width="200px">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -41,8 +53,7 @@
                                    @click="showEditDialog(scope.row.id)"></el-button>
                         <!-- 删除按钮 -->
                         <el-button type="danger" icon="el-icon-delete" size="mini"
-                                   @click="deleteMovieById(scope.row.id)"></el-button>
-
+                                   @click="deleteDirectorScreenwriterById(scope.row.id)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -55,11 +66,11 @@
             </el-pagination>
         </el-card>
 
-        <!-- 添加电影的对话框 -->
-        <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%" @close="addMovieDialogClosed">
+        <!-- 添加用户的对话框 -->
+        <el-dialog title="添加导编" :visible.sync="addDialogVisible" width="50%" @close="addObjDialogClosed">
             <!-- 内容主体区域 -->
             <el-form :model="addForm" ref="addFormRef" label-width="150px">
-                <el-form-item label="电影" prop="name">
+                <el-form-item label="导编" prop="name">
                     <el-input v-model="addForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="外名" prop="foreign_name">
@@ -68,46 +79,42 @@
                 <el-form-item label="海报" prop="cover_url">
                     <el-input v-model="addForm.cover_url"></el-input>
                 </el-form-item>
-                <el-form-item label="长度" prop="length">
-                    <el-input v-model="addForm.length"></el-input>
+                <el-form-item label="海报" prop="isDirector">
+                    <el-switch
+                            v-model="addForm.isDirector"
+                            active-color="#36c6d3">
+                        <!--@change="userStateChanged($event,scope.row)">-->
+                    </el-switch>
                 </el-form-item>
-                <el-form-item label="语言" prop="language">
-                    <el-input v-model="addForm.language"></el-input>
+                <el-form-item label="海报" prop="isScreenwriter">
+                    <el-switch
+                            v-model="addForm.isScreenwriter"
+                            active-color="#36c6d3">
+                        <!--@change="userStateChanged($event,scope.row)">-->
+                    </el-switch>
                 </el-form-item>
-                <el-form-item label="地区" prop="area">
-                    <el-input v-model="addForm.area"></el-input>
+                <el-form-item label="豆瓣" prop="douban_link">
+                    <el-input v-model="addForm.douban_link"></el-input>
                 </el-form-item>
-                <el-form-item label="发行" prop="release_date">
-                    <el-input v-model="addForm.release_date"></el-input>
+                <el-form-item label="imdb" prop="imdb_link">
+                    <el-input v-model="addForm.imdb_link"></el-input>
                 </el-form-item>
-                <el-form-item label="票房" prop="box_office">
-                    <el-input v-model="addForm.box_office"></el-input>
-                </el-form-item>
-                <el-form-item label="评分" prop="rate">
-                    <el-input v-model="addForm.rate"></el-input>
-                </el-form-item>
-                <el-form-item label="权重" prop="rate_weight">
-                    <el-input v-model="addForm.rate_weight"></el-input>
-                </el-form-item>
-                <el-form-item label="投票" prop="votes">
-                    <el-input v-model="addForm.votes"></el-input>
-                </el-form-item>
-
             </el-form>
             <!-- 底部区域 -->
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addMovie">确 定</el-button>
+                <el-button type="primary" @click="addDirectorScreenwriter">确 定</el-button>
             </span>
         </el-dialog>
 
-        <!-- 修改电影的对话框 -->
-        <el-dialog title="修改用户" :visible.sync="editDialogVisible" width="50%" @close="editMovieDialogClosed">
+        <!-- 修改用户的对话框 -->
+        <el-dialog title="修改信息" :visible.sync="editDialogVisible" width="30%"
+                   @close="editDirectorScreenwriterDialogClosed">
             <el-form :model="editForm" ref="editFormRef" label-width="70px">
                 <el-form-item label="id">
                     <el-input v-model="editForm.id" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="电影">
+                <el-form-item label="导编">
                     <el-input v-model="editForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="外名">
@@ -116,29 +123,19 @@
                 <el-form-item label="海报">
                     <el-input v-model="editForm.cover_url"></el-input>
                 </el-form-item>
-                <el-form-item label="长度">
-                    <el-input v-model="editForm.length"></el-input>
+                <el-form-item label="导演?">
+                    <el-switch
+                            v-model="editForm.isDirector"
+                            active-color="#36c6d3">
+                        <!--@change="userStateChanged($event,scope.row)">-->
+                    </el-switch>
                 </el-form-item>
-                <el-form-item label="语言">
-                    <el-input v-model="editForm.language"></el-input>
-                </el-form-item>
-                <el-form-item label="地区">
-                    <el-input v-model="editForm.name"></el-input>
-                </el-form-item>
-                <el-form-item label="发行">
-                    <el-input v-model="editForm.release_date"></el-input>
-                </el-form-item>
-                <el-form-item label="票房">
-                    <el-input v-model="editForm.box_office"></el-input>
-                </el-form-item>
-                <el-form-item label="评分">
-                    <el-input v-model="editForm.rate"></el-input>
-                </el-form-item>
-                <el-form-item label="人数">
-                    <el-input v-model="editForm.votes"></el-input>
-                </el-form-item>
-                <el-form-item label="权重">
-                    <el-input v-model="editForm.rate_weight"></el-input>
+                <el-form-item label="编剧?">
+                    <el-switch
+                            v-model="editForm.isScreenwriter"
+                            active-color="#36c6d3">
+                        <!--@change="userStateChanged($event,scope.row)">-->
+                    </el-switch>
                 </el-form-item>
                 <el-form-item label="豆瓣">
                     <el-input v-model="editForm.douban_link"></el-input>
@@ -146,13 +143,10 @@
                 <el-form-item label="imdb">
                     <el-input v-model="editForm.imdb_link"></el-input>
                 </el-form-item>
-                <el-form-item label="烂番茄">
-                    <el-input v-model="editForm.rottenTomatoes_link"></el-input>
-                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                  <el-button @click="editDialogVisible = false">取 消</el-button>
-                 <el-button type="primary" @click="editMovie">确 定</el-button>
+                 <el-button type="primary" @click="editDirectorScreenwriter">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -164,7 +158,7 @@
     import AdminIndex from "./AdminIndex";
 
     export default {
-        name: "AdminMovie",
+        name: "AdminDirectorScreenwriter",
         data() {
 
             return {
@@ -181,27 +175,19 @@
                 // 搜索返回用户数量
                 total: 0,
                 // 搜索返回用户列表
-                movieList: [],
+                directorScreenwriterList: [],
 
                 // 控制添加对象对话框的显示与隐藏
                 addDialogVisible: false,
                 // 添加对象的表单数据
                 addForm: {
-                    id: '',
                     name: '',
                     foreign_name: '',
-                    length: '',
-                    language: '',
-                    area: '',
-                    release_date: '',
-                    box_office: '',
                     cover_url: '',
-                    rate: '',
-                    votes: '',
-                    rate_weight: '',
+                    isDirector: true,
+                    isScreenwriter: false,
                     douban_link: '',
-                    imdb_link: '',
-                    rottenTomatoes_link: ''
+                    imdb_link: ''
                 },
                 // 控制修改对象对话框的显示与隐藏
                 editDialogVisible: false,
@@ -212,10 +198,10 @@
         },
         methods: {
 
-            // 获取后台电影列表
-            async getMovieList() {
+            // 获取后台用户列表
+            async getDirectorScreenwriter() {
                 const {data: result} = await this.$http.get(
-                    'movie/_all',
+                    'directorScreenwriter/_all',
                     {
                         params: {
                             pageNum: this.queryParams.pageNum,
@@ -225,36 +211,37 @@
                 if (result.status !== 200) {
                     return this.$message.error(result.message)
                 }
-                this.movieList = result.data.content;
+                console.log(result.data.content);
+                this.directorScreenwriterList = result.data.content;
                 this.total = result.data.totalElements;
             },
-            // 点击按钮，添加新电影
-            addMovie() {
+            // 点击按钮，添加新用户
+            addDirectorScreenwriter() {
                 this.$refs.addFormRef.validate(async valid => {
                     if (!valid) return;
-                    // 可以发起添加电影的网络请求
-                    console.log("admin 添加电影 ======>");
+                    // 可以发起添加导编的网络请求
+                    console.log("admin 添加导编 ======>");
                     console.log(this.addForm);
-                    const {data: result} = await this.$http.post('movie', this.addForm);
+                    const {data: result} = await this.$http.post('directorScreenwriter', this.addForm);
 
                     if (result.status !== 200) {
                         this.$message.error(result.message);
                     }
                     this.$message.success(result.message);
-                    console.log("admin 添加电影 成功");
-                    // 隐藏添加电影的对话框
+                    console.log("admin 添加导演编剧 成功");
+                    // 隐藏添加用户的对话框
                     this.addDialogVisible = false;
-                    // 重新获取电影列表数据
-                    this.getMovieList();
+                    // 重新获取用户列表数据
+                    this.getDirectorScreenwriter();
                 })
             },
-            // 修改电影信息并提交
-            editMovie() {
+            // 修改导编信息并提交
+            editDirectorScreenwriter() {
                 this.$refs.editFormRef.validate(async valid => {
                     if (!valid) return;
-                    // 发起修改电影信息的数据请求
+                    // 发起修改导编信息的数据请求
                     const {data: result} = await this.$http.put(
-                        'movie/' + this.editForm.id,
+                        'directorScreenwriter/' + this.editForm.id,
                         this.editForm
                     );
 
@@ -265,15 +252,15 @@
                     // 关闭对话框
                     this.editDialogVisible = false;
                     // 刷新数据列表
-                    this.getMovieList();
+                    this.getDirectorScreenwriter();
                     // 提示修改成功
                     this.$message.success(result.message)
-                });
+                })
             },
-            // 展示编辑用户的对话框, 获取电影信息
+            // 展示编辑用户的对话框, 获取用户信息
             async showEditDialog(id) {
                 // console.log(id)
-                const {data: result} = await this.$http.get('movie/' + id);
+                const {data: result} = await this.$http.get('directorScreenwriter/' + id);
 
                 if (result.status !== 200) {
                     return this.$message.error(result.message)
@@ -282,11 +269,11 @@
                 this.editForm = result.data;
                 this.editDialogVisible = true
             },
-            // 根据Id删除对应的电影信息
-            async deleteMovieById(id) {
+            // 根据Id删除对应的导演编剧信息
+            async deleteDirectorScreenwriterById(id) {
                 // 弹框询问用户是否删除数据
                 const confirmResult = await this.$confirm(
-                    '此操作将永久删除该电影, 是否继续?',
+                    '此操作将永久删除该用户, 是否继续?',
                     '提示',
                     {
                         confirmButtonText: '确定',
@@ -300,38 +287,39 @@
                 if (confirmResult !== 'confirm') {
                     return this.$message.info('已取消删除')
                 }
-                const {data: result} = await this.$http.delete('movie/' + id);
+                const {data: result} = await this.$http.delete('directorScreenwriter/' + id);
 
                 if (result.status !== 200) {
                     return this.$message.error(result.message);
                 }
                 this.$message.success(result.message);
-                this.getMovieList()
+                this.getDirectorScreenwriter()
             },
 
-            // 监听添电影对话框的关闭事件
-            addMovieDialogClosed() {
+            // 监听添加导演编剧对话框的关闭事件
+            addObjDialogClosed() {
                 this.$refs.addFormRef.resetFields();
             },
-            // 监听修改电影对话框的关闭事件
-            editMovieDialogClosed() {
+            // 监听修改导演编剧对话框的关闭事件
+            editDirectorScreenwriterDialogClosed() {
                 this.$refs.editFormRef.resetFields();
             },
             // 监听 pageSize 改变的事件
             handleSizeChange(newSize) {
                 console.log("pageSize: ", newSize);
                 this.queryParams.pageSize = newSize;
-                this.getMovieList();
+                this.getDirectorScreenwriter();
             },
-            // 监听 pageNum 改变的事件
+            // 监听 页码值 改变的事件
             handleCurrentChange(newPage) {
                 console.log("pageNum: ", newPage);
                 this.queryParams.pageNum = newPage;
-                this.getMovieList();
+                this.getDirectorScreenwriter();
             }
+
         },
         created() {
-            this.getMovieList();
+            this.getDirectorScreenwriter();
         }
 
     }

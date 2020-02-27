@@ -11,7 +11,7 @@ import AdminPermission from "../components/admin/AdminPermission";
 import AdminMovie from "../components/admin/AdminMovie";
 import AdminGenre from "../components/admin/AdminGenre";
 import AdminStarring from "../components/admin/AdminStarring";
-import AdminDirectorAndScreenwriter from "../components/admin/AdminDirectorAndScreenwriter";
+import AdminDirectorScreenwriter from "../components/admin/AdminDirectorScreenwriter";
 import AdminDataStatistic from "../components/admin/AdminDataStatistic";
 
 
@@ -32,7 +32,7 @@ const routes = [
             {path: "movie", name: "AdminMovie", component: AdminMovie},
             {path: "genre", name: "AdminGenre", component: AdminGenre},
             {path: "starring", name: "AdminStarring", component: AdminStarring},
-            {path: "directorAndScreenwriter", name: "AdminDirectorAndScreenwriter", component: AdminDirectorAndScreenwriter},
+            {path: "directorAndScreenwriter", name: "AdminDirectorScreenwriter", component: AdminDirectorScreenwriter},
             {path: "dataStatistic", name: "AdminDataStatistic", component: AdminDataStatistic}
         ]
     },

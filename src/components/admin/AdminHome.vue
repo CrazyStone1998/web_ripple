@@ -47,7 +47,13 @@
                 <el-main>
                     <router-view></router-view>
                 </el-main>
-                <el-footer>Footer</el-footer>
+                <el-footer>
+                    <div>
+                        <p>
+                            © 2020              Rio Technologies. All Rights Reserved.
+                        </p>
+                    </div>
+                </el-footer>
             </el-container>
 
         </el-container>
@@ -63,7 +69,6 @@
             return {
                 activePath: "",
                 isCollapse: false,
-
                 menu_template: [
                     {
                         "id": 1,

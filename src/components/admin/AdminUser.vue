@@ -27,12 +27,14 @@
                 <el-table-column label="邮箱" prop="mail"></el-table-column>
                 <el-table-column label="电话" prop="phone"></el-table-column>
                 <el-table-column label="角色" prop="role"></el-table-column>
+                <el-table-column label="创建" prop="createdDate"></el-table-column>
+                <!--<el-table-column label="更新" prop="updatedDate"></el-table-column>-->
                 <el-table-column label="状态">
                     <template slot-scope="scope">
                         <el-switch
                                 v-model="scope.row.state"
                                 active-color="#36c6d3"
-                                @change="userStateChanged($event,scope.row)">
+                                disabled>
                         </el-switch>
                     </template>
                 </el-table-column>
@@ -55,7 +57,7 @@
 
             <!-- 分页区域 -->
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                           :current-page="queryParams.pageNum" :page-sizes="[1, 2, 5, 10]"
+                           :current-page="queryParams.pageNum" :page-sizes="[1, 2, 3, 5, 10]"
                            :page-size="queryParams.pageSize"
                            layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
@@ -171,6 +173,7 @@
 
                 // 控制添加用户对话框的显示与隐藏
                 addDialogVisible: false,
+
                 // 添加用户的表单数据
                 addForm: {
                     username: '',
@@ -223,8 +226,8 @@
                         {validator: checkPhone, trigger: 'blur'}
                     ]
                 },
-                // 控制分配角色对话框的显示与隐藏
 
+                // 控制分配角色对话框的显示与隐藏
                 setRoleDialogVisible: false,
                 // 需要被分配角色的用户信息
                 userInfo: {},
@@ -362,20 +365,20 @@
                 this.setRoleDialogVisible = false;
                 this.$message.success(result.message);
             },
+
             // 监听 switch 开关状态的改变
-            async userStateChanged(userInfo) {
-                console.log(userInfo);
-                userInfo.state = !userInfo.state;
-                // const {data: res} = await this.$http.put(
-                //     `users/${userInfo.id}/state/${userInfo.mg_state}`
-                // );
-                // if (res.meta.status !== 200) {
-                //
-                //     userInfo.mg_state = !userInfo.mg_state;
-                //     return this.$message.error('更新用户状态失败！');
-                // }
-                // this.$message.success('更新用户状态成功！')
-            },
+            // async userStateChanged(userInfo) {
+            //     const {data: res} = await this.$http.put(
+            //         `users/${userInfo.id}/state/${userInfo.mg_state}`
+            //     );
+            //     if (res.meta.status !== 200) {
+            //
+            //         userInfo.mg_state = !userInfo.mg_state;
+            //         return this.$message.error('更新用户状态失败！');
+            //     }
+            //     this.$message.success('更新用户状态成功！')
+            // },
+
             // 监听添加用户对话框的关闭事件
             addUserDialogClosed() {
                 this.$refs.addFormRef.resetFields();
