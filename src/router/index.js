@@ -3,25 +3,40 @@ import VueRouter from "vue-router";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import Home from "../components/Home";
+import AdminHome from "../components/admin/AdminHome";
+import AdminIndex from "../components/admin/AdminIndex";
+import AdminUser from "../components/admin/AdminUser";
+import AdminRole from "../components/admin/AdminRole";
+import AdminPermission from "../components/admin/AdminPermission";
+import AdminMovie from "../components/admin/AdminMovie";
+import AdminGenre from "../components/admin/AdminGenre";
+import AdminStarring from "../components/admin/AdminStarring";
+import AdminDirectorAndScreenwriter from "../components/admin/AdminDirectorAndScreenwriter";
+import AdminDataStatistic from "../components/admin/AdminDataStatistic";
 
 
 Vue.use(VueRouter);
 
 const routes = [
+    // 基础路由
+    {path: "/", redirect: Login},
+    {path: "/login", name: "Login", component: Login},
+    {path: "/register", name: "Register", component: Register},
+
     {
-        path: "/",
-        redirect: Login
+        path: "/admin", name: "Admin", redirect:AdminIndex, component: AdminHome, children: [
+            {path: "index", name: "AdminIndex", component: AdminIndex},
+            {path: "user", name: "AdminUser", component: AdminUser},
+            {path: "role", name: "AdminRole", component: AdminRole},
+            {path: "permission", name: "AdminPermission", component: AdminPermission},
+            {path: "movie", name: "AdminMovie", component: AdminMovie},
+            {path: "genre", name: "AdminGenre", component: AdminGenre},
+            {path: "starring", name: "AdminStarring", component: AdminStarring},
+            {path: "directorAndScreenwriter", name: "AdminDirectorAndScreenwriter", component: AdminDirectorAndScreenwriter},
+            {path: "dataStatistic", name: "AdminDataStatistic", component: AdminDataStatistic}
+        ]
     },
-    {
-        path: "/login",
-        name: "Login",
-        component: Login
-    },
-    {
-        path: "/register",
-        name: "Register",
-        component: Register
-    },
+
     {
         path: "/home",
         name: "Home",
@@ -34,26 +49,23 @@ const router = new VueRouter({
 });
 
 // 挂载路由导航守卫
-router.beforeEach((to, from, next) => {
-  /**
-   * to: 将要访问的路径
-   * from: 代表从那个路径跳转而来
-   * next: 是那个函数，代表放行
-   *      next() 放行， next("/login") 强制跳转
-   */
-  if (to.path === "/login") {
-
-    return next();
-  }
-  const authorization = window.sessionStorage.getItem("Authorization");
-  if (!authorization) {
-    return next("/login");
-  }
-  next();
-
-
-
-});
+// router.beforeEach((to, from, next) => {
+//   /**
+//    * to: 将要访问的路径
+//    * from: 代表从那个路径跳转而来
+//    * next: 是那个函数，代表放行
+//    *      next() 放行， next("/login") 强制跳转
+//    */
+//   if (to.path === "/login") {
+//
+//     return next();
+//   }
+//   const authorization = window.sessionStorage.getItem("Authorization");
+//   if (!authorization) {
+//     return next(Login);
+//   }
+//   next();
+// });
 
 
 export default router;
