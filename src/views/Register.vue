@@ -3,7 +3,7 @@
         <div class="login_box">
             <!--头像 可扩展区域-->
             <div class="avatar_box">
-                <img src="../assets/img/logo.png" alt=""/>
+                <img src="src/assets/img/logo.png" alt=""/>
             </div>
             <!--登录表单区域-->
             <el-form ref="login_form_ref" :model="login_form" :rules="login_form_rules" class="login_form">
@@ -34,7 +34,7 @@
     import Home from "./Home";
 
     export default {
-        name: "Login",
+        name: "Register",
         data() {
             return {
                 login_form: {
@@ -81,12 +81,13 @@
 
 <style lang="scss" scoped>
     $lc_bg_color: #409EFF;
+    $lb_bg_color: #F2F6FC;
+
     .login_container {
         height: 100%;
         background-color: $lc_bg_color;
     }
 
-    $lb_bg_color: #F2F6FC;
     .login_box {
         width: 450px;
         height: 450px;

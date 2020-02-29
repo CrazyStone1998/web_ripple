@@ -3,7 +3,7 @@
         <!--头部区域 -->
         <el-header>
             <div>
-                <img class="admin-rio" src="../../assets/img/logo.png" alt=""/>
+                <img class="admin-rio" src="src/assets/img/logo.png" alt=""/>
                 <span>Rio后台管理系统</span>
             </div>
             <el-button type="info" @click="logout">Logout</el-button>
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-    import Home from "../Home";
+    import Home from "./Home";
 
     export default {
         name: "AdminHome",

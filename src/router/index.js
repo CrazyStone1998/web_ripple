@@ -1,9 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Login from "../components/Login";
-import Register from "../components/Register";
-import Home from "../components/Home";
-import AdminHome from "../components/admin/AdminHome";
+import Login from "../views/Login";
+import Home from "../views/Home";
+import AdminHome from "../views/AdminHome";
 import AdminIndex from "../components/admin/AdminIndex";
 import AdminUser from "../components/admin/AdminUser";
 import AdminRole from "../components/admin/AdminRole";
@@ -13,6 +12,8 @@ import AdminGenre from "../components/admin/AdminGenre";
 import AdminStarring from "../components/admin/AdminStarring";
 import AdminDirectorScreenwriter from "../components/admin/AdminDirectorScreenwriter";
 import AdminDataStatistic from "../components/admin/AdminDataStatistic";
+import Resource from "../views/Resource";
+import Register from "../views/Register";
 
 
 Vue.use(VueRouter);
@@ -38,10 +39,12 @@ const routes = [
     },
 
     {
-        path: "/home",
-        name: "Home",
-        component: Home
+        path: "/home", name: "Home", component: Home,
+    },
+    {
+        path: "/resource", name: "resource", component: Resource
     }
+
 ];
 
 const router = new VueRouter({
@@ -56,7 +59,7 @@ const router = new VueRouter({
 //    * next: 是那个函数，代表放行
 //    *      next() 放行， next("/login") 强制跳转
 //    */
-//   if (to.path === "/login") {
+//   if (to.path === "/home") {
 //
 //     return next();
 //   }

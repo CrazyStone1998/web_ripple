@@ -10,6 +10,8 @@ import {
     Menu, Submenu, MenuItemGroup, MenuItem,
     // 面包屑
     Breadcrumb, BreadcrumbItem,
+    // 轮播
+    CarouselItem, Carousel,
     // 卡片
     Card,
     // 布局
@@ -33,7 +35,9 @@ import {
     // 选择框
     Select, Option,
     //
-    Cascader
+    Cascader,
+    Divider, Drawer
+
 
 } from "element-ui";
 
@@ -66,5 +70,9 @@ Vue.use(Select);
 Vue.use(Option);
 Vue.use(Footer);
 Vue.use(Cascader);
+Vue.use(Carousel);
+Vue.use(CarouselItem);
+Vue.use(Divider);
+Vue.use(Drawer);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

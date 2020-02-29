@@ -1,15 +1,15 @@
 <template>
     <div>
-        this is Register
+        this is mine info
     </div>
 </template>
 
 <script>
     export default {
-        name: "Register"
+        name: "Mine"
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>
