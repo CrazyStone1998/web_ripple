@@ -21,7 +21,7 @@
 
                 </el-col>
                 <el-col :span="1">
-                    <el-button class="btn-login" type="primary" round>Login</el-button>
+                    <el-button class="btn-login" type="primary" round @click="login">Login</el-button>
                 </el-col>
                 <el-col :span="3">
                     <img class="icon-link" src="../assets/img/google_logo.svg" alt=""/>
@@ -37,23 +37,16 @@
             <PreferenceRecommend></PreferenceRecommend>
             <el-divider></el-divider>
             <CoolRecommend></CoolRecommend>
-
+            <el-divider></el-divider>
+            <Footer></Footer>
         </el-main>
 
-        <el-footer>
-            <div>
-                <p>
-                    © 2020              Rio Technologies. All Rights Reserved.
-                </p>
-            </div>
-        </el-footer>
-
         <el-drawer
-                title="我是标题"
+                title="菜单"
                 :visible.sync="drawer"
                 direction="ttb"
                 size="20%">
-            <span>我来啦!</span>
+            <span>this is Rio</span>
         </el-drawer>
     </el-container>
 </template>
@@ -62,9 +55,11 @@
     import PopularRecommend from "../components/home/PopularRecommend";
     import PreferenceRecommend from "../components/home/PreferenceRecommend";
     import CoolRecommend from "../components/home/CoolRecommend";
+    import Login from "./Login";
+    import Footer from "../components/home/Footer";
     export default {
         name: "Home",
-        components: {CoolRecommend, PreferenceRecommend, PopularRecommend},
+        components: {Footer, CoolRecommend, PreferenceRecommend, PopularRecommend},
         data() {
             return {
                 select: '',
@@ -72,12 +67,15 @@
             }
         },
         methods: {
-            // logout() {
-            //     console.log("user ======> logout");
-            //     window.sessionStorage.clear();
-            //     this.$router.push(Login);
-            //     console.log("logout && redirect")
-            // }
+            login() {
+                this.$router.push(Login);
+            },
+            logout() {
+                console.log("user ======> logout");
+                window.sessionStorage.clear();
+                this.$router.push(Login);
+                console.log("logout && redirect")
+            }
         }
     }
 </script>
@@ -122,12 +120,7 @@
             cursor: pointer;
         }
     }
-
     .el-main {
         margin-top: 15px;
-
-    }
-    .el-footer {
-        color: #eeeeee;
     }
 </style>

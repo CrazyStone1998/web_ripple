@@ -6,24 +6,18 @@
                 <img src="src/assets/img/logo.png" alt=""/>
             </div>
             <!--登录表单区域-->
-            <el-form ref="login_form_ref" :model="login_form" :rules="login_form_rules" class="login_form">
 
+            <el-form ref="login_form_ref" :model="login_form" :rules="login_form_rules" class="login_form">
                 <el-form-item class="account" prop="username">
                     <el-input v-model="login_form.username" prefix-icon="el-icon-user-solid"></el-input>
                 </el-form-item>
-
                 <el-form-item class="password" prop="password">
                     <el-input type="password" v-model="login_form.password" prefix-icon="el-icon-s-goods"></el-input>
                 </el-form-item>
-
                 <el-form-item class="form_btn">
-
-                    <el-button icon="el-icon-question" type="info" class="forget_password_btn">Forget</el-button>
-
+                    <el-button icon="el-icon-info" type="success" class="register_btn" @click="register">Register</el-button>
                     <el-button @click="login" @keydown.enter.native="login" icon="el-icon-s-promotion" type="primary"
-                               class="login_btn">Login
-                    </el-button>
-
+                               class="login_btn">Login</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -32,6 +26,7 @@
 
 <script>
     import Home from "./Home";
+    import Register from "./Register";
 
     export default {
         name: "Login",
@@ -74,13 +69,16 @@
                         }
                     }
                 });
+            },
+            register() {
+                this.$router.push(Register);
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    $lc_bg_color: #409EFF;
+    $lc_bg_color: rgba(83, 97, 107, 0.96);
     .login_container {
         height: 100%;
         background-color: $lc_bg_color;
@@ -110,34 +108,19 @@
             padding: 10px;
             box-shadow: 0 0 10px $lb_bg_color;
             background: $lb_bg_color;
-
             img {
                 width: 100%;
                 height: 100%;
                 border-radius: 50%;
             }
         }
-
         .login_form {
-            position: absolute;
-            top: 30%;
-            width: 100%;
-            padding: 0 20px;
-            box-sizing: border-box;
-
-            .account {
-                margin-bottom: 50px;
-            }
-        }
-
-        .form_btn {
             margin-top: 100px;
-            display: flex;
-            justify-content: flex-end;
+            padding: 30px;
 
-            .forget_password_btn {
-                margin-right: 160px;
-
+            .login_btn {
+                margin-left: 150px;
+                margin-top: 80px;
             }
         }
     }

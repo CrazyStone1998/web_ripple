@@ -36,7 +36,8 @@ import {
     Select, Option,
     //
     Cascader,
-    Divider, Drawer
+    Divider, Drawer,
+    Image
 
 
 } from "element-ui";
@@ -74,5 +75,6 @@ Vue.use(Carousel);
 Vue.use(CarouselItem);
 Vue.use(Divider);
 Vue.use(Drawer);
+Vue.use(Image);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
