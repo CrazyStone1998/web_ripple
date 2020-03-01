@@ -37,7 +37,9 @@ import {
     //
     Cascader,
     Divider, Drawer,
-    Image
+    Image,
+    CheckboxGroup, CheckboxButton, Checkbox,
+    InfiniteScroll
 
 
 } from "element-ui";
@@ -76,5 +78,9 @@ Vue.use(CarouselItem);
 Vue.use(Divider);
 Vue.use(Drawer);
 Vue.use(Image);
+Vue.use(Checkbox);
+Vue.use(CheckboxButton);
+Vue.use(CheckboxGroup);
+Vue.use(InfiniteScroll);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

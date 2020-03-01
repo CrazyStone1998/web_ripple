@@ -14,6 +14,8 @@ import AdminDirectorScreenwriter from "../components/admin/AdminDirectorScreenwr
 import AdminDataStatistic from "../components/admin/AdminDataStatistic";
 import Resource from "../views/Resource";
 import Register from "../views/Register";
+import Mine from "../views/Mine";
+import Detail from "../views/Detail";
 
 
 Vue.use(VueRouter);
@@ -42,7 +44,13 @@ const routes = [
         path: "/home", name: "Home", component: Home,
     },
     {
-        path: "/resource", name: "resource", component: Resource
+        path: "/resource", name: "Resource", component: Resource
+    },
+    {
+        path: "/mine", name: "Mine", component: Mine,
+    },
+    {
+        path: "/movie", name: "Movie", component: Detail
     }
 
 ];

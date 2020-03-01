@@ -16,8 +16,8 @@
                         </el-select>
                         <el-button slot="append" icon="el-icon-search"></el-button>
                     </el-input>
-                    <el-button class="btn-link" type="primary" round>资源库</el-button>
-                    <el-button class="btn-link" type="primary" round>排行榜</el-button>
+                    <el-button class="btn-link" type="primary" round @click="resourceLink">资源库</el-button>
+                    <el-button class="btn-link" type="primary" round @click="rankLink">排行榜</el-button>
 
                 </el-col>
                 <el-col :span="1">
@@ -57,6 +57,7 @@
     import CoolRecommend from "../components/home/CoolRecommend";
     import Login from "./Login";
     import Footer from "../components/home/Footer";
+    import Resource from "./Resource";
     export default {
         name: "Home",
         components: {Footer, CoolRecommend, PreferenceRecommend, PopularRecommend},
@@ -75,6 +76,11 @@
                 window.sessionStorage.clear();
                 this.$router.push(Login);
                 console.log("logout && redirect")
+            },
+            resourceLink() {
+                this.$router.push(Resource)
+            },
+            rankLink() {
             }
         }
     }

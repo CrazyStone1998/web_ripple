@@ -15,7 +15,7 @@
                         </el-select>
                         <el-button slot="append" icon="el-icon-search"></el-button>
                     </el-input>
-                    <el-button class="btn-link" type="primary" round>首页</el-button>
+                    <el-button class="btn-link" type="primary" round @click="homeLink">首页</el-button>
                     <el-button class="btn-link" type="primary" round>排行榜</el-button>
                 </el-col>
                 <el-col :span="1">
@@ -30,16 +30,13 @@
         </el-header>
 
         <el-main>
+            <Query></Query>
+            <el-divider></el-divider>
+            <Show></Show>
+            <el-divider></el-divider>
+            <Footer></Footer>
 
         </el-main>
-
-        <el-footer>
-            <div>
-                <p>
-                    © 2020              Rio Technologies. All Rights Reserved.
-                </p>
-            </div>
-        </el-footer>
 
         <el-drawer
                 title="我是标题"
@@ -52,8 +49,15 @@
 </template>
 
 <script>
+    import Home from "./Home";
+    import Login from "./Login";
+    import Footer from "../components/home/Footer";
+    import Query from "../components/resource/Query";
+    import Show from "../components/resource/Show";
+
     export default {
         name: "Resource",
+        components: {Show, Query, Footer},
         data() {
             return {
                 select: '',
@@ -61,12 +65,16 @@
             }
         },
         methods: {
-            // logout() {
-            //     console.log("user ======> logout");
-            //     window.sessionStorage.clear();
-            //     this.$router.push(Login);
-            //     console.log("logout && redirect")
-            // }
+            logout() {
+                console.log("user ======> logout");
+                window.sessionStorage.clear();
+                this.$router.push(Login);
+                console.log("logout && redirect")
+            },
+            homeLink() {
+                this.$router.push(Home);
+            }
+
         }
     }
 </script>
