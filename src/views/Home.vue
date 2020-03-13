@@ -2,6 +2,7 @@
     <el-container>
 
         <el-header height="80px">
+            <meta name="referrer" content="no-referrer"/>
             <el-row>
                 <el-col :span="6">
                     <img class="img-logo" src="../assets/img/logo.png" alt=""/>
@@ -58,9 +59,11 @@
     import Login from "./Login";
     import Footer from "../components/home/Footer";
     import Resource from "./Resource";
+
     export default {
         name: "Home",
         components: {Footer, CoolRecommend, PreferenceRecommend, PopularRecommend},
+        props: ["icon", "username"],
         data() {
             return {
                 select: '',
@@ -93,6 +96,7 @@
         height: 100%;
         background-color: $bg_color;
     }
+
     .el-header {
         background-color: $fg_color;
 
@@ -100,14 +104,17 @@
             width: 75px;
             height: 75px;
         }
+
         .header-middle {
             display: flex;
+
             .input {
                 margin-top: 20px;
                 width: 550px;
                 margin-right: 30px;
                 margin-left: 40px;
             }
+
             .btn-link {
                 margin-top: 15px;
 
@@ -117,6 +124,7 @@
         .btn-login {
             margin-top: 15px;
         }
+
         .icon-link {
             width: 45px;
             height: 45px;
@@ -126,6 +134,7 @@
             cursor: pointer;
         }
     }
+
     .el-main {
         margin-top: 15px;
     }

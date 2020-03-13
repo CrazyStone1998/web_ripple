@@ -49,11 +49,11 @@
 </template>
 
 <script>
-    import Home from "./Home";
     import Login from "./Login";
     import Footer from "../components/home/Footer";
     import Query from "../components/resource/Query";
     import Show from "../components/resource/Show";
+    import Home from "./Home";
 
     export default {
         name: "Resource",

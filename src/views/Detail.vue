@@ -18,7 +18,6 @@
                     </el-input>
                     <el-button class="btn-link" type="primary" round @click="homeLink">首页</el-button>
                     <el-button class="btn-link" type="success" round @click="resourceLink">资源库</el-button>
-
                 </el-col>
                 <el-col :span="1">
                     <el-button class="btn-login" type="primary" round @click="login">Login</el-button>
@@ -32,7 +31,7 @@
         </el-header>
 
         <el-main>
-            <MovieDetail></MovieDetail>
+            <router-view></router-view>
             <el-divider></el-divider>
             <Footer></Footer>
         </el-main>
@@ -49,12 +48,11 @@
 
 <script>
     import Footer from "../components/home/Footer";
-    import MovieDetail from "../components/detail/MovieDetail";
     import Home from "./Home";
     import Resource from "./Resource";
     export default {
         name: "Detail",
-        components: {MovieDetail, Footer},
+        components: {Footer},
         data() {
             return {
                 select: '',
@@ -68,7 +66,7 @@
             resourceLink() {
                 this.$router.push(Resource);
             }
-        }
+        },
     }
 </script>
 
@@ -113,6 +111,7 @@
         }
     }
     .el-main {
-        margin-top: 15px;
+        padding: 0;
+        background-color: #F5F5FA;
     }
 </style>

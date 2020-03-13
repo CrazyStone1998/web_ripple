@@ -5,12 +5,12 @@
         </el-header>
         <el-container>
             <el-main>
-                <el-row v-for="(row,index) in coolList" :key="index">
+                <el-row v-for="(row,index) in coldRecommendList" :key="index">
                     <el-col :span="6" v-for="(item,index) in row" :key="index">
-                        <el-card :body-style="{ padding: '0px' }" shadow="hover" >
-                            <el-image :src="item.cover_url" fit="fill"></el-image>
+                        <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                            <el-image :src="item.cover_url" fit="fill" @click="jumpToDetail(item.id, item)"></el-image>
                             <div>
-                                <span class="movie-detail">{{item.name}}</span>
+                                <span class="movie-detail" @click="jumpToDetail(item.id, item)">{{item.name}}</span>
                             </div>
                         </el-card>
                     </el-col>
@@ -21,13 +21,13 @@
                     <div slot="header">
                         <span>强烈推荐</span>
                     </div>
-                    <div v-for="(row,index) in coolList" :key="index">
+                    <div v-for="(row,index) in coldRecommendList" :key="index">
                         <el-row v-for="(item,index) in row" :key="index" class="prefer-row">
                             <el-col :span="4">
                                 >
                             </el-col>
-                            <el-col :span="20">
-                                {{item.name}}
+                            <el-col :span="20" style="cursor: pointer">
+                                <span @click="jumpToDetail(item.id, item)" style="cursor: pointer">{{item.name}}</span>
                             </el-col>
                         </el-row>
                     </div>
@@ -44,46 +44,37 @@
         name: "CoolRecommend",
         data() {
             return {
-                coolList: [
-                    [
-                        {
-                            name: '闪光少女',
-                            cover_url: 'http://img4.imgtn.bdimg.com/it/u=2937730371,3066347201&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '克隆人',
-                            cover_url: 'http://img2.imgtn.bdimg.com/it/u=2021115687,1180101425&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '终结者',
-                            cover_url: 'http://img4.imgtn.bdimg.com/it/u=1762736586,1454463982&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '天气之子',
-                            cover_url: 'http://img3.imgtn.bdimg.com/it/u=1292697011,3663126806&fm=26&gp=0.jpg'
-                        },
-
-                    ],
-                    [
-                        {
-                            name: '一代宗师',
-                            cover_url: 'http://img4.imgtn.bdimg.com/it/u=2064679879,3619300735&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '爱',
-                            cover_url: 'http://img2.imgtn.bdimg.com/it/u=4014499474,1772505248&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '唐人街探案',
-                            cover_url: 'http://img5.imgtn.bdimg.com/it/u=2499636776,3741085657&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '爱猫之城',
-                            cover_url: 'http://img2.imgtn.bdimg.com/it/u=2470489405,626330881&fm=26&gp=0.jpg'
-                        },
-                    ]
-                ]
+                coldRecommendList: []
             };
+        },
+        methods: {
+
+            async getColdRecommendList() {
+                console.log('初始化 冷门推荐');
+                const {data: result} = await this.$http.get("movie/es/cold");
+                if (result.status === 200) {
+                    this.$message.success(result.message);
+                    this.coldRecommendList.push(result.data["resultList"].slice(0, 4));
+                    this.coldRecommendList.push(result.data["resultList"].slice(4, 8));
+                    console.log(this.coldRecommendList)
+                } else {
+                    this.$message.error(result.message);
+                }
+            },
+            jumpToDetail(movieId, movieInfo) {
+                this.$router.push(
+                    {
+                        name: "MovieDetail",
+                        params: {
+                            id: movieId,
+                            movie: movieInfo
+                        }
+                    }
+                )
+            }
+        },
+        created() {
+            this.getColdRecommendList();
         }
     }
 </script>
@@ -99,19 +90,25 @@
                 float: left;
             }
         }
+
         .el-main {
             padding: 0;
             padding-top: 5px;
+
             .el-card {
                 background-color: transparent;
                 margin: 5px;
                 margin-top: 0;
+
                 .el-image {
                     height: 260px;
                     width: 220px;
+                    cursor: pointer;
                 }
-                .movie-detail{
+
+                .movie-detail {
                     color: #eeeeee;
+                    cursor: pointer;
                 }
             }
         }
@@ -119,11 +116,13 @@
         .el-aside {
 
             background-color: transparent;
+
             .prefer-rank {
                 background-color: transparent;
                 color: #eeeeee;
                 height: auto;
             }
+
             .prefer-row {
                 margin-bottom: 40px;
                 color: #7491e2;

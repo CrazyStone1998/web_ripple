@@ -1,11 +1,13 @@
 /* 全局样式表 */
-html,
-body,
-#app {
+$bg_black_global: #1A2228;
+$bg_white_global: #FFFFFF;
+$bg_red_global: #4C3E38;
+
+html, body, #app{
   height: 100%;
   margin: 0;
   padding: 0;
-  min-width: 1366px;
+  font-family: "PingFang SC", "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 
 .el-breadcrumb {
@@ -36,4 +38,12 @@ body,
 
 .ql-editor {
   min-height: 300px;
+}
+
+.icon {
+  width: 5em;
+  height: 5em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }

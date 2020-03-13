@@ -1,49 +1,28 @@
 import Vue from "vue";
 import {
-    // 表单
-    Button, Form, FormItem, Input,
-    // 导入弹框提示组件
-    Message,
-    // 容器
-    Container, Header, Aside, Main, Footer,
+    // 表单 & 按钮 & Tips & 头像
+    Button, Form, FormItem, Input, Image, Avatar,Link,
+    // 导入弹框提示组件 对话框 消息盒子
+    Message, Dialog, MessageBox,
+    // 容器 & 布局
+    Container, Header, Aside, Main, Footer,Row, Col,
     // 菜单
     Menu, Submenu, MenuItemGroup, MenuItem,
-    // 面包屑
-    Breadcrumb, BreadcrumbItem,
-    // 轮播
-    CarouselItem, Carousel,
-    // 卡片
-    Card,
-    // 布局
-    Row, Col,
-    // 表格
-    Table, TableColumn,
-    // 提示
-    Tooltip,
-    // 开关
-    Switch,
-    // 分页
-    Pagination,
-    // 对话框
-    Dialog,
-    // 消息盒子
-    MessageBox,
-    // 标签
-    Tag,
-    // 树
-    Tree,
-    // 选择框
-    Select, Option,
-    //
-    Cascader,
-    Divider, Drawer,
-    Image,
+    // 结构: 面包屑 & 轮播 & 卡片 & 开关 & 提示
+    Breadcrumb, BreadcrumbItem, CarouselItem, Carousel, Card, Switch, Tooltip,
+    // 表格 分页
+    Table, TableColumn, Pagination,
+    Tag, Tree, Select, Option, Rate, Cascader, Divider, Drawer,
     CheckboxGroup, CheckboxButton, Checkbox,
-    InfiniteScroll
-
+    InfiniteScroll,
+    Collapse, CollapseItem,
+    Upload
 
 } from "element-ui";
 
+import VideoPlayer from 'vue-video-player'
+
+Vue.use(VideoPlayer);
 Vue.use(Button);
 Vue.use(FormItem);
 Vue.use(Form);
@@ -82,5 +61,11 @@ Vue.use(Checkbox);
 Vue.use(CheckboxButton);
 Vue.use(CheckboxGroup);
 Vue.use(InfiniteScroll);
+Vue.use(Rate);
+Vue.use(Collapse);
+Vue.use(CollapseItem);
+Vue.use(Avatar);
+Vue.use(Link);
+Vue.use(Upload);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

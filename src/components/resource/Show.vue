@@ -1,11 +1,11 @@
 <template>
-    <div  v-infinite-scroll="loadShowList" class="container-show">
+    <div v-infinite-scroll="loadShowList" class="container-show">
         <el-row v-for="(row,index) in showList" :key="index">
             <el-col :span="6" v-for="(item,index) in row" :key="index">
-                <el-card :body-style="{ padding: '0px' }" shadow="hover" >
-                    <el-image :src="item.cover_url" fit="fill"></el-image>
+                <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                    <el-image :src="item.cover_url" fit="fill" @click="jumpToDetail(item.id,item)"></el-image>
                     <div>
-                        <span class="movie-detail">{{item.name}}</span>
+                        <span class="movie-detail" @click="jumpToDetail(item.id,item)">{{item.name}}</span>
                     </div>
                 </el-card>
             </el-col>
@@ -18,71 +18,67 @@
         name: "Show",
         data() {
             return {
-                showList: [
-                    [
-                        {
-                            name: '黑寡妇',
-                            cover_url: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1373827667,48927463&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '蝙蝠侠',
-                            cover_url: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2138247768,2720298265&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '率巨人',
-                            cover_url: 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1066926804,1548075868&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: 'V字仇杀队',
-                            cover_url: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2629247203,1604036191&fm=26&gp=0.jpg'
-                        },
-                    ],
-                    [
-                        {
-                            name: '奇异博士',
-                            cover_url: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2332818030,2116484028&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '钢铁侠',
-                            cover_url: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2477403324,1600680804&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '战争之网',
-                            cover_url: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1012433093,525783264&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '权利的游戏',
-                            cover_url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1005423353,680353328&fm=26&gp=0.jpg'
-                        },
-
-                    ]
-                ]
+                pageNum: 3,
+                pageSize: 4,
+                showList: []
             }
         },
         methods: {
-            loadShowList() {
-                this.showList.push([
+            async getShowList() {
+                console.log("初始化 资源库列表");
+                const {data: result} = await this.$http.get(
+                    "movie/es/_search",
                     {
-                        name: '闪光少女',
-                        cover_url: 'http://img4.imgtn.bdimg.com/it/u=2937730371,3066347201&fm=26&gp=0.jpg'
-                    },
+                        params: {
+                            pageNum: 1,
+                            pageSize: 8
+                        }
+                    }
+                );
+                if (result.status === 200) {
+                    this.$message.success(result.message);
+                    this.showList.push(result.data["resultList"].slice(0, 4));
+                    this.showList.push(result.data["resultList"].slice(4, 8));
+                } else {
+                    this.$message.error(result.message);
+                }
+            },
+            async loadShowList() {
+                this.$message.info("滚动更新");
+                console.log(this.pageNum, this.pageSize);
+                const {data: result} = await this.$http.get(
+                    "movie/es/_search",
                     {
-                        name: '克隆人',
-                        cover_url: 'http://img2.imgtn.bdimg.com/it/u=2021115687,1180101425&fm=26&gp=0.jpg'
-                    },
+                        params: {
+                            pageNum: this.pageNum,
+                            pageSize: this.pageSize
+                        }
+                    }
+                );
+                if (result.status === 200) {
+                    this.$message.success(result.message);
+                    console.log(result.data);
+                    this.showList.push(result.data["resultList"]);
+                    this.pageNum += 1;
+                } else {
+                    this.$message.error(result.message);
+                }
+            },
+            jumpToDetail(movieId, movieInfo) {
+                this.$router.push(
                     {
-                        name: '终结者',
-                        cover_url: 'http://img4.imgtn.bdimg.com/it/u=1762736586,1454463982&fm=26&gp=0.jpg'
-                    },
-                    {
-                        name: '天气之子',
-                        cover_url: 'http://img3.imgtn.bdimg.com/it/u=1292697011,3663126806&fm=26&gp=0.jpg'
-                    },
-
-                ])
+                        name: "MovieDetail",
+                        params: {
+                            id: movieId,
+                            movie: movieInfo
+                        }
+                    }
+                )
             }
+        },
+        created() {
+            this.getShowList();
         }
-
     }
 </script>
 
@@ -90,24 +86,27 @@
     .container-show {
         margin-left: 330px;
         padding: 0;
+
         .el-col {
             width: 300px;
         }
+
         .el-card {
             background-color: transparent;
             width: 160px;
             height: 250px;
         }
+
         .el-image {
             width: 150px;
             height: 200px;
         }
+
         .movie-detail {
             color: #7491e2;
             font-size: x-large;
         }
     }
-
 
 
 </style>

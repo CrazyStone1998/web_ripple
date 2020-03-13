@@ -16,18 +16,26 @@ import Resource from "../views/Resource";
 import Register from "../views/Register";
 import Mine from "../views/Mine";
 import Detail from "../views/Detail";
+import UserDetail from "../components/detail/UserDetail";
+import StarringDetail from "../components/detail/StarringDetail";
+import DirectorScreenwriterDetail from "../components/detail/DirectorScreenwriterDetail";
+import MovieDetail from "../components/detail/MovieDetail";
+import Demo from "../views/Demo";
 
 
 Vue.use(VueRouter);
 
 const routes = [
+    // 测试路由
+    {path: "/demo", name:"Demo", component: Demo},
+
     // 基础路由
     {path: "/", redirect: Login},
     {path: "/login", name: "Login", component: Login},
     {path: "/register", name: "Register", component: Register},
 
     {
-        path: "/admin", name: "Admin", redirect:AdminIndex, component: AdminHome, children: [
+        path: "/admin", name: "Admin", redirect: AdminIndex, component: AdminHome, children: [
             {path: "index", name: "AdminIndex", component: AdminIndex},
             {path: "user", name: "AdminUser", component: AdminUser},
             {path: "role", name: "AdminRole", component: AdminRole},
@@ -39,7 +47,6 @@ const routes = [
             {path: "dataStatistic", name: "AdminDataStatistic", component: AdminDataStatistic}
         ]
     },
-
     {
         path: "/home", name: "Home", component: Home,
     },
@@ -50,7 +57,34 @@ const routes = [
         path: "/mine", name: "Mine", component: Mine,
     },
     {
-        path: "/movie", name: "Movie", component: Detail
+        path: "/detail", name: "Detail", component: Detail,
+        children: [
+            {
+                path: "movie/:id",
+                name: "MovieDetail",
+                component: MovieDetail,
+                props: route => ({id: route.params.id, movie: route.params.movie})
+            },
+            {
+                path: "user/:id",
+                name: "UserDetail",
+                component: UserDetail,
+                props: route => ({id: route.params.id, movie: route.params.user})
+            },
+
+            {
+                path: "starring/:id",
+                name: "StarringDetail",
+                component: StarringDetail,
+                props: route => ({id: route.params.id, starring: route.params.starring})
+            },
+            {
+                path: "directorScreenwriter/:id",
+                name: "DirectorScreenwriterDetail",
+                component: DirectorScreenwriterDetail,
+                props: route => ({id:route.params.id, directorScreenwriter: route.params.directorScreenwriter})
+            }
+        ]
     }
 
 ];

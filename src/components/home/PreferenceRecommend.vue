@@ -5,10 +5,10 @@
         </el-header>
         <el-container>
             <el-main>
-                <el-row v-for="(row,index) in preferenceList" :key="index">
+                <el-row v-for="(row,index) in preferenceRecommendList" :key="index">
                     <el-col :span="6" v-for="(item,index) in row" :key="index">
-                        <el-card :body-style="{ padding: '0px' }" shadow="hover" >
-                            <el-image :src="item.cover_url" fit="fill"></el-image>
+                        <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                            <el-image :src="item.cover_url" fit="fill" @click="jumpToDetail(item.id, item)"></el-image>
                             <div>
                                 <span class="movie-detail">{{item.name}}</span>
                             </div>
@@ -21,13 +21,13 @@
                     <div slot="header">
                         <span>强烈推荐</span>
                     </div>
-                    <div v-for="(row,index) in preferenceList" :key="index">
+                    <div v-for="(row,index) in preferenceRecommendList" :key="index">
                         <el-row v-for="(item,index) in row" :key="index" class="prefer-row">
                             <el-col :span="4">
                                 >
                             </el-col>
                             <el-col :span="20">
-                                {{item.name}}
+                                <span style="cursor: pointer;" @click="jumpToDetail(item.id, item)">{{item.name}}</span>
                             </el-col>
                         </el-row>
                     </div>
@@ -44,46 +44,34 @@
         name: "PreferenceRecommend",
         data() {
             return {
-                preferenceList: [
-                    [
-                        {
-                            name: '黑寡妇',
-                            cover_url: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1373827667,48927463&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '蝙蝠侠',
-                            cover_url: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2138247768,2720298265&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '率巨人',
-                            cover_url: 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1066926804,1548075868&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: 'V字仇杀队',
-                            cover_url: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2629247203,1604036191&fm=26&gp=0.jpg'
-                        },
-                    ],
-                    [
-                        {
-                            name: '奇异博士',
-                            cover_url: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2332818030,2116484028&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '钢铁侠',
-                            cover_url: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2477403324,1600680804&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '战争之网',
-                            cover_url: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1012433093,525783264&fm=26&gp=0.jpg'
-                        },
-                        {
-                            name: '权利的游戏',
-                            cover_url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1005423353,680353328&fm=26&gp=0.jpg'
-                        },
+                preferenceRecommendList: []
 
-                    ]
-                ]
             };
+        },
+        methods: {
+            async getPreferenceRecommendList() {
+                console.log("初始化 偏好推荐");
+                const {data: result} = await this.$http.get("movie/es/prefer");
+                if (result.status === 200) {
+                    this.$message.success(result.message);
+                    this.preferenceRecommendList.push(result.data["resultList"].slice(8, 12));
+                    this.preferenceRecommendList.push(result.data["resultList"].slice(12, 16));
+                } else {
+                    this.$message.error(result.message);
+                }
+            },
+            jumpToDetail(movie_id) {
+                this.$router.push(
+                    {
+                        name: "MovieDetail",
+                        params: {id: movie_id,}
+                    }
+                )
+
+            }
+        },
+        created() {
+            this.getPreferenceRecommendList();
         }
     }
 </script>
@@ -99,20 +87,25 @@
                 float: left;
             }
         }
+
         .el-main {
             padding: 0;
             padding-top: 5px;
+
             .el-card {
                 background-color: transparent;
                 margin: 5px;
                 margin-top: 0;
                 cursor: pointer;
+
                 .el-image {
                     height: 260px;
                     width: 220px;
                 }
-                .movie-detail{
+
+                .movie-detail {
                     color: #eeeeee;
+                    cursor: pointer;
                 }
             }
         }
@@ -120,17 +113,19 @@
         .el-aside {
 
             background-color: transparent;
+
             .prefer-rank {
                 background-color: transparent;
                 color: #eeeeee;
                 height: auto;
             }
+
             .prefer-row {
                 margin-bottom: 40px;
                 color: #7491e2;
             }
 
         }
-}
+    }
 
 </style>

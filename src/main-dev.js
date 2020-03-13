@@ -6,13 +6,16 @@ import axios from "axios";
 import "./plugins/element.js";
 import "./assets/sass/global.scss";
 import NProgress from "nprogress";
-import "nprogress/nprogress.css"
+import "nprogress/nprogress.css";
+import "./assets/js/iconfont";
 
 // 简单配置
 NProgress.inc(0.2);
 NProgress.configure({easing: 'ease', speed: 500, showSpinner: false});
+
 // 请求 baseURL
-axios.defaults.baseURL = "http://127.0.0.1:10000/";
+axios.defaults.baseURL = "http://127.0.0.1:8000/";
+
 // 请求头拦截器，添加Header
 // 在request拦截器中,展示进度条 NProgress.start()
 axios.interceptors.request.use(config => {
