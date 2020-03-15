@@ -8,6 +8,7 @@ import "./assets/sass/global.scss";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "./assets/js/iconfont";
+import "./assets/sass/fonts.scss";
 
 // 简单配置
 NProgress.inc(0.2);

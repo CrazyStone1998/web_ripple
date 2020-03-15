@@ -1,7 +1,8 @@
 <template>
     <el-container class="preference-container" style="height: 650px">
         <el-header>
-            <el-tag type="success">猜你喜欢</el-tag>
+            <el-image class="topic" :src="require('../../assets/img/prefer.png')" fit="fill">
+            </el-image>
         </el-header>
         <el-container>
             <el-main>

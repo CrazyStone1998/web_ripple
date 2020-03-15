@@ -8,7 +8,7 @@
                 </el-col>
                 <el-col :span="14" class="header-middle">
                     <el-button class="btn-link" @click="drawer = !drawer" type="primary" round>菜单</el-button>
-                    <el-input prefix-icon="el-icon-search" placeholder="请输入内容" v-model="query" class="input">
+                    <el-input prefix-icon="el-icon-search" placeholder="请输入内容" v-model="query" class="search-input">
                         <el-select v-model="select" slot="prepend" placeholder="All">
                             <el-option label="All" value="1"></el-option>
                             <el-option label="订单号" value="2"></el-option>
@@ -22,11 +22,7 @@
                 <el-col :span="1">
                     <el-button class="btn-login" type="primary" round @click="login">Login</el-button>
                 </el-col>
-                <el-col :span="3">
-                    <img class="icon-link" src="../assets/img/google_logo.svg" alt=""/>
-                    <img class="icon-link" src="../assets/img/twitter_logo.svg" alt=""/>
-                    <img class="icon-link" src="../assets/img/facebook_logo.svg" alt=""/>
-                </el-col>
+
             </el-row>
         </el-header>
 
@@ -86,7 +82,7 @@
         }
         .header-middle {
             display: flex;
-            .input {
+            .search-input {
                 margin-top: 20px;
                 width: 550px;
                 margin-right: 30px;

@@ -1,7 +1,10 @@
 <template>
     <el-container class="preference-container" style="height: 650px">
+        <p class="font-test">heasdfdsfasdfadfdfasdfasdfdfllo</p>
         <el-header>
-            <el-tag type="success">猜你喜欢</el-tag>
+            <el-image :src="require('../../assets/img/prefer.png')"></el-image>
+            <el-image :src="require('../../assets/img/prefer.png')"></el-image>
+
         </el-header>
         <el-container>
             <el-main>
@@ -83,8 +86,14 @@
         height: 680px;
 
         .el-header {
-            .el-tag {
-                float: left;
+            display: flex;
+
+            .topic {
+                height: 75px;
+                width: 75px;
+            }
+            .font-test {
+                font-family: pingfang;
             }
         }
 

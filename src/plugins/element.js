@@ -1,11 +1,11 @@
 import Vue from "vue";
 import {
     // 表单 & 按钮 & Tips & 头像
-    Button, Form, FormItem, Input, Image, Avatar,Link,
+    Button, Form, FormItem, Input, Image, Avatar, Link,
     // 导入弹框提示组件 对话框 消息盒子
     Message, Dialog, MessageBox,
     // 容器 & 布局
-    Container, Header, Aside, Main, Footer,Row, Col,
+    Container, Header, Aside, Main, Footer, Row, Col,
     // 菜单
     Menu, Submenu, MenuItemGroup, MenuItem,
     // 结构: 面包屑 & 轮播 & 卡片 & 开关 & 提示
@@ -16,7 +16,7 @@ import {
     CheckboxGroup, CheckboxButton, Checkbox,
     InfiniteScroll,
     Collapse, CollapseItem,
-    Upload
+    Upload, Backtop
 
 } from "element-ui";
 
@@ -67,5 +67,6 @@ Vue.use(CollapseItem);
 Vue.use(Avatar);
 Vue.use(Link);
 Vue.use(Upload);
+Vue.use(Backtop);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

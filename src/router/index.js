@@ -21,13 +21,14 @@ import StarringDetail from "../components/detail/StarringDetail";
 import DirectorScreenwriterDetail from "../components/detail/DirectorScreenwriterDetail";
 import MovieDetail from "../components/detail/MovieDetail";
 import Demo from "../views/Demo";
+import Rank from "../components/rank/Rank";
 
 
 Vue.use(VueRouter);
 
 const routes = [
     // 测试路由
-    {path: "/demo", name:"Demo", component: Demo},
+    {path: "/demo", name: "Demo", component: Demo},
 
     // 基础路由
     {path: "/", redirect: Login},
@@ -52,6 +53,9 @@ const routes = [
     },
     {
         path: "/resource", name: "Resource", component: Resource
+    },
+    {
+        path: "/rank", name: "Rank", component: Rank
     },
     {
         path: "/mine", name: "Mine", component: Mine,
@@ -82,7 +86,7 @@ const routes = [
                 path: "directorScreenwriter/:id",
                 name: "DirectorScreenwriterDetail",
                 component: DirectorScreenwriterDetail,
-                props: route => ({id:route.params.id, directorScreenwriter: route.params.directorScreenwriter})
+                props: route => ({id: route.params.id, directorScreenwriter: route.params.directorScreenwriter})
             }
         ]
     }
