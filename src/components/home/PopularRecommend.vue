@@ -1,10 +1,14 @@
 <template>
-    <el-carousel :interval="4000" type="card" height="500px">
-        <el-carousel-item v-for="(item,index) in popularList" :key="index">
-            <el-image :src="item.cover_url" fit="fill" style="width: 100%; height: 100%"
-                      @click="jumpToDetail(item.id,item)"></el-image>
-        </el-carousel-item>
-    </el-carousel>
+    <el-container class="popular-container">
+        <el-main>
+            <el-carousel :interval="4000" type="card" height="500px">
+                <el-carousel-item v-for="(item,index) in popularList" :key="index">
+                    <el-image :src="item.cover_url" fit="fill" style="width: 100%; height: 100%"
+                              @click="jumpToDetail(item.id,item)"></el-image>
+                </el-carousel-item>
+            </el-carousel>
+        </el-main>
+    </el-container>
 </template>
 
 <script>
@@ -46,27 +50,38 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-carousel {
-        margin-left: 150px;
-        margin-right: 150px;
-    }
 
-    .el-carousel__item h3 {
-        color: #eeeeee;
-        font-size: 14px;
-        opacity: 0.75;
-        line-height: 200px;
-        margin: 0;
-    }
+    @import "src/assets/sass/global";
 
-    .el-carousel__item:nth-child(2n) {
-        background-color: #b2ebff;
-        cursor: pointer;
-    }
+    .popular-container {
+        padding-left: 3%;
+        padding-right: 3%;
 
-    .el-carousel__item:nth-child(2n+1) {
-        background-color: #8ce4ec;
-        cursor: pointer;
-    }
+        .el-main {
+            padding: 0;
+            .el-carousel {
+                margin-left: 150px;
+                margin-right: 150px;
+                border-radius: 6px;
+            }
 
+            .el-carousel__item h3 {
+                color: #eeeeee;
+                font-size: 14px;
+                opacity: 0.75;
+                line-height: 200px;
+                margin: 0;
+            }
+
+            .el-carousel__item:nth-child(2n) {
+                background-color: #b2ebff;
+                cursor: pointer;
+            }
+
+            .el-carousel__item:nth-child(2n+1) {
+                background-color: #8ce4ec;
+                cursor: pointer;
+            }
+        }
+    }
 </style>

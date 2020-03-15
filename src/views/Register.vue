@@ -74,18 +74,18 @@
             </div>
         </el-main>
         <el-footer>
-            <Footer></Footer>
+            <FooterSimple></FooterSimple>
         </el-footer>
     </el-container>
 </template>
 
 <script>
     import Login from "./Login";
-    import Footer from "../components/home/Footer";
+    import FooterSimple from "../components/home/FooterSimple";
 
     export default {
         name: "Register",
-        components: {Footer},
+        components: {FooterSimple},
         data() {
             // 验证邮箱的规则
             const checkMail = (rule, value, callback) => {

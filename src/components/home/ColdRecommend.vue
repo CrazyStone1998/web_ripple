@@ -1,11 +1,11 @@
 <template>
-    <el-container class="preference-container">
+    <el-container class="cold-container">
         <el-header>
-            <el-image :src="require('../../assets/img/topic-prefer.png')" class="topic"></el-image>
+            <el-image :src="require('../../assets/img/topic-cold.png')" class="topic"></el-image>
         </el-header>
         <el-container>
             <el-main>
-                <el-row v-for="(row,index) in preferenceRecommendList" :key="index">
+                <el-row v-for="(row,index) in coldRecommendList" :key="index">
                     <el-col :span="6" v-for="(item,index) in row" :key="index">
                         <el-card
                                 :body-style="{ padding: '0px' }"
@@ -34,11 +34,11 @@
             </el-main>
             <el-aside width="22%">
                 <el-card :body-style="{paddingBottom: '0'}"
-                        class="prefer-rank">
+                         class="prefer-rank">
                     <div slot="header">
                         <el-image class="tag-recommend" :src="require('../../assets/img/tag-recommend.png')" fit="cover"></el-image>
                     </div>
-                    <div v-for="(row,index) in preferenceRecommendList" :key="index">
+                    <div v-for="(row,index) in coldRecommendList" :key="index">
                         <el-row
                                 v-for="(item,index) in row" :key="index"
                                 class="prefer-row"
@@ -69,7 +69,6 @@
                         </el-row>
                     </div>
                 </el-card>
-
             </el-aside>
         </el-container>
     </el-container>
@@ -78,31 +77,33 @@
 
 <script>
     export default {
-        name: "PreferenceRecommend",
+        name: "ColdRecommend",
         data() {
             return {
-                preferenceRecommendList: []
+                coldRecommendList: []
             };
         },
         methods: {
-            async getPreferenceRecommendList() {
-                console.log("初始化 偏好推荐");
-                const {data: result} = await this.$http.get("movie/es/prefer");
+
+            async getColdRecommendList() {
+                console.log('初始化 冷门推荐');
+                const {data: result} = await this.$http.get("movie/es/cold");
                 if (result.status === 200) {
                     this.$message.success(result.message);
-                    this.preferenceRecommendList.push(result.data["resultList"].slice(8, 12));
-                    this.preferenceRecommendList.push(result.data["resultList"].slice(12, 16));
+                    this.coldRecommendList.push(result.data["resultList"].slice(0, 4));
+                    this.coldRecommendList.push(result.data["resultList"].slice(4, 8));
+                    console.log(this.coldRecommendList)
                 } else {
                     this.$message.error(result.message);
                 }
             },
-            jumpToDetail(movieId, movie) {
+            jumpToDetail(movieId, movieInfo) {
                 this.$router.push(
                     {
                         name: "MovieDetail",
                         params: {
                             id: movieId,
-                            movie: movie
+                            movie: movieInfo
                         }
                     }
                 )
@@ -124,18 +125,20 @@
             },
         },
         created() {
-            this.getPreferenceRecommendList();
+            this.getColdRecommendList();
         }
     }
 </script>
 
 <style lang="scss" scoped>
     @import "src/assets/sass/global";
-    .preference-container {
+
+    .cold-container {
         padding-left: 11%;
         padding-right: 12%;
         padding-top: 1%;
         height: 120%;
+
         .el-header {
             display: flex;
             margin-bottom: 3%;

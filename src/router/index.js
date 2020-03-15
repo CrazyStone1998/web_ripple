@@ -21,7 +21,7 @@ import StarringDetail from "../components/detail/StarringDetail";
 import DirectorScreenwriterDetail from "../components/detail/DirectorScreenwriterDetail";
 import MovieDetail from "../components/detail/MovieDetail";
 import Demo from "../views/Demo";
-import Rank from "../components/rank/Rank";
+import Ranking from "../components/rank/Ranking";
 
 
 Vue.use(VueRouter);
@@ -48,18 +48,23 @@ const routes = [
             {path: "dataStatistic", name: "AdminDataStatistic", component: AdminDataStatistic}
         ]
     },
+
     {
         path: "/home", name: "Home", component: Home,
     },
+
     {
         path: "/resource", name: "Resource", component: Resource
     },
+
     {
-        path: "/rank", name: "Rank", component: Rank
+        path: "/ranking", name: "Ranking", component: Ranking
     },
+
     {
         path: "/mine", name: "Mine", component: Mine,
     },
+
     {
         path: "/detail", name: "Detail", component: Detail,
         children: [

@@ -54,18 +54,18 @@
             </div>
         </el-main>
         <el-footer>
-            <Footer></Footer>
+            <FooterSimple></FooterSimple>
         </el-footer>
     </el-container>
 </template>
 
 <script>
     import Register from "./Register";
-    import Footer from "../components/home/Footer";
+    import FooterSimple from "../components/home/FooterSimple";
 
     export default {
         name: "Login",
-        components: {Footer},
+        components: {FooterSimple},
         data() {
             return {
                 icon: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
