@@ -3,12 +3,18 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import axios from "axios";
+import base from "./assets/js/base";
 import "./plugins/element.js";
+import "./assets/js/globalArgs";
+import eventBuss from "./assets/js/eventBuss";
+
 import "./assets/sass/global.scss";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "./assets/js/iconfont";
 import "./assets/sass/fonts.scss";
+import globalArgs from "./assets/js/globalArgs";
+
 
 // 简单配置
 NProgress.inc(0.2);
@@ -35,11 +41,11 @@ axios.interceptors.response.use(config => {
 });
 
 
-
-
+Vue.use(base);
 Vue.prototype.$http = axios;
+Vue.prototype.$global = globalArgs;
+Vue.prototype.$eventBus = eventBuss;
 Vue.config.productionTip = false;
-
 
 new Vue({
   router,

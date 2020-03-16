@@ -44,10 +44,7 @@
             <div class="copyright">
                 © 2020 Rio Technologies. All Rights Reserved. Inc.
             </div>
-
         </el-main>
-
-
     </el-container>
 </template>
 
@@ -157,7 +154,7 @@
             }
             .copyright {
                 margin-top: 40px;
-                font-size: x-large;
+                font-size: large;
                 color: $bg_gray_global;
             }
         }

@@ -51,6 +51,7 @@ const routes = [
 
     {
         path: "/home", name: "Home", component: Home,
+        props: route => ({icon: route.params.icon, username: route.params.username})
     },
 
     {

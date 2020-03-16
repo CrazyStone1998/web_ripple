@@ -7,7 +7,7 @@ import {
     // 容器 & 布局
     Container, Header, Aside, Main, Footer, Row, Col,
     // 菜单
-    Menu, Submenu, MenuItemGroup, MenuItem,
+    Menu, Submenu, MenuItemGroup, MenuItem, Dropdown, DropdownItem, DropdownMenu,
     // 结构: 面包屑 & 轮播 & 卡片 & 开关 & 提示
     Breadcrumb, BreadcrumbItem, CarouselItem, Carousel, Card, Switch, Tooltip,
     // 表格 分页
@@ -16,7 +16,8 @@ import {
     CheckboxGroup, CheckboxButton, Checkbox,
     InfiniteScroll,
     Collapse, CollapseItem,
-    Upload, Backtop
+    Upload, Backtop, Loading
+
 
 } from "element-ui";
 
@@ -68,5 +69,10 @@ Vue.use(Avatar);
 Vue.use(Link);
 Vue.use(Upload);
 Vue.use(Backtop);
+Vue.use(Dropdown);
+Vue.use(DropdownItem);
+Vue.use(DropdownMenu);
+
+Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

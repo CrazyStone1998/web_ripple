@@ -49,7 +49,9 @@
                         Don't have an account ?
                         <el-link type="primary" @click="redirect_register">Create One !</el-link>
                     </el-form-item>
-
+                    <el-form-item class="customer-login">
+                        <el-link type="info" icon="el-icon-user-solid" @click="customer_login">Visitor Login</el-link>
+                    </el-form-item>
                 </el-form>
             </div>
         </el-main>
@@ -62,12 +64,14 @@
 <script>
     import Register from "./Register";
     import FooterSimple from "../components/home/FooterSimple";
+    import Home from "./Home";
 
     export default {
         name: "Login",
         components: {FooterSimple},
         data() {
             return {
+                checked: false,
                 icon: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
                 login_form: {
                     username: "",
@@ -102,7 +106,9 @@
                             this.$message.success(result.message);
 
                             // 登录跳转
-                            this.redirect_home(this.login_form.username, result.data.icon);
+                            // this.redirect_home(this.login_form.username, result.data.icon);
+                            this.redirect_home(this.login_form.username, 'http://tupian.qqw21.com/article/UploadPic/2020-2/2020231257963915.jpg');
+
                         } else { // 登录失败
                             console.log("登录失败 : " + result.message);
                             console.log("********");
@@ -114,7 +120,7 @@
             redirect_register() {
                 this.$router.push(Register);
             },
-            redirect_home(username,icon) {
+            redirect_home(username, icon) {
                 this.$router.push(
                     {
                         name: "Home",
@@ -124,6 +130,11 @@
                         }
                     }
                 );
+            },
+            customer_login() {
+                window.sessionStorage.setItem(this.$global.username, null);
+                window.sessionStorage.setItem(this.$global.userIcon, null);
+                this.$router.push(Home);
             }
         }
     }
@@ -162,9 +173,11 @@
                     .account {
                         margin-bottom: 2%;
                     }
+
                     .password {
 
                     }
+
                     .login_btn {
                         width: 100%;
                     }
@@ -180,6 +193,13 @@
                         margin-right: 4%;
                         cursor: pointer;
                     }
+                }
+
+                .customer-login {
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 20%;
+                    margin-right: 5%;
                 }
             }
         }

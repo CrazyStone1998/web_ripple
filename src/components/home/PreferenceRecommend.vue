@@ -42,8 +42,8 @@
                         <el-row
                                 v-for="(item,index) in row" :key="index"
                                 class="prefer-row"
-                                @mouseover.native="mouseover($event,' row-active')"
-                                @mouseout.native="mouseout($event,' row-active')"
+                                @mouseover.native="mouseover($event,'row-active')"
+                                @mouseout.native="mouseout($event,'row-active')"
                                 @click="jumpToDetail(item.id, item)">
                             <div style="margin-top: 30px">
                                 <el-col :span="3">
@@ -77,6 +77,7 @@
 </template>
 
 <script>
+    import eventBuss from "../../assets/js/eventBuss";
     export default {
         name: "PreferenceRecommend",
         data() {
@@ -92,6 +93,7 @@
                     this.$message.success(result.message);
                     this.preferenceRecommendList.push(result.data["resultList"].slice(8, 12));
                     this.preferenceRecommendList.push(result.data["resultList"].slice(12, 16));
+                    eventBuss.$emit('homeLoadingEvent', 'ColdRecommend');
                 } else {
                     this.$message.error(result.message);
                 }
@@ -113,13 +115,13 @@
 
             // 监听方法
             mouseover($event,activeClassName) {
-                $event.currentTarget.className += activeClassName;
+                $event.currentTarget.className += " " + activeClassName;
             },
             mouseout($event,activeClassName) {
                 $event.currentTarget.className =
                     $event.currentTarget.className.slice(
                         0,
-                        $event.currentTarget.className.indexOf(activeClassName)
+                        $event.currentTarget.className.indexOf(" " + activeClassName)
                     )
             },
         },

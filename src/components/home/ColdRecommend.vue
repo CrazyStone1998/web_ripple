@@ -76,6 +76,7 @@
 </template>
 
 <script>
+    import eventBuss from "../../assets/js/eventBuss";
     export default {
         name: "ColdRecommend",
         data() {
@@ -84,7 +85,6 @@
             };
         },
         methods: {
-
             async getColdRecommendList() {
                 console.log('初始化 冷门推荐');
                 const {data: result} = await this.$http.get("movie/es/cold");
@@ -92,6 +92,7 @@
                     this.$message.success(result.message);
                     this.coldRecommendList.push(result.data["resultList"].slice(0, 4));
                     this.coldRecommendList.push(result.data["resultList"].slice(4, 8));
+                    eventBuss.$emit('test');
                     console.log(this.coldRecommendList)
                 } else {
                     this.$message.error(result.message);

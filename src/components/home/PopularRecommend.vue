@@ -12,7 +12,7 @@
 </template>
 
 <script>
-
+    import eventBuss from "../../assets/js/eventBuss";
     export default {
         name: "PopularRecommend",
         data() {
@@ -27,6 +27,8 @@
                 if (result.status === 200) {
                     this.$message.success(result.message);
                     this.popularList = result.data["resultList"];
+
+                    eventBuss.$emit('homeLoadingEvent');
                 } else {
                     this.$message.error(result.message);
                 }

@@ -4,14 +4,17 @@
             <meta name="referrer" content="no-referrer"/>
             <el-row class="header-box">
                 <el-col :span="6">
-                    <el-image :src="require('../assets/img/logo.png')" class="logo" fit="fill"></el-image>
+                    <el-image :src="require('../assets/img/logo.png')" href="/login" class="logo" fit="fill"></el-image>
                     <el-image :src="require('../assets/img/rio.png')" class="rio"></el-image>
                 </el-col>
-                <el-col :span="15" class="header-middle">
+                <el-col :span="14" class="header-middle">
                     <el-image
                             :src="require('../assets/img/menu.png')"
                             class="btn-menu"
-                            @click="drawer = !drawer">
+                            @click="drawer = !drawer"
+                            @mouseover.native="mouseover($event, 'menu-active')"
+                            @mouseout.native="mouseout($event, 'menu-active')"
+                    >
                     </el-image>
                     <el-input prefix-icon="el-icon-search" placeholder="请输入内容" v-model="query_content"
                               class="search-input">
@@ -23,24 +26,39 @@
                     </el-input>
                     <el-button
                             class="btn-link" @click="resourceLink"
-                            @mouseover.native="mouseover($event,'el-button btn-link')"
-                            @mouseout.native="mouseout($event, 'el-button btn-link')"
+                            @mouseover.native="mouseover($event,'btn-active')"
+                            @mouseout.native="mouseout($event, 'btn-active')"
                     >资源库
                     </el-button>
                     <el-button class="btn-link" type="primary" @click="rankLink"
-                               @mouseover.native="mouseover($event,'el-button btn-link')"
-                               @mouseout.native="mouseout($event, 'el-button btn-link')"
+                               @mouseover.native="mouseover($event,'btn-active')"
+                               @mouseout.native="mouseout($event, 'btn-active')"
                     >排行榜
                     </el-button>
-
                 </el-col>
-                <el-col :span="3" class="header-right">
+
+                <el-col :span="4" class="header-right-user" v-if="this.hasLoginState">
+                    <el-avatar class="home-user-avatar" :src="this.icon"></el-avatar>
+                    <el-dropdown class="home-user-dropdown">
+                        <span class="el-dropdown-link">
+                            <el-tag class="home-user-tag">{{username}}</el-tag>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>系统消息</el-dropdown-item>
+                            <el-dropdown-item>私信</el-dropdown-item>
+                            <el-dropdown-item>愿望单</el-dropdown-item>
+                            <el-dropdown-item @click.native="redirect_userInfo">我的信息</el-dropdown-item>
+                            <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+                <el-col :span="4" class="header-right" v-else>
                     <el-divider direction="vertical" style="width: 100px"></el-divider>
                     <el-button class="btn-login"
                                icon="el-icon-s-promotion"
                                @click="redirect_login"
-                               @mouseover.native="mouseover($event, 'btn-login')"
-                               @mouseout.native="mouseout($event, 'btn-login')">
+                               @mouseover.native="mouseover($event, 'btn-active')"
+                               @mouseout.native="mouseout($event, 'btn-active')">
                         Sign in
                     </el-button>
                 </el-col>
@@ -52,7 +70,6 @@
             <PreferenceRecommend></PreferenceRecommend>
             <CoolRecommend></CoolRecommend>
             <Footer></Footer>
-
         </el-main>
 
         <el-drawer
@@ -75,7 +92,10 @@
     import Resource from "./Resource";
     import Register from "./Register";
 
+    // import eventBuss from "../assets/js/eventBuss";
+
     export default {
+
         name: "Home",
         components: {Footer, CoolRecommend, PreferenceRecommend, PopularRecommend},
         props: ["icon", "username"],
@@ -83,8 +103,10 @@
             return {
                 select: '',
                 drawer: false,
+                hasLoginState: false,
+                hasLoading: 3,
                 query_content: ''
-            }
+            };
         },
         methods: {
             redirect_login() {
@@ -99,9 +121,21 @@
                 window.sessionStorage.clear();
                 this.username = null;
                 this.icon = null;
-                console.log("logout && redirect")
+                this.hasLoginState = false;
+                console.log("logout && redirect");
                 console.log("********");
             },
+            redirect_userInfo() {
+                this.$router.push(
+                    {
+                        name: 'UserDetail',
+                        params: {
+                            username: this.username
+                        }
+                    }
+                );
+            },
+
             resourceLink() {
                 this.$router.push(Resource);
             },
@@ -111,15 +145,47 @@
 
             search() {
 
-
             },
 
-            mouseover($event, name) {
-                $event.currentTarget.className = name + " btn-active";
+            hasLogin() {
+                if (this.username !== undefined && this.icon !== undefined) {
+                    this.hasLoginState = true;
+                } else {
+                    this.username = window.sessionStorage.getItem(this.$global.username);
+                    this.icon = window.sessionStorage.getItem(this.$global.icon);
+                    this.hasLoginState = this.username !== null && this.icon !== null;
+                }
             },
-            mouseout($event, name) {
-                $event.currentTarget.className = name;
+
+            // 监听方法
+            mouseover($event, activeClassName) {
+                $event.currentTarget.className += " " + activeClassName;
+            },
+            mouseout($event, activeClassName) {
+                $event.currentTarget.className =
+                    $event.currentTarget.className.slice(
+                        0,
+                        $event.currentTarget.className.indexOf(" " + activeClassName)
+                    )
             }
+        },
+        created() {
+            this.hasLogin();
+
+            // this.hasLoading = 3;
+            // const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)'
+            // });
+            // eventBuss.$on('homeLoadingEvent', () => {
+            //     console.log("被调用",name);
+            //     this.hasLoading -= 1;
+            //     if (this.hasLoading === 0) {
+            //         loading.close();
+            //     }
+            // });
         }
     }
 </script>
@@ -166,9 +232,17 @@
 
                     .btn-menu {
                         margin-top: 1%;
-                        width: 50px;
-                        height: 50px;
+                        width: 45px;
+                        height: 45px;
                         cursor: pointer;
+                        padding-left: 5px;
+                    }
+
+                    .menu-active {
+                        border-radius: 6px;
+                        box-shadow: 0 0 5px 10px rgba(211, 232, 248, 0.5);
+                        width: 50px;
+                        padding-left: 0;
                     }
 
                     .btn-link {
@@ -185,6 +259,7 @@
                         border-color: $bg_green_global;
                         color: $bg_green_global;
                         font-size: xx-large;
+                        background-color: rgba(211, 232, 248, 0.3);
                         padding: 8px;
 
                     }
@@ -195,13 +270,22 @@
                     display: flex;
                     justify-content: flex-end;
 
+                    .el-divider--vertical {
+                        width: 3px;
+                        height: 50px;
+                        border-radius: 6px;
+                        background-color: $bg_green_global;
+                        border-color: rgba(211, 232, 248, 0.3);
+                    }
+
                     .btn-login {
                         background-color: transparent;
-                        border-color: transparent;
+                        border-color: rgba(211, 232, 248, 0.3);
                         font-size: x-large;
                         margin-right: 10%;
                         border-radius: 6px;
-                        padding: 2px;
+                        padding-left: 0;
+                        padding-right: 2%;
                         color: $bg_gray_light_global;
                     }
 
@@ -210,6 +294,35 @@
                         color: $bg_green_global;
                         font-size: xx-large;
                         margin-top: -5px;
+                        margin-right: 0;
+                    }
+                }
+
+                .header-right-user {
+                    margin-top: 20px;
+                    display: flex;
+                    justify-content: flex-end;
+
+                    .home-user-avatar {
+                        cursor: pointer;
+                    }
+
+                    .el-dropdown-link {
+                    }
+
+                    .home-user-tag {
+                        background-color: transparent;
+                        border-color: transparent;
+                        font-size: x-large;
+                        color: $bg_green_global;
+                        cursor: pointer;
+
+
+                    }
+
+                    .home-user-dropdown {
+                        margin: 5px 10px 0 10px;
+
                     }
                 }
             }
