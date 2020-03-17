@@ -1,15 +1,42 @@
 <template>
-    <div v-infinite-scroll="loadShowList" class="container-show">
-        <el-row v-for="(row,index) in showList" :key="index">
-            <el-col :span="6" v-for="(item,index) in row" :key="index">
-                <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                    <el-image :src="item.cover_url" fit="fill" @click="jumpToDetail(item.id,item)"></el-image>
-                    <div>
-                        <span class="movie-detail" @click="jumpToDetail(item.id,item)">{{item.name}}</span>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
+    <!--<div v-infinite-scroll="loadShowList" class="container-show">-->
+    <div class="container-show">
+        <el-menu :default-active="activeIndex" class="show-sort-menu" mode="horizontal" @select="handleSelect">
+            <el-menu-item index="1">按热度</el-menu-item>
+            <el-menu-item index="2">按时间</el-menu-item>
+            <el-menu-item index="3">按喜好</el-menu-item>
+        </el-menu>
+
+        <div class="show-content-list">
+            <el-row v-for="(row,index) in showList" :key="index" class="row-show-movie">
+                <el-col :span="6" v-for="(item,index) in row" :key="index" class="col-show-movie">
+                    <el-card
+                            :body-style="{ padding: '0px' }"
+                            shadow="hover"
+                            @mouseover.native="mouseover($event,' card-active')"
+                            @mouseout.native="mouseout($event,' card-active')"
+                    >
+                        <el-image :src="item.cover_url" fit="fill" @click="jumpToDetail(item.id, item)"></el-image>
+                        <div class="movie-detail">
+                            <el-tag class="movie-name" >{{item.name}}</el-tag>
+                            <div class="movie-rate">
+                                <svg class="rate-star" aria-hidden="true">
+                                    <use xlink:href="#icon-star"></use>
+                                </svg>
+                                <i style="color: #f9f031">{{item.rate}}</i>
+                            </div>
+                        </div>
+                        <div class="movie-genre-box">
+                            <el-tag class="movie-genre" v-for="(genre, index) in item.genreSet" :key="index" @click="searchByQuery">
+                                {{genre.name}}
+                            </el-tag>
+                        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </div>
+
+
     </div>
 </template>
 
@@ -43,26 +70,31 @@
                     this.$message.error(result.message);
                 }
             },
-            async loadShowList() {
+            loadShowList() {
                 this.$message.info("滚动更新");
                 console.log(this.pageNum, this.pageSize);
-                const {data: result} = await this.$http.get(
-                    "movie/es/_search",
-                    {
-                        params: {
-                            pageNum: this.pageNum,
-                            pageSize: this.pageSize
+
+                setTimeout(async () => {
+                    const {data: result} = await this.$http.get(
+                        "movie/es/_search",
+                        {
+                            params: {
+                                pageNum: this.pageNum,
+                                pageSize: this.pageSize
+                            }
                         }
+                    );
+                    if (result.status === 200) {
+                        this.$message.success(result.message);
+                        console.log(result.data);
+                        this.showList.push(result.data["resultList"]);
+                        this.pageNum += 1;
+                    } else {
+                        this.$message.error(result.message);
                     }
-                );
-                if (result.status === 200) {
-                    this.$message.success(result.message);
-                    console.log(result.data);
-                    this.showList.push(result.data["resultList"]);
-                    this.pageNum += 1;
-                } else {
-                    this.$message.error(result.message);
-                }
+                }, 5000);
+
+
             },
             jumpToDetail(movieId, movieInfo) {
                 this.$router.push(
@@ -74,7 +106,19 @@
                         }
                     }
                 )
-            }
+            },
+
+            // 监听方法
+            mouseover($event,activeClassName) {
+                $event.currentTarget.className += activeClassName;
+            },
+            mouseout($event,activeClassName) {
+                $event.currentTarget.className =
+                    $event.currentTarget.className.slice(
+                        0,
+                        $event.currentTarget.className.indexOf(activeClassName)
+                    )
+            },
         },
         created() {
             this.getShowList();
@@ -83,29 +127,79 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "src/assets/sass/global";
     .container-show {
-        margin-left: 330px;
-        padding: 0;
 
-        .el-col {
-            width: 300px;
+        .show-sort-menu {
+            padding-left: 5%;
+            margin-bottom: 2%;
+            border-radius: 6px;
         }
 
-        .el-card {
-            background-color: transparent;
-            width: 160px;
-            height: 250px;
+        .show-content-list {
+            margin-left: 5%;
+            margin-right: 5%;
+
+            .el-card {
+                background-color: $bg_black_global;
+                border-color: transparent;
+                margin-right: 8px;
+                margin-left: 8px;
+                margin-bottom: 5%;
+                cursor: pointer;
+
+                .el-image {
+                    height: 300px;
+                    width: 100%;
+                }
+
+                .movie-detail {
+                    display: flex;
+                    justify-content: space-around;
+                    border: transparent;
+                    background-color: transparent;
+                    cursor: pointer;
+
+                    .movie-name {
+                        border-color: transparent;
+                        background-color: transparent;
+                        font-size: x-large;
+                    }
+
+                    .movie-rate {
+                        margin-top: 3%;
+                    }
+
+                    .rate-star {
+                        width: 15px;
+                        height: 15px;
+                        margin-right: 5px;
+                    }
+                }
+
+                .movie-genre-box {
+                    display: flex;
+
+                    .movie-genre {
+                        margin-left: 5px;
+                        color: #eeeeee;
+                        border-color: transparent;
+                        background-color: $bg_green_global;
+                        font-size: small;
+                    }
+                }
+
+            }
+
+            .card-active {
+                border-color: #eeeeee;
+                background-color: #536f85;
+                margin-right: 0;
+                margin-left: 0;
+                margin-bottom: 0;
+            }
         }
 
-        .el-image {
-            width: 150px;
-            height: 200px;
-        }
-
-        .movie-detail {
-            color: #7491e2;
-            font-size: x-large;
-        }
     }
 
 

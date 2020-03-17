@@ -127,7 +127,7 @@
                         0,
                         $event.currentTarget.className.indexOf(activeClassName)
                     )
-            },
+            }
         },
         created() {
             this.getColdRecommendList();

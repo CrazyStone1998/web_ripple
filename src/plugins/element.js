@@ -9,7 +9,7 @@ import {
     // 菜单
     Menu, Submenu, MenuItemGroup, MenuItem, Dropdown, DropdownItem, DropdownMenu,
     // 结构: 面包屑 & 轮播 & 卡片 & 开关 & 提示
-    Breadcrumb, BreadcrumbItem, CarouselItem, Carousel, Card, Switch, Tooltip,
+    Breadcrumb, BreadcrumbItem, CarouselItem, Carousel, Card, Switch, Tooltip, Slider,
     // 表格 分页
     Table, TableColumn, Pagination,
     Tag, Tree, Select, Option, Rate, Cascader, Divider, Drawer,
@@ -72,6 +72,7 @@ Vue.use(Backtop);
 Vue.use(Dropdown);
 Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
+Vue.use(Slider);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
