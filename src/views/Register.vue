@@ -82,6 +82,7 @@
 <script>
     import Login from "./Login";
     import FooterSimple from "../components/home/FooterSimple";
+    import Home from "./Home";
 
     export default {
         name: "Register",
@@ -183,15 +184,11 @@
                 this.$router.push(Login);
             },
             redirect_home(username, icon) {
-                this.$router.push(
-                    {
-                        name: "Home",
-                        params: {
-                            username: username,
-                            icon: icon
-                        }
-                    }
-                );
+                this.$store.commit('setUsername', {
+                    username: username,
+                    userIcon: icon
+                });
+                this.$router.push(Home);
             },
             handleAvatarSuccess(res, file) {
                 this.icon_url = URL.createObjectURL(file.raw);

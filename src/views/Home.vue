@@ -37,8 +37,8 @@
                     </el-button>
                 </el-col>
 
-                <el-col :span="4" class="header-right-user" v-if="this.hasLoginState">
-                    <el-avatar class="home-user-avatar" :src="this.icon"></el-avatar>
+                <el-col :span="4" class="header-right-user" v-if="this.loginState">
+                    <el-avatar class="home-user-avatar" :src="userIcon"></el-avatar>
                     <el-dropdown class="home-user-dropdown">
                         <span class="el-dropdown-link">
                             <el-tag class="home-user-tag">{{username}}</el-tag>
@@ -91,23 +91,38 @@
     import Footer from "../components/home/Footer";
     import Resource from "./Resource";
     import Register from "./Register";
+    import {mapState} from "vuex";
+    import Rank from "./Rank";
 
-    // import eventBuss from "../assets/js/eventBuss";
 
     export default {
 
         name: "Home",
         components: {Footer, CoolRecommend, PreferenceRecommend, PopularRecommend},
-        props: ["icon", "username"],
         data() {
             return {
                 select: '',
                 drawer: false,
-                hasLoginState: false,
                 hasLoading: 3,
                 query_content: ''
             };
         },
+        computed: mapState({
+            loginState: 'loginState',
+            username: 'username',
+            userIcon: 'userIcon',
+            loadingCalculation: "loadingCalculation"
+        }),
+        watch: {
+            loadingCalculation(curVal, oldVal) {
+
+                if (curVal === 0 && oldVal === 1) {
+                    const loading = this.$loading();
+                    loading.close();
+                }
+            }
+        },
+
         methods: {
             redirect_login() {
                 this.$router.push(Login);
@@ -118,10 +133,7 @@
             logout() {
                 console.log("********");
                 console.log(this.username, " ======> logout");
-                window.sessionStorage.clear();
-                this.username = null;
-                this.icon = null;
-                this.hasLoginState = false;
+                this.$store.commit('delUser');
                 console.log("logout && redirect");
                 console.log("********");
             },
@@ -140,21 +152,11 @@
                 this.$router.push(Resource);
             },
             rankLink() {
-
+                this.$router.push(Rank);
             },
 
             search() {
 
-            },
-
-            hasLogin() {
-                if (this.username !== undefined && this.icon !== undefined) {
-                    this.hasLoginState = true;
-                } else {
-                    this.username = window.sessionStorage.getItem(this.$global.username);
-                    this.icon = window.sessionStorage.getItem(this.$global.icon);
-                    this.hasLoginState = this.username !== null && this.icon !== null;
-                }
             },
 
             // 监听方法
@@ -169,24 +171,16 @@
                     )
             }
         },
-        created() {
-            this.hasLogin();
-
-            // this.hasLoading = 3;
-            // const loading = this.$loading({
-            //     lock: true,
-            //     text: 'Loading',
-            //     spinner: 'el-icon-loading',
-            //     background: 'rgba(0, 0, 0, 0.7)'
-            // });
-            // eventBuss.$on('homeLoadingEvent', () => {
-            //     console.log("被调用",name);
-            //     this.hasLoading -= 1;
-            //     if (this.hasLoading === 0) {
-            //         loading.close();
-            //     }
-            // });
-        }
+        beforeCreate() {
+            if (this.$store.state.loadingCalculation) {
+                this.$loading({
+                    lock: true,
+                    text: '加 载 中',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(26, 34, 40, 0.9)'
+                });
+            }
+        },
     }
 </script>
 
@@ -200,7 +194,6 @@
 
         .home-container-header {
             background-color: $bg_red_global;
-            height: 80px;
             background-image: linear-gradient(to bottom, $bg_red_global, $bg_black_global, $bg_red_global);
             padding: 0;
 

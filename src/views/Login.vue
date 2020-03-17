@@ -121,19 +121,13 @@
                 this.$router.push(Register);
             },
             redirect_home(username, icon) {
-                this.$router.push(
-                    {
-                        name: "Home",
-                        params: {
-                            username: username,
-                            icon: icon
-                        }
-                    }
-                );
+                this.$store.commit('setUser', {
+                    username: username,
+                    userIcon: icon
+                });
+                this.$router.push(Home);
             },
             customer_login() {
-                window.sessionStorage.setItem(this.$global.username, null);
-                window.sessionStorage.setItem(this.$global.userIcon, null);
                 this.$router.push(Home);
             }
         }

@@ -36,7 +36,7 @@
                 <el-card :body-style="{paddingBottom: '0'}"
                          class="prefer-rank">
                     <div slot="header">
-                        <el-image class="tag-recommend" :src="require('../../assets/img/tag-recommend.png')" fit="cover"></el-image>
+                        <el-image class="tag-recommend" :src="require('../../assets/img/tag-proposal.png')" fit="fill"></el-image>
                     </div>
                     <div v-for="(row,index) in coldRecommendList" :key="index">
                         <el-row
@@ -76,24 +76,28 @@
 </template>
 
 <script>
-    import eventBuss from "../../assets/js/eventBuss";
+    import {mapState} from "vuex";
     export default {
         name: "ColdRecommend",
         data() {
             return {
-                coldRecommendList: []
             };
         },
+        computed: mapState({
+            coldRecommendList: "coldRecommendList"
+        }),
         methods: {
             async getColdRecommendList() {
+                if (this.$store.state.coldRecommendList.length) {
+                    return;
+                }
                 console.log('初始化 冷门推荐');
                 const {data: result} = await this.$http.get("movie/es/cold");
                 if (result.status === 200) {
                     this.$message.success(result.message);
-                    this.coldRecommendList.push(result.data["resultList"].slice(0, 4));
-                    this.coldRecommendList.push(result.data["resultList"].slice(4, 8));
-                    eventBuss.$emit('test');
-                    console.log(this.coldRecommendList)
+                    this.$store.commit('setColdRecommendList', {
+                        totalColdRecommendList: result.data['resultList']
+                    });
                 } else {
                     this.$message.error(result.message);
                 }

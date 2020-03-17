@@ -1,5 +1,5 @@
 <template>
-    <el-container class="movie-detail">
+    <el-container class="container-movie-detail">
         <el-header style="height: 30px">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="homeLink">首页</el-breadcrumb-item>
@@ -135,12 +135,12 @@
 </script>
 
 <style lang="scss" scoped>
-    $bg-white: #F5F5FA;
-    .movie-detail {
+    @import "src/assets/sass/global";
+
+
+    .container-movie-detail {
         padding: 0;
         background-color: #8ce4ec;
-        margin-left: 200px;
-        margin-right: 200px;
 
         .el-header {
             margin-top: 20px;

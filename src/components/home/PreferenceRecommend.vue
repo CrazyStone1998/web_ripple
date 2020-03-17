@@ -77,23 +77,28 @@
 </template>
 
 <script>
-    import eventBuss from "../../assets/js/eventBuss";
+    import {mapState} from "vuex";
     export default {
         name: "PreferenceRecommend",
         data() {
             return {
-                preferenceRecommendList: []
             };
         },
+        computed: mapState({
+            preferenceRecommendList: "preferenceRecommendList"
+        }),
         methods: {
             async getPreferenceRecommendList() {
+                if (this.$store.state.preferenceRecommendList.length) {
+                    return;
+                }
                 console.log("初始化 偏好推荐");
                 const {data: result} = await this.$http.get("movie/es/prefer");
                 if (result.status === 200) {
                     this.$message.success(result.message);
-                    this.preferenceRecommendList.push(result.data["resultList"].slice(8, 12));
-                    this.preferenceRecommendList.push(result.data["resultList"].slice(12, 16));
-                    eventBuss.$emit('homeLoadingEvent', 'ColdRecommend');
+                    this.$store.commit('setPreferenceRecommendList',{
+                        totalPreferenceRecommendList: result.data['resultList']
+                    })
                 } else {
                     this.$message.error(result.message);
                 }

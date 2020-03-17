@@ -1,55 +1,83 @@
 <template>
-    <el-container>
-        <el-header height="80px">
-            <el-row>
-                <el-col :span="6">
-                    <img class="img-logo" src="../assets/img/logo.png" alt=""/>
-                </el-col>
-                <el-col :span="14" class="header-middle">
-                    <el-button class="btn-link" @click="drawer = !drawer" type="primary" round>菜单</el-button>
-                    <el-input prefix-icon="el-icon-search" placeholder="请输入内容" v-model="query" class="search-input">
-                        <el-select v-model="select" slot="prepend" placeholder="All">
-                            <el-option label="All" value="1"></el-option>
-                            <el-option label="订单号" value="2"></el-option>
-                            <el-option label="用户电话" value="3"></el-option>
-                        </el-select>
-                        <el-button slot="append" icon="el-icon-search"></el-button>
-                    </el-input>
-                    <el-button class="btn-link" type="primary" round @click="homeLink">首页</el-button>
-                    <el-button class="btn-link" type="primary" round>排行榜</el-button>
-                </el-col>
-                <el-col :span="4">
-                    <el-button class="btn-login" type="primary" round>Login</el-button>
-                </el-col>
+    <el-container class="resource-container">
+        <el-header class="resource-container-header" style="height: 85px">
+        <!--    <meta name="referrer" content="no-referrer"/>-->
+        <!--    <el-row class="header-box">-->
+        <!--        <el-col :span="7">-->
+        <!--            <el-image :src="require('../assets/img/logo.png')" href="/login" class="logo" fit="fill"></el-image>-->
+        <!--            <el-image :src="require('../assets/img/rio.png')" class="rio"></el-image>-->
+        <!--        </el-col>-->
+        <!--        <el-col :span="13" class="header-middle">-->
 
-            </el-row>
+        <!--            <el-input prefix-icon="el-icon-search" placeholder="请输入内容" v-model="query_content"-->
+        <!--                      class="search-input">-->
+
+        <!--                <el-button slot="append" icon="el-icon-search"-->
+        <!--                           @click="search"-->
+        <!--                ></el-button>-->
+
+        <!--            </el-input>-->
+        <!--            <el-button-->
+        <!--                    class="btn-link" @click="homeLink"-->
+        <!--                    @mouseover.native="mouseover($event,'btn-active')"-->
+        <!--                    @mouseout.native="mouseout($event, 'btn-active')"-->
+        <!--            >首页-->
+        <!--            </el-button>-->
+        <!--            <el-button class="btn-link" type="primary" @click="rankLink"-->
+        <!--                       @mouseover.native="mouseover($event,'btn-active')"-->
+        <!--                       @mouseout.native="mouseout($event, 'btn-active')"-->
+        <!--            >排行榜-->
+        <!--            </el-button>-->
+        <!--        </el-col>-->
+
+        <!--        <el-col :span="4" class="header-right-user" v-if="this.loginState">-->
+        <!--            <el-avatar class="home-user-avatar" :src="userIcon"></el-avatar>-->
+        <!--            <el-dropdown class="home-user-dropdown">-->
+        <!--                <span class="el-dropdown-link">-->
+        <!--                    <el-tag class="home-user-tag">{{username}}</el-tag>-->
+        <!--                </span>-->
+        <!--                <el-dropdown-menu slot="dropdown">-->
+        <!--                    <el-dropdown-item>系统消息</el-dropdown-item>-->
+        <!--                    <el-dropdown-item>私信</el-dropdown-item>-->
+        <!--                    <el-dropdown-item>愿望单</el-dropdown-item>-->
+        <!--                    <el-dropdown-item @click.native="redirect_userInfo">我的信息</el-dropdown-item>-->
+        <!--                    <el-dropdown-item @click.native="logout">退出</el-dropdown-item>-->
+        <!--                </el-dropdown-menu>-->
+        <!--            </el-dropdown>-->
+        <!--        </el-col>-->
+        <!--        <el-col :span="4" class="header-right" v-else>-->
+        <!--            <el-divider direction="vertical" style="width: 100px"></el-divider>-->
+        <!--            <el-button class="btn-login"-->
+        <!--                       icon="el-icon-s-promotion"-->
+        <!--                       @click="redirect_login"-->
+        <!--                       @mouseover.native="mouseover($event, 'btn-active')"-->
+        <!--                       @mouseout.native="mouseout($event, 'btn-active')">-->
+        <!--                Sign in-->
+        <!--            </el-button>-->
+        <!--        </el-col>-->
+        <!--    </el-row>-->
         </el-header>
 
-        <el-main>
-            <Query></Query>
-            <el-divider></el-divider>
-            <Show></Show>
-            <el-divider></el-divider>
+        <el-main class="resource-container-main">
+            <div class="main-content">
+                <Query></Query>
+                <el-divider></el-divider>
+                <Show></Show>
+            </div>
             <Footer></Footer>
-
         </el-main>
-
-        <el-drawer
-                title="我是标题"
-                :visible.sync="drawer"
-                direction="ttb"
-                size="20%">
-            <span>我来啦!</span>
-        </el-drawer>
     </el-container>
 </template>
 
 <script>
     import Login from "./Login";
     import Footer from "../components/home/Footer";
-    import Query from "../components/resource/Query";
-    import Show from "../components/resource/Show";
+    import Query from "../components/library/Category";
+    import Show from "../components/library/Show";
     import Home from "./Home";
+    import Rank from "./Rank";
+    import {mapState} from "vuex";
+    import UserDetail from "../components/detail/UserDetail";
 
     export default {
         name: "Resource",
@@ -57,18 +85,52 @@
         data() {
             return {
                 select: '',
-                drawer: false
+                drawer: false,
+                query_content: ''
             }
         },
+        computed: mapState({
+            loginState: "loginState",
+            username: "username",
+            userIcon: "userIcon"
+        }),
         methods: {
+
+            search() {
+
+            },
+
             logout() {
                 console.log("user ======> logout");
-                window.sessionStorage.clear();
+                this.$store.commit('delUser');
                 this.$router.push(Login);
                 console.log("logout && redirect")
             },
+
+            redirect_login() {
+                this.$router.push(Login);
+            },
+            redirect_userInfo() {
+                this.$router.push(UserDetail);
+            },
+
             homeLink() {
                 this.$router.push(Home);
+            },
+            rankLink() {
+                this.$router.push(Rank);
+            },
+
+            // 监听方法
+            mouseover($event, activeClassName) {
+                $event.currentTarget.className += " " + activeClassName;
+            },
+            mouseout($event, activeClassName) {
+                $event.currentTarget.className =
+                    $event.currentTarget.className.slice(
+                        0,
+                        $event.currentTarget.className.indexOf(" " + activeClassName)
+                    )
             }
 
         }
@@ -76,51 +138,151 @@
 </script>
 
 <style lang="scss" scoped>
-    $bg_color: #303134;
-    $fg_color: #535457;
-    .el-container {
+    @import "src/assets/sass/global";
+    .resource-container {
         height: 100%;
-        background-color: $bg_color;
-    }
-    .el-header {
-        background-color: $fg_color;
+        background-color: $bg_black_global;
 
-        .img-logo {
-            width: 75px;
-            height: 75px;
-        }
-        .header-middle {
-            display: flex;
-            .search-input {
-                margin-top: 20px;
-                width: 550px;
-                margin-right: 30px;
-                margin-left: 40px;
+        .resource-container-header {
+
+            background-color: $bg_red_global;
+            background-image: linear-gradient(to bottom,  $bg_red_global,$bg_black_global);
+            padding: 0;
+
+            .header-box {
+                .logo {
+                    margin-left: 20%;
+                    margin-right: 3%;
+                    width: 75px;
+                    height: 75px;
+                    cursor: pointer;
+                }
+
+                .rio {
+                    width: 125px;
+                    height: 70px;
+                    cursor: pointer;
+                }
+
+                .header-middle {
+                    display: flex;
+                    justify-content: space-around;
+
+                    .search-input {
+                        margin-top: 20px;
+                        width: 550px;
+                        margin-right: 30px;
+                        margin-left: 40px;
+                    }
+
+                    .btn-menu {
+                        margin-top: 1%;
+                        width: 45px;
+                        height: 45px;
+                        cursor: pointer;
+                        padding-left: 5px;
+                    }
+
+                    .menu-active {
+                        border-radius: 6px;
+                        box-shadow: 0 0 5px 10px rgba(211, 232, 248, 0.5);
+                        width: 50px;
+                        padding-left: 0;
+                    }
+
+                    .btn-link {
+                        margin-top: 1%;
+                        background-color: transparent;
+                        border-color: transparent;
+                        font-size: x-large;
+                        margin-left: -50px;
+                        margin-right: -30px;
+                        color: $bg_blue_global;
+                    }
+
+                    .btn-active {
+                        border-color: $bg_green_global;
+                        color: $bg_green_global;
+                        font-size: xx-large;
+                        background-color: rgba(211, 232, 248, 0.3);
+                        padding: 8px;
+
+                    }
+                }
+
+                .header-right {
+                    margin-top: 20px;
+                    display: flex;
+                    justify-content: flex-end;
+
+                    .el-divider--vertical {
+                        width: 3px;
+                        height: 50px;
+                        border-radius: 6px;
+                        background-color: $bg_green_global;
+                        border-color: rgba(211, 232, 248, 0.3);
+                    }
+
+                    .btn-login {
+                        background-color: transparent;
+                        border-color: rgba(211, 232, 248, 0.3);
+                        font-size: x-large;
+                        margin-right: 10%;
+                        border-radius: 6px;
+                        padding-left: 0;
+                        padding-right: 2%;
+                        color: $bg_gray_light_global;
+                    }
+
+                    .btn-active {
+                        border-color: $bg_green_global;
+                        color: $bg_green_global;
+                        font-size: xx-large;
+                        margin-top: -5px;
+                        margin-right: 0;
+                    }
+                }
+
+                .header-right-user {
+                    margin-top: 20px;
+                    display: flex;
+                    justify-content: flex-end;
+
+                    .home-user-avatar {
+                        cursor: pointer;
+                    }
+
+                    .el-dropdown-link {
+                    }
+
+                    .home-user-tag {
+                        background-color: transparent;
+                        border-color: transparent;
+                        font-size: x-large;
+                        color: $bg_green_global;
+                        cursor: pointer;
+
+
+                    }
+
+                    .home-user-dropdown {
+                        margin: 5px 10px 0 10px;
+
+                    }
+                }
             }
-            .btn-link {
-                margin-top: 15px;
+        }
 
+        .resource-container-main {
+            padding: 0;
+            .main-content {
+                background-color: $bg_gray_middle_global;
+                margin-left: 15%;
+                margin-right: 15%;
+                box-shadow: 0 0 50px 20px rgba(235,242,242,0.5);
+                border-radius: 30px;
+                padding-top: 30px;
             }
         }
-
-        .btn-login {
-            margin-top: 15px;
-        }
-        .icon-link {
-            width: 45px;
-            height: 45px;
-            margin-top: 10px;
-            margin-left: 5px;
-            margin-right: 5px;
-            cursor: pointer;
-        }
-    }
-
-    .el-main {
-        margin-top: 15px;
-
-    }
-    .el-footer {
-        color: #eeeeee;
     }
 </style>
