@@ -141,55 +141,55 @@
             margin-right: 5%;
 
             .el-card {
-                background-color: $bg_black_global;
-                border-color: transparent;
-                margin-right: 8px;
-                margin-left: 8px;
-                margin-bottom: 5%;
-                cursor: pointer;
+                 background-color: $bg_black_global;
+                 border-color: transparent;
+                 margin-right: 8px;
+                 margin-left: 8px;
+                 margin-bottom: 5%;
+                 cursor: pointer;
 
-                .el-image {
-                    height: 300px;
-                    width: 100%;
-                }
+                 .el-image {
+                     height: 300px;
+                     width: 100%;
+                 }
 
-                .movie-detail {
-                    display: flex;
-                    justify-content: space-around;
-                    border: transparent;
-                    background-color: transparent;
-                    cursor: pointer;
+                 .movie-detail {
+                     display: flex;
+                     justify-content: space-around;
+                     border: transparent;
+                     background-color: transparent;
+                     cursor: pointer;
 
-                    .movie-name {
-                        border-color: transparent;
-                        background-color: transparent;
-                        font-size: x-large;
-                    }
+                     .movie-name {
+                         border-color: transparent;
+                         background-color: transparent;
+                         font-size: x-large;
+                     }
 
-                    .movie-rate {
-                        margin-top: 3%;
-                    }
+                     .movie-rate {
+                         margin-top: 3%;
+                     }
 
-                    .rate-star {
-                        width: 15px;
-                        height: 15px;
-                        margin-right: 5px;
-                    }
-                }
+                     .rate-star {
+                         width: 15px;
+                         height: 15px;
+                         margin-right: 5px;
+                     }
+                 }
 
-                .movie-genre-box {
-                    display: flex;
+                 .movie-genre-box {
+                     display: flex;
 
-                    .movie-genre {
-                        margin-left: 5px;
-                        color: #eeeeee;
-                        border-color: transparent;
-                        background-color: $bg_green_global;
-                        font-size: small;
-                    }
-                }
+                     .movie-genre {
+                         margin-left: 5px;
+                         color: #eeeeee;
+                         border-color: transparent;
+                         background-color: $bg_green_global;
+                         font-size: small;
+                     }
+                 }
 
-            }
+             }
 
             .card-active {
                 border-color: #eeeeee;

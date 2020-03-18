@@ -1,6 +1,6 @@
 <template>
-    <el-container class="resource-container">
-        <el-header class="resource-container-header" style="height: 85px">
+    <el-container class="detail-container">
+        <el-header class="detail-container-header" style="height: 85px">
             <meta name="referrer" content="no-referrer"/>
             <el-row class="header-box">
                 <el-col :span="7">
@@ -58,7 +58,7 @@
             </el-row>
         </el-header>
 
-        <el-main class="resource-container-main">
+        <el-main class="detail-container-main">
             <router-view></router-view>
             <el-divider></el-divider>
             <Footer></Footer>
@@ -135,11 +135,13 @@
 <style lang="scss" scoped>
     @import "src/assets/sass/global";
 
-    .resource-container {
+    .detail-container {
         height: 100%;
         background-color: $bg_black_global;
 
-        .resource-container-header {
+
+
+        .detail-container-header {
 
             background-color: $bg_red_global;
             background-image: linear-gradient(to bottom, $bg_red_global, $bg_black_global);
@@ -269,7 +271,7 @@
             }
         }
 
-        .resource-container-main {
+        .detail-container-main {
             padding: 0;
         }
     }

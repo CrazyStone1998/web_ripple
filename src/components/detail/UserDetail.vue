@@ -1,15 +1,33 @@
 <template>
-    <div>
-        this is userDetail
-    </div>
+    <el-container class="container-userDetail">
+
+
+    </el-container>
 </template>
 
 <script>
     export default {
-        name: "UserDetail"
+        name: "UserDetail",
+        data() {
+            return{
+
+            }
+        },
+        computed: {
+
+        },
+        created() {
+
+        },
+        mounted() {
+
+        }
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
+    .container-movie-detail {
+
+    }
 </style>

@@ -11,11 +11,7 @@ $bg_orange_global: #E6A23C;
 $bg_yellow_global: #f5c518;
 $bg_young_global: #d3e8f8;
 $bg_gray_global: #B3B3B3;
-
-
-//.el-container {
-//  font-family: "PingFang SC";
-//}
+$bg_green_white_global: #E1F4D7;
 
 html, body, #app{
   height: 100%;
@@ -39,26 +35,3 @@ html, body, #app{
   font-size: 12px;
 }
 
-.el-pagination {
-  margin-top: 15px;
-}
-
-.el-steps {
-  margin: 15px 0;
-}
-
-.el-step__title {
-  font-size: 13px;
-}
-
-.ql-editor {
-  min-height: 300px;
-}
-
-.icon {
-  width: 5em;
-  height: 5em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
-}

@@ -21,7 +21,7 @@ import StarringDetail from "../components/detail/StarringDetail";
 import DirectorScreenwriterDetail from "../components/detail/DirectorScreenwriterDetail";
 import MovieDetail from "../components/detail/MovieDetail";
 import Demo from "../views/Demo";
-import Ranking from "../components/rank/Ranking";
+import Rank from "../views/Rank";
 
 
 Vue.use(VueRouter);
@@ -59,7 +59,7 @@ const routes = [
     },
 
     {
-        path: "/ranking", name: "Ranking", component: Ranking
+        path: "/rank", name: "rank", component: Rank
     },
 
     {
@@ -95,7 +95,7 @@ const routes = [
                 props: route => ({id: route.params.id, directorScreenwriter: route.params.directorScreenwriter})
             }
         ]
-    }
+    },
 
 ];
 

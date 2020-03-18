@@ -1,7 +1,7 @@
 import Vue from "vue";
 import {
     // 表单 & 按钮 & Tips & 头像
-    Button, Form, FormItem, Input, Image, Avatar, Link,
+    Button, Form, FormItem, Input, Image, Avatar, Link, Badge,
     // 导入弹框提示组件 对话框 消息盒子
     Message, Dialog, MessageBox,
     // 容器 & 布局
@@ -11,11 +11,10 @@ import {
     // 结构: 面包屑 & 轮播 & 卡片 & 开关 & 提示
     Breadcrumb, BreadcrumbItem, CarouselItem, Carousel, Card, Switch, Tooltip, Slider,
     // 表格 分页
-    Table, TableColumn, Pagination,
+    Table, TableColumn, Pagination, Collapse, CollapseItem, CheckboxGroup, CheckboxButton, Checkbox,
     Tag, Tree, Select, Option, Rate, Cascader, Divider, Drawer,
-    CheckboxGroup, CheckboxButton, Checkbox,
+
     InfiniteScroll,
-    Collapse, CollapseItem,
     Upload, Backtop, Loading
 
 
@@ -73,6 +72,7 @@ Vue.use(Dropdown);
 Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
 Vue.use(Slider);
+Vue.use(Badge);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;

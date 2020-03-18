@@ -6,7 +6,7 @@ import axios from "axios";
 import base from "./assets/js/base";
 import "./plugins/element.js";
 import "./assets/js/globalArgs";
-import eventBuss from "./assets/js/eventBuss";
+
 
 import "./assets/sass/global.scss";
 import NProgress from "nprogress";
@@ -44,7 +44,6 @@ axios.interceptors.response.use(config => {
 Vue.use(base);
 Vue.prototype.$http = axios;
 Vue.prototype.$global = globalArgs;
-Vue.prototype.$eventBus = eventBuss;
 Vue.config.productionTip = false;
 
 new Vue({
