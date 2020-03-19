@@ -92,7 +92,7 @@
     import Resource from "./Resource";
     import Register from "./Register";
     import {mapState} from "vuex";
-    import Rank from "./Rank";
+    import Rank from "./TopRank";
 
 
     export default {

@@ -20,20 +20,25 @@ import UserDetail from "../components/detail/UserDetail";
 import StarringDetail from "../components/detail/StarringDetail";
 import DirectorScreenwriterDetail from "../components/detail/DirectorScreenwriterDetail";
 import MovieDetail from "../components/detail/MovieDetail";
-import Demo from "../views/Demo";
-import Rank from "../views/Rank";
+import TopRank from "../views/TopRank";
 
 
 Vue.use(VueRouter);
 
 const routes = [
-    // 测试路由
-    {path: "/demo", name: "Demo", component: Demo},
 
     // 基础路由
-    {path: "/", redirect: Login},
-    {path: "/login", name: "Login", component: Login},
-    {path: "/register", name: "Register", component: Register},
+    {
+        path: "/", redirect: Home
+    },
+
+    {
+        path: "/login", name: "Login", component: Login
+    },
+
+    {
+        path: "/register", name: "Register", component: Register
+    },
 
     {
         path: "/admin", name: "Admin", redirect: AdminIndex, component: AdminHome, children: [
@@ -59,7 +64,7 @@ const routes = [
     },
 
     {
-        path: "/rank", name: "rank", component: Rank
+        path: "/topRank", name: "topRank", component: TopRank
     },
 
     {

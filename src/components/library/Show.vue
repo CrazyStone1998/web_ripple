@@ -1,7 +1,7 @@
 <template>
     <!--<div v-infinite-scroll="loadShowList" class="container-show">-->
     <div class="container-show">
-        <el-menu :default-active="activeIndex" class="show-sort-menu" mode="horizontal" @select="handleSelect">
+        <el-menu default-active="1" class="show-sort-menu" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">按热度</el-menu-item>
             <el-menu-item index="2">按时间</el-menu-item>
             <el-menu-item index="3">按喜好</el-menu-item>
@@ -30,6 +30,7 @@
                             <el-tag class="movie-genre" v-for="(genre, index) in item.genreSet" :key="index" @click="searchByQuery">
                                 {{genre.name}}
                             </el-tag>
+
                         </div>
                     </el-card>
                 </el-col>
@@ -107,7 +108,12 @@
                     }
                 )
             },
+            handleSelect() {
 
+            },
+            searchByQuery() {
+
+            },
             // 监听方法
             mouseover($event,activeClassName) {
                 $event.currentTarget.className += activeClassName;

@@ -8,9 +8,9 @@
             </el-breadcrumb>
             <el-divider></el-divider>
         </el-header>
+
         <el-container class="inner-container-movie-detail">
             <el-main class="inner-container-movie-detail-main">
-
                 <el-row class="movie-detail-description">
                     <el-col :span="4">
                         <el-image :src="movieInfo.cover_url" fit="fill" class="movie-detail-cover"></el-image>

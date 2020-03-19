@@ -74,7 +74,7 @@
     import Query from "../components/library/Category";
     import Show from "../components/library/Show";
     import Home from "./Home";
-    import Rank from "./Rank";
+    import Rank from "./TopRank";
     import {mapState} from "vuex";
     import UserDetail from "../components/detail/UserDetail";
 

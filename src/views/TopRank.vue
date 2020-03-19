@@ -1,6 +1,6 @@
 <template>
-    <el-container class="rank-container">
-        <el-header class="rank-container-header" style="height: 85px">
+    <el-container class="top-rank-container">
+        <el-header class="top-rank-container-header" style="height: 85px">
             <meta name="referrer" content="no-referrer"/>
             <el-row class="header-box">
                 <el-col :span="7">
@@ -58,9 +58,9 @@
             </el-row>
         </el-header>
 
-        <el-main class="rank-container-main">
+        <el-main class="top-rank-container-main">
             <div class="main-content">
-
+                <Ranking></Ranking>
             </div>
             <Footer></Footer>
         </el-main>
@@ -74,10 +74,11 @@
     import {mapState} from "vuex";
     import UserDetail from "../components/detail/UserDetail";
     import Resource from "./Resource";
+    import Ranking from "../components/rank/RankShow";
 
     export default {
-        name: "Rank",
-        components: { Footer},
+        name: "TopRank",
+        components: {Ranking, Footer},
         data() {
             return {
                 select: '',
@@ -135,11 +136,11 @@
 
 <style lang="scss" scoped>
     @import "src/assets/sass/global";
-    .rank-container {
+    .top-rank-container {
         height: 100%;
         background-color: $bg_black_global;
 
-        .rank-container-header {
+        .top-rank-container-header {
 
             background-color: $bg_red_global;
             background-image: linear-gradient(to bottom,  $bg_red_global,$bg_black_global);
@@ -269,7 +270,7 @@
             }
         }
 
-        .rank-container-main {
+        .top-rank-container-main {
             padding: 0;
             .main-content {
                 background-color: $bg_gray_middle_global;

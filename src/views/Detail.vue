@@ -70,7 +70,7 @@
     import Login from "./Login";
     import Footer from "../components/home/Footer";
     import Home from "./Home";
-    import Rank from "./Rank";
+    import Rank from "./TopRank";
     import {mapState} from "vuex";
     import UserDetail from "../components/detail/UserDetail";
 
