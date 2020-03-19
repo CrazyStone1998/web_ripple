@@ -92,7 +92,7 @@
     import Resource from "./Resource";
     import Register from "./Register";
     import {mapState} from "vuex";
-    import Rank from "./TopRank";
+    import TopRank from "./TopRank";
 
 
     export default {
@@ -152,7 +152,7 @@
                 this.$router.push(Resource);
             },
             rankLink() {
-                this.$router.push(Rank);
+                this.$router.push(TopRank);
             },
 
             search() {

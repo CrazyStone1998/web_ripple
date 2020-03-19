@@ -70,7 +70,7 @@
     import Login from "./Login";
     import Footer from "../components/home/Footer";
     import Home from "./Home";
-    import Rank from "./TopRank";
+    import TopRank from "./TopRank";
     import {mapState} from "vuex";
     import UserDetail from "../components/detail/UserDetail";
 
@@ -113,7 +113,7 @@
                 this.$router.push(Home);
             },
             rankLink() {
-                this.$router.push(Rank);
+                this.$router.push(TopRank);
             },
 
             // 监听方法

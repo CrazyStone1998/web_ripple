@@ -26,7 +26,7 @@
                     <el-button class="btn-link" type="primary" @click="resourceLink"
                                @mouseover.native="mouseover($event,'btn-active')"
                                @mouseout.native="mouseout($event, 'btn-active')"
-                    >排行榜
+                    >资源库
                     </el-button>
                 </el-col>
 
@@ -59,9 +59,7 @@
         </el-header>
 
         <el-main class="top-rank-container-main">
-            <div class="main-content">
-                <Ranking></Ranking>
-            </div>
+            <RankShow></RankShow>
             <Footer></Footer>
         </el-main>
     </el-container>
@@ -74,16 +72,17 @@
     import {mapState} from "vuex";
     import UserDetail from "../components/detail/UserDetail";
     import Resource from "./Resource";
-    import Ranking from "../components/rank/RankShow";
+    import RankShow from "../components/top/RankShow";
 
     export default {
         name: "TopRank",
-        components: {Ranking, Footer},
+        components: {RankShow, Footer},
         data() {
             return {
                 select: '',
                 drawer: false,
-                query_content: ''
+                query_content: '',
+
             }
         },
         computed: mapState({
@@ -96,14 +95,12 @@
             search() {
 
             },
-
             logout() {
                 console.log("user ======> logout");
                 this.$store.commit('delUser');
                 this.$router.push(Login);
                 console.log("logout && redirect")
             },
-
             redirect_login() {
                 this.$router.push(Login);
             },
@@ -136,6 +133,7 @@
 
 <style lang="scss" scoped>
     @import "src/assets/sass/global";
+
     .top-rank-container {
         height: 100%;
         background-color: $bg_black_global;
@@ -143,7 +141,7 @@
         .top-rank-container-header {
 
             background-color: $bg_red_global;
-            background-image: linear-gradient(to bottom,  $bg_red_global,$bg_black_global);
+            background-image: linear-gradient(to bottom, $bg_red_global, $bg_black_global);
             padding: 0;
 
             .header-box {
@@ -270,16 +268,5 @@
             }
         }
 
-        .top-rank-container-main {
-            padding: 0;
-            .main-content {
-                background-color: $bg_gray_middle_global;
-                margin-left: 15%;
-                margin-right: 15%;
-                box-shadow: 0 0 50px 20px rgba(235,242,242,0.5);
-                border-radius: 30px;
-                margin-bottom: 100px;
-            }
-        }
     }
 </style>

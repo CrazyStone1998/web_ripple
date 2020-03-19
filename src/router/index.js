@@ -64,11 +64,11 @@ const routes = [
     },
 
     {
-        path: "/topRank", name: "topRank", component: TopRank
+        path: "/top", name: "TopRank", component: TopRank
     },
 
     {
-        path: "/mine", name: "Mine", component: Mine,
+        path: "/mine", name: "Mine", component: Mine
     },
 
     {

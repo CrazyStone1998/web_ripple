@@ -74,7 +74,6 @@
     import Query from "../components/library/Category";
     import Show from "../components/library/Show";
     import Home from "./Home";
-    import Rank from "./TopRank";
     import {mapState} from "vuex";
     import UserDetail from "../components/detail/UserDetail";
 
@@ -117,7 +116,9 @@
                 this.$router.push(Home);
             },
             rankLink() {
-                this.$router.push(Rank);
+                this.$router.push(
+                    {name: ""}
+                );
             },
 
             // 监听方法
