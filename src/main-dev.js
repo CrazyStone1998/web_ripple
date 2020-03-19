@@ -7,7 +7,6 @@ import base from "./assets/js/base";
 import "./plugins/element.js";
 import "./assets/js/globalArgs";
 
-
 import "./assets/sass/global.scss";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";

@@ -17,15 +17,18 @@ import Register from "../views/Register";
 import Mine from "../views/Mine";
 import Detail from "../views/Detail";
 import UserDetail from "../components/detail/UserDetail";
-import StarringDetail from "../components/detail/StarringDetail";
-import DirectorScreenwriterDetail from "../components/detail/DirectorScreenwriterDetail";
 import MovieDetail from "../components/detail/MovieDetail";
 import TopRank from "../views/TopRank";
+import CelebrityDetail from "../components/detail/CelebrityDetail";
+import Demo from "../views/Demo";
 
 
 Vue.use(VueRouter);
 
 const routes = [
+    {
+        path: "/demo", component: Demo
+    },
 
     // 基础路由
     {
@@ -84,21 +87,14 @@ const routes = [
                 path: "user/:id",
                 name: "UserDetail",
                 component: UserDetail,
-                props: route => ({id: route.params.id, movie: route.params.user})
-            },
-
-            {
-                path: "starring/:id",
-                name: "StarringDetail",
-                component: StarringDetail,
-                props: route => ({id: route.params.id, starring: route.params.starring})
+                props: route => ({id: route.params.id, user: route.params.user})
             },
             {
-                path: "directorScreenwriter/:id",
-                name: "DirectorScreenwriterDetail",
-                component: DirectorScreenwriterDetail,
-                props: route => ({id: route.params.id, directorScreenwriter: route.params.directorScreenwriter})
-            }
+                path: "celebrity/:id",
+                name: "Celebrity",
+                component: CelebrityDetail,
+                props: route => ({id: route.params.id, celebrity: route.params.celebrity})
+            },
         ]
     },
 

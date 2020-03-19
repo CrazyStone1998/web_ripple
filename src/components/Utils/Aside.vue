@@ -1,15 +1,16 @@
 <template>
     <div>
-        this is review
+        this is aside
     </div>
 </template>
 
 <script>
     export default {
-        name: "Review"
+        name: "Aside"
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
 
 </style>
