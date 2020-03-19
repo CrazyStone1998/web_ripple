@@ -102,7 +102,10 @@
                 </el-row>
 
                 <el-divider content-position="left">资源</el-divider>
-                <el-row class="movie-detail-resource"></el-row>
+                <el-row class="movie-detail-mp4" style="width: 500px;height: 300px">
+                    <RioVideoPlayer :video_src="'http://vt1.doubanio.com/202003192308/31cef8f54686e776edffb05a73fca3ef/view/movie/M/402530176.mp4'" :cover_url="'https://img9.doubanio.com/view/photo/sqxs/public/p2575977024.webp'"></RioVideoPlayer>
+                </el-row>
+
                 <el-divider content-position="left">获奖</el-divider>
                 <el-row class="movie-detail-resource"></el-row>
                 <el-divider content-position="left">演员</el-divider>
@@ -255,9 +258,11 @@
     import Home from "../../views/Home";
     import Resource from "../../views/Resource";
     import echarts from 'echarts';
+    import RioVideoPlayer from "../Utils/RioVideoPlayer";
 
     export default {
         name: "MovieDetail",
+        components: {RioVideoPlayer},
         props: ['id', 'movie'],
         data() {
             return {

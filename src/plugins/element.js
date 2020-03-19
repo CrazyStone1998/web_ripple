@@ -20,9 +20,6 @@ import {
 
 } from "element-ui";
 
-import VideoPlayer from 'vue-video-player'
-
-Vue.use(VideoPlayer);
 Vue.use(Button);
 Vue.use(FormItem);
 Vue.use(Form);

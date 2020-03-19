@@ -190,7 +190,7 @@
     .home-container {
         height: 100%;
         background-color: $bg_black_global;
-        background-image: linear-gradient(to right, $bg_black_global, $bg_red_global, $bg_black_global);
+        background-image: linear-gradient(to left bottom, $bg_black_global, $bg_red_global,$bg_black_global,$bg_red_global,$bg_black_global);
 
         .home-container-header {
             background-color: $bg_red_global;
