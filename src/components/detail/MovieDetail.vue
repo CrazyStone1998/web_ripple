@@ -40,28 +40,28 @@
                             <span class="movie-detail-tag">导演 : </span>
                             <span class="movie-detail-tag-content" v-for="(item,index) in movieInfo.directorSet"
                                   :key="index">
-                                {{item}}
+                                {{item.name}}
                             </span>
                         </div>
                         <div class="movie-detail-block">
                             <span class="movie-detail-tag">编剧 : </span>
                             <span class="movie-detail-tag-content" v-for="(item,index) in movieInfo.screenwriterSet"
                                   :key="index">
-                                {{item}}
+                                {{item.name}}
                             </span>
                         </div>
                         <div class="movie-detail-block">
                             <span class="movie-detail-tag">演员 : </span>
                             <span class="movie-detail-tag-content" v-for="(item,index) in movieInfo.starringSet"
                                   :key="index">
-                                {{item}}
+                                {{item.name}}
                             </span>
                         </div>
                         <div class="movie-detail-block">
                             <span class="movie-detail-tag">类型 : </span>
                             <span class="movie-detail-tag-content" v-for="(item,index) in movieInfo.genreSet"
                                   :key="index">
-                                {{item}}
+                                {{item.name}}
                             </span>
                         </div>
                         <div class="movie-detail-block">
@@ -102,14 +102,19 @@
                 </el-row>
 
                 <el-divider content-position="left">资源</el-divider>
-                <el-row class="movie-detail-mp4" style="width: 500px;height: 300px">
-                    <RioVideoPlayer :video_src="'http://vt1.doubanio.com/202003192308/31cef8f54686e776edffb05a73fca3ef/view/movie/M/402530176.mp4'" :cover_url="'https://img9.doubanio.com/view/photo/sqxs/public/p2575977024.webp'"></RioVideoPlayer>
+                <el-row class="movie-detail-resource">
+                    <el-col :span="16" class="movie-detail-mp4">
+                        <RioVideoPlayer :video_src="'http://vt1.doubanio.com/202003192308/31cef8f54686e776edffb05a73fca3ef/view/movie/M/402530176.mp4'" :cover_url="'https://img9.doubanio.com/view/photo/sqxs/public/p2575977024.webp'"></RioVideoPlayer>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-image :src="movieInfo.cover_url"></el-image>
+                    </el-col>
                 </el-row>
 
                 <el-divider content-position="left">获奖</el-divider>
-                <el-row class="movie-detail-resource"></el-row>
-                <el-divider content-position="left">演员</el-divider>
-                <el-row class="movie-detail-resource"></el-row>
+                <el-row class="movie-detail-awards"></el-row>
+                <el-divider content-position="left">缔造者</el-divider>
+                <el-row class="movie-detail-celebrity"></el-row>
 
                 <el-divider content-position="center">评论</el-divider>
                 <el-menu default-active="1" class="comment-sort-menu" mode="horizontal" @select="commentSortSelect">
@@ -263,38 +268,67 @@
     export default {
         name: "MovieDetail",
         components: {RioVideoPlayer},
-        props: ['id', 'movie'],
+        props: ['id', 'movieInfo'],
         data() {
             return {
                 homeLink: Home,
                 resourceLink: Resource,
-                movieInfo: {
-                    id: 1,
-                    name: "冰雪奇缘",
-                    foreign_name: "Frozen",
-                    length: 181,
-                    language: "英语 / 冰岛语",
-                    area: "美国",
-                    release_date: "2013-12-21",
-                    box_office: 2000000.05,
-                    cover_url: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2166640945.jpg",
-                    rate: 9.5,
-                    votes: 50000000,
-                    weight: "14%,25%,52%,25%,12%",
-                    imdb_link: "",
-                    douban_link: "https://movie.douban.com/subject/4202982/",
-                    rottenTomatoes_link: "",
-                    directorSet: ["Lee", "Buck"],
-                    screenwriterSet: ["Lee", "Buce"],
-                    starringSet: ["门泽尔", "安娜"],
-                    genreSet: ["动画", "音乐", "家庭"],
-                    introduction: "在四面环海、风景如画的阿伦黛尔王国，生活着两位可爱美丽的小公主，艾莎和安娜。艾莎天生具有制造冰雪的能力，随着年龄的增长，她的能力越来越强，甚至险些夺走妹妹的生命。为此国王紧闭宫门，也中断了两姐妹的联系。悲哀的海难过后，艾莎（伊迪娜·门泽尔 Idina Menzel 配音 ）终于到了加冕的年龄，各国王公齐来祝贺。艾莎战战兢兢，唯恐被人识破隐藏了多年的秘密。然而当听说安娜（克里斯汀·贝尔 Kristen Bell 配音）将要和初次见面的南埃尔斯王子汉斯（圣蒂诺·方塔纳 Santino Fontana 配音）结婚时，依然情绪失控露出了马脚。在此之后她逃到山中，构建了属于自己的冰雪王国，而阿伦黛尔也陷入可怕的寒冷之中。",
-                    trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
-                },
                 commentList: [],
                 reviewList: [],
+                related_movie_list: [],
 
-                related_movie_list: [
+                showMore: false,
+                activeNames: 1,
+                commentSortSelect: 1,
+                reviewSortSelect: 1,
+
+            }
+        },
+        computed: {
+
+        },
+        methods: {
+            async getAllCommentList() {
+                const {data: result} = await this.$http.get(
+                    "/comment/" + this.movieInfo.id,
+                    {
+                        params: {
+                            pageNum: 1,
+                            pageSize: 10
+                        }
+                    }
+                );
+                if (result.status === 200) {
+                    this.$message.success(result.message);
+                    this.commentList = result.data["resultList"];
+
+                } else {
+                    this.$message.error(result.message);
+                }
+
+
+            },
+            async getAllReviewList() {
+                const {data: result} = await this.$http.get(
+                    "/review/" + this.movieInfo.id,
+                    {
+                        params: {
+                            pageNum: 1,
+                            pageSize: 10
+                        }
+                    }
+                );
+                if (result.status === 200) {
+                    this.$message.success(result.message);
+                    console.log(result);
+                    this.reviewList = result.data["resultList"];
+
+                } else {
+                    this.$message.error(result.message);
+                }
+            },
+            async getRelatedMovieList() {
+                this.related_movie_list = [
                     [
                         {
                             id: 1,
@@ -391,65 +425,35 @@
                             trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
                         }
                     ]
-                ],
+                ];
 
-                showMore: false,
-                activeNames: 1,
-                commentSortSelect: 1,
-                reviewSortSelect: 1,
-
-            }
-        },
-        computed: {
-
-        },
-        methods: {
-            async getAllCommentList() {
                 const {data: result} = await this.$http.get(
-                    "/comment/" + 25,
+                    "/movie/relation/" + this.movieInfo.id,
                     {
                         params: {
                             pageNum: 1,
-                            pageSize: 10
-                        }
-                    }
-                );
-                if (result.status === 200) {
-                    this.$message.success(result.message);
-                    this.commentList = result.data["resultList"];
-
-                } else {
-                    this.$message.error(result.message);
-                }
-
-
-            },
-            async getAllReviewList() {
-                const {data: result} = await this.$http.get(
-                    "/review/" + 40,
-                    {
-                        params: {
-                            pageNum: 1,
-                            pageSize: 10
+                            pageSize: 4
                         }
                     }
                 );
                 if (result.status === 200) {
                     this.$message.success(result.message);
                     console.log(result);
-                    this.reviewList = result.data["resultList"];
-
+                    // this.related_movie_list = result.data["resultList"];
                 } else {
                     this.$message.error(result.message);
                 }
             },
+
             rateChart(dom_id) {
+                console.log(this.movieInfo);
                 let dom = document.getElementById(dom_id);
                 let rate_data = [];
-                let rate_list = this.movieInfo.weight.split(",");
-                for (let i = 0; i < rate_list.length; i++) {
-                    rate_data.push({name: parseInt(rate_list[i].slice(0, -1)), value: rate_list[i]});
+                let rate_list = this.movieInfo.rate_weight.split(",");
+                for (let i = 0; i < 5; i++) {
+                    rate_data.push({name: (5-i) +'星', value: parseFloat(rate_list[i].slice(0, -1))});
                 }
+                console.log(rate_data);
                 let myChart = echarts.init(dom);
                 let option = {
                     tooltip: {
@@ -470,14 +474,7 @@
                             left: '1%',
                             top: '0%',
                             funnelAlign: 'left',
-                            // center: ['25%', '25%'],  // for pie
-                            data: [
-                                {value: 14, name: '五星'},
-                                {value: 25, name: '四星'},
-                                {value: 52, name: '三星'},
-                                {value: 14, name: '两星'},
-                                {value: 60, name: '一星'},
-                            ]
+                            data: rate_data
                         }
                     ]
                 };
@@ -489,6 +486,7 @@
         created() {
             this.getAllCommentList();
             this.getAllReviewList();
+            this.getRelatedMovieList();
         },
         mounted() {
             this.rateChart('rate-chart');
@@ -565,7 +563,7 @@
 
                             .el-divider--vertical {
                                 margin-left: 100px;
-                                border-top: 1px dashed $bg_young_global
+                                border-top: 1px dashed $bg_blue_white_global
                             }
                         }
 
@@ -581,6 +579,19 @@
                 }
 
                 .movie-detail-resource {
+                    .movie-detail-mp4 {
+                        margin-left: 5%;
+                        width: 60%;
+                    }
+                    .el-image {
+                        border-radius: 6px;
+                        height: 340px;
+                    }
+                }
+                .movie-detail-awards {
+                    margin-bottom: 10%;
+                }
+                .movie-detail-celebrity {
                     margin-bottom: 10%;
                 }
 
@@ -607,7 +618,7 @@
                             .comment-user-name {
                                 background-color: transparent;
                                 border-color: transparent;
-                                color: $bg_red_global;
+                                color: $bg_red_black_global;
                                 font-size: large;
                                 cursor: pointer;
                             }
@@ -617,7 +628,7 @@
                             }
 
                             .comment-user-name:hover {
-                                color: $bg_red_global;
+                                color: $bg_red_black_global;
                                 font-weight: bold;
                             }
 
@@ -674,7 +685,7 @@
                             .comment-user-name {
                                 background-color: transparent;
                                 border-color: transparent;
-                                color: $bg_red_global;
+                                color: $bg_red_black_global;
                                 font-size: large;
                                 cursor: pointer;
                             }
@@ -684,7 +695,7 @@
                             }
 
                             .comment-user-name:hover {
-                                color: $bg_red_global;
+                                color: $bg_red_black_global;
                                 font-weight: bold;
                             }
 
@@ -715,7 +726,7 @@
                                 right: 30%;
                                 bottom: 10%;
                                 border-radius: 50%;
-                                background-color: $bg_young_global;
+                                background-color: $bg_blue_white_global;
                                 font-size: x-large;
                             }
                             .review-card-content-back:hover {
@@ -768,7 +779,7 @@
                     border-radius: 30px;
                     .rate-chart-topic {
                         font-size: x-large;
-                        color: $bg_red_global;
+                        color: $bg_red_black_global;
                     }
 
                     #rate-chart {

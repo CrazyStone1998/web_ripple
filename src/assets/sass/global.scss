@@ -1,22 +1,44 @@
 /* 全局样式表 */
-$bg_black_global: #1A2228;
-
 $bg_white_global: #FFFFFF;
-$bg_red_global: #5c4d47;
+
+$bg_black_global: #1A2228;
+$bg_black_dark: #000000;
+
+$bg_red_global: #DC143C;
+$bg_red_black_global: #5c4d47;
+
 $bg_green_global: #6db33f;
 $bg_green_light_global: #80EA6E;
+$bg_green_white_global: #E1F4D7;
+
+$bg_gray_global: #B3B3B3;
 $bg_gray_light_global: #EBF2F2;
-$bg_gray_middle_global: #F8F8F8;
+$bg_gray_white_global: #F8F8F8;
+
 $bg_blue_global: #409EFF;
+$bg_blue_white_global: #d3e8f8;
+
 $bg_orange_global: #E6A23C;
 $bg_yellow_global: #f5c518;
-$bg_young_global: #d3e8f8;
-$bg_gray_global: #B3B3B3;
-$bg_green_white_global: #E1F4D7;
+$bg_yellow_gold_global: #fdb933;
+
 
 html, body, #app{
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: "PingFang SC", "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+
+.logo {
+  margin-left: 20%;
+  margin-right: 3%;
+  width: 75px;
+  height: 75px;
+  cursor: pointer;
+}
+.rio {
+  width: 125px;
+  height: 70px;
+  cursor: pointer;
 }

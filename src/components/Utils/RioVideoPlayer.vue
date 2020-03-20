@@ -18,7 +18,7 @@
             },
             cover_url: {
                 type: String
-            }
+            },
         },
         data() {
             return {

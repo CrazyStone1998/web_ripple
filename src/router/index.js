@@ -81,7 +81,7 @@ const routes = [
                 path: "movie/:id",
                 name: "MovieDetail",
                 component: MovieDetail,
-                props: route => ({id: route.params.id, movie: route.params.movie})
+                props: route => ({id: route.params.movieId, movieInfo: route.params.movieInfo})
             },
             {
                 path: "user/:id",

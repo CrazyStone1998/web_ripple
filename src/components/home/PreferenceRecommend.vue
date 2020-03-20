@@ -82,6 +82,7 @@
         name: "PreferenceRecommend",
         data() {
             return {
+                repeatInitTimes: 3
             };
         },
         computed: mapState({
@@ -100,16 +101,21 @@
                         totalPreferenceRecommendList: result.data['resultList']
                     })
                 } else {
-                    this.$message.error(result.message);
+                    if (this.repeatInitTimes > 0) {
+                        this.repeatInitTimes -= 1;
+                        this.getPopularRecommendList();
+                    } else {
+                        this.$message.error("Network failed");
+                    }
                 }
             },
-            jumpToDetail(movieId, movie) {
+            jumpToDetail(movieId, movieInfo) {
                 this.$router.push(
                     {
                         name: "MovieDetail",
                         params: {
-                            id: movieId,
-                            movie: movie
+                            movieId: movieId,
+                            movieInfo: movieInfo
                         }
                     }
                 )
@@ -234,7 +240,7 @@
 
             .prefer-row {
                 cursor: pointer;
-                color: $bg_young_global;
+                color: $bg_blue_white_global;
                 font-size: large;
                 .rate-star {
                     width: 15px;
@@ -247,7 +253,7 @@
                     margin-bottom: 0;
                     padding-bottom: 0;
                     background: 0 0;
-                    border-top: 1px dashed $bg_young_global;
+                    border-top: 1px dashed $bg_blue_white_global;
                 }
             }
             .row-active {

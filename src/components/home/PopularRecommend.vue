@@ -18,6 +18,7 @@
         name: "PopularRecommend",
         data() {
             return {
+                repeatInitTimes: 3
             };
         },
         computed: mapState({
@@ -36,7 +37,12 @@
                         popularRecommendList: result.data["resultList"]
                     });
                 } else {
-                    this.$message.error(result.message);
+                    if (this.repeatInitTimes > 0) {
+                        this.repeatInitTimes -= 1;
+                        this.getPopularRecommendList();
+                    } else {
+                        this.$message.error("Network failed");
+                    }
                 }
             },
             jumpToDetail(movieId, movieInfo) {
@@ -44,8 +50,8 @@
                     {
                         name: "MovieDetail",
                         params: {
-                            id: movieId,
-                            movie: movieInfo
+                            movieId: movieId,
+                            movieInfo: movieInfo
                         }
                     }
                 )

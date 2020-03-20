@@ -14,6 +14,7 @@
                     <el-card class="item-card"
                              :body-style="{ padding: '0px' }"
                              shadow="hover"
+                             @click.native="jumpToDetail(movieInfo)"
                     >
                         <el-row>
                             <el-col :span="10">
@@ -98,7 +99,8 @@
     export default {
         name: "RankShow",
         data() {
-            return{
+            return {
+                tag: '',
                 rankList: [
                     [
                         {
@@ -294,20 +296,58 @@
                     ]
                 ]
             }
+        },
+        methods: {
+            async getRankList() {
+                const {data: result} = this.$http.get(
+                    '/movie/rank/' + this.tag,
+                    {
+                        params: {
+                            pageNum: 1,
+                            pageSize: 50
+                        }
+                    }
+                );
+                if (result.state === 200) {
+                    this.$message.success(result.message);
+                    this.rankList = result.data['resultList'];
+                } else {
+                    this.$message.error(result.message);
+                }
+            },
+            jumpToDetail(movieInfo) {
+                this.$router.push(
+                    {
+                        name: "MovieDetail",
+                        params:{
+                            movieId: movieInfo.id,
+                            movieInfo: movieInfo
+                        }
+                    }
+                )
+            }
+        },
+        created() {
+            this.getRankList();
         }
     }
 </script>
 <style lang="scss" scoped>
     @import "src/assets/sass/global";
+
     .show-block {
         margin-left: 15%;
         margin-right: 15%;
         margin-bottom: 5%;
         padding-top: 1.5%;
         padding-bottom: 1%;
-        background-color: $bg_gray_middle_global;
+        background-color: $bg_gray_white_global;
         border-radius: 30px;
         box-shadow: 0 0 50px 20px rgba(235, 242, 242, 0.5);
+
+        .el-menu {
+            margin-bottom: 20px;
+        }
 
         .el-divider--horizontal {
             margin-top: 0;
@@ -326,6 +366,7 @@
         .top-series-content {
             margin-right: 5px;
             margin-left: 5px;
+
             .item-card {
                 padding: 5px;
                 margin: 5px;
@@ -345,8 +386,6 @@
                         color: deepskyblue;
                         font-size: 25px;
                         margin-left: 10px;
-
-
                     }
 
                     .item-rate {
@@ -378,7 +417,7 @@
                         }
 
                         .el-divider--vertical {
-                            border-top: 1px dashed $bg_young_global
+                            border-top: 1px dashed $bg_blue_white_global
                         }
                     }
                 }

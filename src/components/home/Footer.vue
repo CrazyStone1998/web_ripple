@@ -102,6 +102,7 @@
 
     .footer-container {
         margin-top: 2%;
+        width: 100%;
         height: 50%;
         color: #eeeeee;
         background-color: $bg_black_global;
@@ -117,7 +118,6 @@
                     display: inline-block;
                 }
 
-
                 .icon-footer {
                     width: 40px;
                     height: 40px;
@@ -125,7 +125,7 @@
 
                 .icon-footer-active {
                     border-radius: 40%;
-                    background-color: $bg_red_global;
+                    background-color: $bg_red_black_global;
                     box-shadow: 0 0 5px 8px rgba(255, 255, 255, 0.5);
                 }
 

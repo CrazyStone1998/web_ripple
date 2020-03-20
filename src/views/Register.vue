@@ -218,7 +218,7 @@
     .el-container {
         height: 100%;
         background-color: $bg_black_global;
-        background-image: linear-gradient(to right, $bg_black_global, $bg_red_global, $bg_black_global);
+        background-image: linear-gradient(to right, $bg_black_global, $bg_red_black_global, $bg_black_global);
 
         .el-main {
             display: flex;

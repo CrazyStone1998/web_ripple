@@ -102,8 +102,8 @@
                     {
                         name: "MovieDetail",
                         params: {
-                            id: movieId,
-                            movie: movieInfo
+                            movieId: movieId,
+                            movieInfo: movieInfo
                         }
                     }
                 )

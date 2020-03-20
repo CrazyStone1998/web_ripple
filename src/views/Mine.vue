@@ -224,7 +224,7 @@
 
                             .el-divider--vertical {
                                 margin-left: 100px;
-                                border-top: 1px dashed $bg_young_global
+                                border-top: 1px dashed $bg_blue_white_global
                             }
                         }
                     }
