@@ -1,16 +1,9 @@
 <template>
     <div>
-        <!-- 面包屑导航区域 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="redirectPath">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>电影管理</el-breadcrumb-item>
-            <el-breadcrumb-item>演员列表</el-breadcrumb-item>
-        </el-breadcrumb>
-
         <!-- 卡片视图区域 -->
         <el-card>
             <!-- 搜索与添加区域 -->
-            <el-row :gutter="20">
+            <el-row class="search-header" :gutter="20">
                 <el-col :span="8">
                     <el-input placeholder="请输入内容" v-model="queryParams.query" clearable @clear="getStarringList">
                         <el-button slot="append" icon="el-icon-search" @click="getStarringList"></el-button>
@@ -109,15 +102,13 @@
 </template>
 
 <script>
-    import AdminIndex from "./AdminIndex";
 
     export default {
         name: "AdminStarring",
         data() {
 
             return {
-                // 面包屑首页重定向
-                redirectPath: AdminIndex,
+
                 // 搜索参数
                 queryParams: {
                     query: '',
@@ -277,6 +268,17 @@
 </script>
 
 <style lang="scss" scoped>
-
+    @import "src/assets/sass/global";
+    .el-card {
+        .search-header {
+            margin-bottom: 20px;
+            ::v-deep .el-button--default:hover{
+                background-color: $bg_blue_white_global;
+            }
+        }
+        .el-pagination {
+            margin-top: 20px;
+        }
+    }
 
 </style>

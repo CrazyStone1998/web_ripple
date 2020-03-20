@@ -36,7 +36,7 @@
 
                         <!-- 二级菜单 -->
                         <el-menu-item :index="subItem.path" v-for="subItem in item.sub_menu" :key="subItem.sub_id"
-                                      @click="saveActivePath(subItem.path)">
+                                      @click="saveActivePath(subItem.path,item.menu_name,subItem.sub_name)">
                             <template slot="title">
                                 <!-- 图标 -->
                                 <i :class="subItem.icon"></i>
@@ -51,6 +51,12 @@
             <!--右侧内容主题-->
             <el-container>
                 <el-main>
+                    <!-- 面包屑导航区域 -->
+                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                        <el-breadcrumb-item :to="redirectPath" @click.native="redirect_admin_index">首页</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{menuName}}</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{subMenu}}</el-breadcrumb-item>
+                    </el-breadcrumb>
                     <router-view></router-view>
                 </el-main>
                 <el-footer>
@@ -65,14 +71,20 @@
     import FooterSimple from "../components/home/FooterSimple";
     import {mapState} from "vuex";
     import Login from "./Login";
+    import AdminIndex from "../components/admin/AdminIndex";
 
     export default {
         name: "AdminHome",
         components: {FooterSimple},
         data() {
             return {
-                activePath: "",
+                activePath: "index",
                 isCollapse: false,
+                // 面包屑首页重定向
+                redirectPath: AdminIndex,
+                menuName: '',
+                subMenu: '',
+
                 menu_template: [
                     {
                         "id": 1,
@@ -161,13 +173,21 @@
                 this.$router.push(Login);
                 console.log("logout && redirect")
             },
+            redirect_admin_index() {
+                this.activePath = '';
+                this.menuName = '';
+                this.subMenu = '';
+            },
             toggleCollapse() {
                 this.isCollapse = !this.isCollapse;
             },
-            saveActivePath(activePath) {
-                console.log(activePath);
+            saveActivePath(activePath,menu_name,sub_menu) {
+                this.menuName = menu_name;
+                this.subMenu = sub_menu;
                 this.activePath = activePath;
                 window.sessionStorage.setItem("activePath", activePath);
+                window.sessionStorage.setItem("menuName", menu_name);
+                window.sessionStorage.setItem("subMenu", sub_menu);
             }
         },
         computed: mapState({
@@ -176,6 +196,9 @@
         }),
         created() {
             this.activePath = window.sessionStorage.getItem("activePath")
+            this.menuName = window.sessionStorage.getItem("menuName");
+            this.subMenu = window.sessionStorage.getItem("subMenu");
+
         }
 
     }
@@ -209,15 +232,17 @@
                 }
 
                 .rio-img {
-                    height:50px;
+                    height: 50px;
                     width: 120px;
                     cursor: pointer;
                 }
+
                 span {
                     margin-left: 20px;
                 }
+
                 .admin-icon {
-                    height:50px;
+                    height: 50px;
                     width: 120px;
                     cursor: pointer;
                 }
@@ -247,6 +272,12 @@
             .menu-name {
                 margin-right: 20px;
             }
+        }
+
+        .el-breadcrumb {
+            cursor: pointer;
+            font-size: large;
+            margin-bottom: 20px;
         }
 
     }

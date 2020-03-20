@@ -1,16 +1,9 @@
 <template>
     <div>
-        <!-- 面包屑导航区域 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="redirectPath">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>电影管理</el-breadcrumb-item>
-            <el-breadcrumb-item>导编列表</el-breadcrumb-item>
-        </el-breadcrumb>
-
         <!-- 卡片视图区域 -->
         <el-card>
             <!-- 搜索与添加区域 -->
-            <el-row :gutter="20">
+            <el-row class="search-header" :gutter="20">
                 <el-col :span="8">
                     <el-input placeholder="请输入内容" v-model="queryParams.query" clearable
                               @clear="getDirectorScreenwriter">
@@ -26,7 +19,11 @@
                 <el-table-column label="id" prop="id"></el-table-column>
                 <el-table-column label="导编" prop="name"></el-table-column>
                 <el-table-column label="外名" prop="foreign_name"></el-table-column>
-                <el-table-column label="海报" prop="cover_url"></el-table-column>
+                <el-table-column label="海报" prop="cover_url">
+                    <template slot-scope="scope">
+                        <el-image :src="scope.row.cover_url"></el-image>
+                    </template>
+                </el-table-column>
 
                 <el-table-column label="导演">
                     <template slot-scope="scope">
@@ -155,15 +152,13 @@
 </template>
 
 <script>
-    import AdminIndex from "./AdminIndex";
 
     export default {
         name: "AdminDirectorScreenwriter",
         data() {
 
             return {
-                // 面包屑首页重定向
-                redirectPath: AdminIndex,
+
                 // 搜索参数
                 queryParams: {
                     query: '',
@@ -326,6 +321,17 @@
 </script>
 
 <style lang="scss" scoped>
-
+    @import "src/assets/sass/global";
+    .el-card {
+        .search-header {
+            margin-bottom: 20px;
+            ::v-deep .el-button--default:hover{
+                background-color: $bg_blue_white_global;
+            }
+        }
+        .el-pagination {
+            margin-top: 20px;
+        }
+    }
 
 </style>

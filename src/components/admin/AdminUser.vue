@@ -1,19 +1,12 @@
 <template>
     <div>
-        <!-- 面包屑导航区域 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="redirectPath">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-            <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-        </el-breadcrumb>
-
         <!-- 卡片视图区域 -->
         <el-card>
             <!-- 搜索与添加区域 -->
-            <el-row :gutter="20">
+            <el-row class="search-header" :gutter="10" >
                 <el-col :span="8">
-                    <el-input placeholder="请输入内容" v-model="queryParams.query" clearable @clear="getUserList">
-                        <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
+                    <el-input placeholder="请输入内容" v-model="queryParams.name" clearable @clear="getUserList">
+                        <el-button slot="append" icon="el-icon-search" @click="getUserBySearch"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
@@ -21,7 +14,7 @@
                 </el-col>
             </el-row>
             <!-- 用户列表区域 -->
-            <el-table :data="userList" border stripe>
+            <el-table max-height="900px" :data="userList" border stripe>
                 <el-table-column label="id" prop="id"></el-table-column>
                 <el-table-column label="姓名" prop="username"></el-table-column>
                 <el-table-column label="邮箱" prop="mail"></el-table-column>
@@ -56,11 +49,15 @@
             </el-table>
 
             <!-- 分页区域 -->
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                           :current-page="queryParams.pageNum" :page-sizes="[1, 2, 3, 5, 10]"
+            <el-pagination @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :current-page="queryParams.pageNum"
+                           :page-sizes="[1, 2, 3, 5, 10]"
                            :page-size="queryParams.pageSize"
-                           layout="total, sizes, prev, pager, next, jumper" :total="total">
+                           :total="total"
+                           layout="total, sizes, prev, pager, next, jumper" >
             </el-pagination>
+
         </el-card>
 
         <!-- 添加用户的对话框 -->
@@ -130,8 +127,6 @@
 </template>
 
 <script>
-    import AdminIndex from "./AdminIndex";
-
     export default {
         name: "AdminUser",
         data() {
@@ -156,15 +151,14 @@
                 callback(new Error('请输入合法的手机号'))
             };
             return {
-                // 面包屑首页重定向
-                redirectPath: AdminIndex,
+
                 // 搜索参数
                 queryParams: {
                     query: '',
                     // 当前的页数
                     pageNum: 1,
                     // 当前每页显示多少条数据
-                    pageSize: 2
+                    pageSize: 5
                 },
                 // 搜索返回用户数量
                 total: 0,
@@ -253,6 +247,18 @@
                 }
                 this.userList = result.data.content;
                 this.total = result.data.totalElements;
+            },
+            async getUserBySearch() {
+                const {data: result} = await this.$http.get(
+                    'user/_username/'+this.queryParams.query,
+                );
+                if (result.status === 200) {
+                    this.userList = [].push(result.data);
+                    this.total = 1;
+                } else {
+                    this.total = 0;
+                    return this.$message.error(result.message)
+                }
             },
             // 点击按钮，添加新用户
             addUser() {
@@ -412,5 +418,16 @@
 </script>
 
 <style lang="scss" scoped>
-
+    @import "src/assets/sass/global";
+    .el-card {
+        .search-header {
+            margin-bottom: 20px;
+            ::v-deep .el-button--default:hover{
+                background-color: $bg_blue_white_global;
+            }
+        }
+        .el-pagination {
+            margin-top: 20px;
+        }
+    }
 </style>
