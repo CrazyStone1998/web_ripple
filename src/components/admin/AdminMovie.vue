@@ -24,7 +24,11 @@
             <el-table :data="movieList" border stripe>
                 <el-table-column label="id" prop="id"></el-table-column>
                 <el-table-column label="电影" prop="name"></el-table-column>
-                <el-table-column label="封面" prop="cover_url"></el-table-column>
+                <el-table-column label="封面" prop="cover_url">
+                    <template slot-scope="scope">
+                        <el-image :src="scope.row.cover_url"></el-image>
+                    </template>
+                </el-table-column>
                 <el-table-column label="外名" prop="foreign_name"></el-table-column>
                 <el-table-column label="长度" prop="length"></el-table-column>
                 <el-table-column label="语言" prop="language"></el-table-column>
@@ -211,7 +215,6 @@
             };
         },
         methods: {
-
             // 获取后台电影列表
             async getMovieList() {
                 const {data: result} = await this.$http.get(
@@ -222,11 +225,13 @@
                             pageSize: this.queryParams.pageSize
                         }
                     });
-                if (result.status !== 200) {
-                    return this.$message.error(result.message)
+                if (result.status === 200) {
+                    this.$message.success(result.message);
+                    this.movieList = result.data.content;
+                    this.total = result.data.totalElements;
+                } else {
+                    this.$message.error(result.message)
                 }
-                this.movieList = result.data.content;
-                this.total = result.data.totalElements;
             },
             // 点击按钮，添加新电影
             addMovie() {

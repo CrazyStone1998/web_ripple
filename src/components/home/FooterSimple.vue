@@ -1,5 +1,5 @@
 <template>
-    <div class="copyright" style="color: #FFFFFF">
+    <div class="copyright">
         © 2020 Rio Technologies. All Rights Reserved. Inc.
     </div>
 </template>
@@ -11,4 +11,9 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "src/assets/sass/global";
+    .copyright {
+        background-color: transparent;
+        color: $bg_black_global;
+    }
 </style>

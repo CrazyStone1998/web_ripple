@@ -3,10 +3,16 @@
         <!--头部区域 -->
         <el-header>
             <div>
-                <img class="admin-rio" src="src/assets/img/logo.png" alt=""/>
-                <span>Rio后台管理系统</span>
+                <el-image class="logo-img" :src="require('../assets/img/logo.png')"></el-image>
+                <el-image class="rio-img" :src="require('../assets/img/rio.png')"></el-image>
+                <span>后台管理系统</span>
             </div>
-            <el-button type="info" @click="logout">Logout</el-button>
+            <div>
+                <svg class="admin-icon" aria-hidden="true">
+                    <use xlink:href="#icon-apple-white"></use>
+                </svg>
+                <el-button type="success" @click="logout">Logout</el-button>
+            </div>
         </el-header>
 
         <!--页面主题区域-->
@@ -48,23 +54,21 @@
                     <router-view></router-view>
                 </el-main>
                 <el-footer>
-                    <div>
-                        <p>
-                            © 2020              Rio Technologies. All Rights Reserved.
-                        </p>
-                    </div>
+                    <FooterSimple></FooterSimple>
                 </el-footer>
             </el-container>
-
         </el-container>
     </el-container>
 </template>
 
 <script>
-    import Home from "./Home";
+    import FooterSimple from "../components/home/FooterSimple";
+    import {mapState} from "vuex";
+    import Login from "./Login";
 
     export default {
         name: "AdminHome",
+        components: {FooterSimple},
         data() {
             return {
                 activePath: "",
@@ -154,7 +158,7 @@
             logout() {
                 console.log("admin ======> logout");
                 window.sessionStorage.clear();
-                this.$router.push(Home);
+                this.$router.push(Login);
                 console.log("logout && redirect")
             },
             toggleCollapse() {
@@ -164,9 +168,12 @@
                 console.log(activePath);
                 this.activePath = activePath;
                 window.sessionStorage.setItem("activePath", activePath);
-
             }
         },
+        computed: mapState({
+            username: "userIcon",
+            userIcon: "userIcon"
+        }),
         created() {
             this.activePath = window.sessionStorage.getItem("activePath")
         }
@@ -175,64 +182,73 @@
 </script>
 
 <style lang="scss" scoped>
-    $black_bg_color: rgb(48, 65, 86);
-    $white_bg_color: #ffffff;
+    @import "src/assets/sass/global";
 
     .el-container {
         height: 100%;
-    }
+        background-color: $bg_gray_light_global;
 
-    .admin-rio {
-        height: 40px;
-        width: 40px;
-    }
-
-    .el-header {
-        background-color: $black_bg_color;
-        display: flex;
-        justify-content: space-between;
-        /*padding-left: 0;*/
-        align-items: center;
-        color: #7491e2;
-        font-size: 35px;
-
-        div {
+        .el-header {
             display: flex;
-            align-items: center;
+            justify-content: space-between;
+            background-color: $bg_black_global;
 
-            span {
-                margin-left: 20px;
+            /*padding-left: 0;*/
+            align-items: center;
+            color: #7491e2;
+            font-size: 35px;
+
+            div {
+                display: flex;
+                align-items: center;
+
+                .logo-img {
+                    height: 60px;
+                    width: 60px;
+                    cursor: pointer;
+                }
+
+                .rio-img {
+                    height:50px;
+                    width: 120px;
+                    cursor: pointer;
+                }
+                span {
+                    margin-left: 20px;
+                }
+                .admin-icon {
+                    height:50px;
+                    width: 120px;
+                    cursor: pointer;
+                }
             }
         }
-    }
 
-    .el-aside {
-        background-color: $black_bg_color;
+        .el-aside {
+            background-color: #304156;
 
-        .toggle-button {
-            color: aquamarine;
-            background-color: #4d6183;
-            line-height: 24px;
-            font-size: 10px;
-            text-align: center;
-            cursor: pointer;
+            .toggle-button {
+                color: aquamarine;
+                background-color: #4d6183;
+                line-height: 24px;
+                font-size: 10px;
+                text-align: center;
+                cursor: pointer;
+            }
+
+            .el-menu {
+                border-right: 0;
+            }
+
+            .el-icon-location {
+                margin-right: 10px;
+            }
+
+            .menu-name {
+                margin-right: 20px;
+            }
         }
 
-        .el-menu {
-            border-right: 0;
-        }
-
-        .el-icon-location {
-            margin-right: 10px;
-        }
-
-        .menu-name {
-            margin-right: 20px;
-        }
-    }
-
-    .el-main {
-        background-color: $white_bg_color;
     }
 
 </style>
