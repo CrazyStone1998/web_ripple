@@ -6,8 +6,8 @@
             <el-row class="search-header" :gutter="20">
                 <el-col :span="8">
                     <el-input placeholder="请输入内容" v-model="queryParams.query" clearable
-                              @clear="getDirectorScreenwriter">
-                        <el-button slot="append" icon="el-icon-search" @click="getDirectorScreenwriter"></el-button>
+                              @clear="getDirectorScreenwriterList">
+                        <el-button slot="append" icon="el-icon-search" @click="getDirectorScreenwriterBySearch"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
@@ -158,7 +158,6 @@
         data() {
 
             return {
-
                 // 搜索参数
                 queryParams: {
                     query: '',
@@ -193,8 +192,26 @@
         },
         methods: {
 
+            async getDirectorScreenwriterBySearch() {
+                if (this.queryParams.query === '') {
+                    return this.userList.length > 1 ? this.$message.warning('搜索内容为空') : this.getDirectorScreenwriterList();
+                }
+                const {data: result} = await this.$http.get(
+                    'directorScreenwriter/_name/' + this.queryParams.query,
+                );
+                if (result.status === 200) {
+                    this.directorScreenwriterList = [];
+                    this.directorScreenwriterList.push(result.data);
+                    this.total = 1;
+                } else {
+                    this.directorScreenwriterList = [];
+                    this.total = 0;
+                    return this.$message.error(result.message)
+                }
+            },
+
             // 获取后台用户列表
-            async getDirectorScreenwriter() {
+            async getDirectorScreenwriterList() {
                 const {data: result} = await this.$http.get(
                     'directorScreenwriter/_all',
                     {
@@ -227,7 +244,7 @@
                     // 隐藏添加用户的对话框
                     this.addDialogVisible = false;
                     // 重新获取用户列表数据
-                    this.getDirectorScreenwriter();
+                    this.getDirectorScreenwriterList();
                 })
             },
             // 修改导编信息并提交
@@ -247,7 +264,7 @@
                     // 关闭对话框
                     this.editDialogVisible = false;
                     // 刷新数据列表
-                    this.getDirectorScreenwriter();
+                    this.getDirectorScreenwriterList();
                     // 提示修改成功
                     this.$message.success(result.message)
                 })
@@ -288,7 +305,7 @@
                     return this.$message.error(result.message);
                 }
                 this.$message.success(result.message);
-                this.getDirectorScreenwriter()
+                this.getDirectorScreenwriterList()
             },
 
             // 监听添加导演编剧对话框的关闭事件
@@ -303,18 +320,18 @@
             handleSizeChange(newSize) {
                 console.log("pageSize: ", newSize);
                 this.queryParams.pageSize = newSize;
-                this.getDirectorScreenwriter();
+                this.getDirectorScreenwriterList();
             },
             // 监听 页码值 改变的事件
             handleCurrentChange(newPage) {
                 console.log("pageNum: ", newPage);
                 this.queryParams.pageNum = newPage;
-                this.getDirectorScreenwriter();
+                this.getDirectorScreenwriterList();
             }
 
         },
         created() {
-            this.getDirectorScreenwriter();
+            this.getDirectorScreenwriterList();
         }
 
     }

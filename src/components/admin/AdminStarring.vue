@@ -15,7 +15,7 @@
             </el-row>
             <!-- 用户列表区域 -->
             <el-table :data="starringList" border stripe>
-                <el-table-column label="id" prop="id"></el-table-column>
+                <el-table-column label="id" prop="id" sortable></el-table-column>
                 <el-table-column label="演员" prop="name"></el-table-column>
                 <el-table-column label="外名" prop="foreign_name"></el-table-column>
                 <el-table-column label="海报" prop="cover_url"></el-table-column>

@@ -192,7 +192,7 @@
                 .customer-login {
                     display: flex;
                     justify-content: flex-end;
-                    margin-top: 20%;
+                    margin-top: 8%;
                     margin-right: 5%;
                 }
             }

@@ -3,7 +3,7 @@
         <!-- 卡片视图区域 -->
         <el-card>
             <!-- 搜索与添加区域 -->
-            <el-row :gutter="20">
+            <el-row class="search-header" :gutter="20">
                 <el-col :span="8">
                     <el-input placeholder="请输入内容" v-model="queryParams.query" clearable @clear="getGenreList">
                         <el-button slot="append" icon="el-icon-search" @click="getGenreList"></el-button>
@@ -13,7 +13,7 @@
                     <el-button type="primary" @click="addDialogVisible = true">添加类型</el-button>
                 </el-col>
             </el-row>
-            <!-- 用户列表区域 -->
+            <!-- 类型列表区域 -->
             <el-table :data="genreList" border stripe>
                 <el-table-column label="id" prop="id"></el-table-column>
                 <el-table-column label="类型" prop="name"></el-table-column>
@@ -41,7 +41,7 @@
         </el-card>
 
         <!-- 添加用户的对话框 -->
-        <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="20%" @close="addGenreDialogClosed">
+        <el-dialog title="添加类型" :visible.sync="addDialogVisible" width="20%" @close="addGenreDialogClosed">
             <!-- 内容主体区域 -->
             <el-form :model="addForm" ref="addFormRef" label-width="80px">
                 <el-form-item label="类型" prop="name">
@@ -58,7 +58,7 @@
             </span>
         </el-dialog>
 
-        <!-- 修改用户的对话框 -->
+        <!-- 修改类型的对话框 -->
         <el-dialog title="修改用户" :visible.sync="editDialogVisible" width="20%" @close="editGenreDialogClosed">
             <el-form :model="editForm" ref="editFormRef" label-width="70px">
                 <el-form-item label="id">
@@ -97,9 +97,9 @@
                     // 当前每页显示多少条数据
                     pageSize: 2
                 },
-                // 搜索返回用户数量
+                // 搜索返回类型数量
                 total: 0,
-                // 搜索返回用户列表
+                // 搜索返回类型列表
                 genreList: [],
 
                 // 控制添加对象对话框的显示与隐藏

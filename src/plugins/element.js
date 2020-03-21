@@ -15,7 +15,7 @@ import {
     Tag, Tree, Select, Option, Rate, Cascader, Divider, Drawer,Progress,
 
     InfiniteScroll,
-    Upload, Backtop, Loading
+    Upload, Backtop, Loading,Transfer
 
 
 } from "element-ui";
@@ -72,6 +72,7 @@ Vue.use(Slider);
 Vue.use(Badge);
 Vue.use(PageHeader);
 Vue.use(Progress);
+Vue.use(Transfer);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;

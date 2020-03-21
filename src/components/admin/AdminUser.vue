@@ -3,9 +3,9 @@
         <!-- 卡片视图区域 -->
         <el-card>
             <!-- 搜索与添加区域 -->
-            <el-row class="search-header" :gutter="10" >
+            <el-row class="search-header" :gutter="10">
                 <el-col :span="8">
-                    <el-input placeholder="请输入内容" v-model="queryParams.name" clearable @clear="getUserList">
+                    <el-input placeholder="请输入内容" v-model="queryParams.username" clearable @clear="getUserList">
                         <el-button slot="append" icon="el-icon-search" @click="getUserBySearch"></el-button>
                     </el-input>
                 </el-col>
@@ -15,14 +15,24 @@
             </el-row>
             <!-- 用户列表区域 -->
             <el-table max-height="900px" :data="userList" border stripe>
-                <el-table-column label="id" prop="id"></el-table-column>
+                <el-table-column label="id"
+                                 prop="id"
+                                 width="80px"
+                                 sortable></el-table-column>
                 <el-table-column label="姓名" prop="username"></el-table-column>
                 <el-table-column label="邮箱" prop="mail"></el-table-column>
                 <el-table-column label="电话" prop="phone"></el-table-column>
-                <el-table-column label="角色" prop="role"></el-table-column>
+                <el-table-column label="角色"
+                                 prop="role.name"
+                                 :filters="userRoleFilters"
+                                 :filter-method="filterRole"
+                                 filter-placement="bottom-end"></el-table-column>
                 <el-table-column label="创建" prop="createdDate"></el-table-column>
                 <!--<el-table-column label="更新" prop="updatedDate"></el-table-column>-->
-                <el-table-column label="状态">
+                <el-table-column label="状态"
+                                 :filters="userStateFilters"
+                                 :filter-method="filterState"
+                                 filter-placement="bottom-end">
                     <template slot-scope="scope">
                         <el-switch
                                 v-model="scope.row.state"
@@ -42,7 +52,7 @@
                         <!-- 分配角色按钮 -->
                         <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
                             <el-button type="warning" icon="el-icon-setting" size="mini"
-                                       @click="setRole(scope.role)"></el-button>
+                                       @click="setRole(scope.row)"></el-button>
                         </el-tooltip>
                     </template>
                 </el-table-column>
@@ -55,15 +65,15 @@
                            :page-sizes="[1, 2, 3, 5, 10]"
                            :page-size="queryParams.pageSize"
                            :total="total"
-                           layout="total, sizes, prev, pager, next, jumper" >
+                           layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
 
         </el-card>
 
         <!-- 添加用户的对话框 -->
-        <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%" @close="addUserDialogClosed">
+        <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="30%" @close="addUserDialogClosed">
             <!-- 内容主体区域 -->
-            <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="150px">
+            <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="80px">
                 <el-form-item label="用户名" prop="username">
                     <el-input v-model="addForm.username"></el-input>
                 </el-form-item>
@@ -107,10 +117,10 @@
         </el-dialog>
 
         <!-- 分配角色的对话框 -->
-        <el-dialog title="分配角色" :visible.sync="setRoleDialogVisible" width="50%" @close="setRoleDialogClosed">
-            <div>
+        <el-dialog title="分配角色" :visible.sync="setRoleDialogVisible" width="30%" @close="setRoleDialogClosed">
+            <div style="text-align: left; display: inline-block;">
                 <p>当前的用户：{{userInfo.username}}</p>
-                <p>当前的角色：{{userInfo.role}}</p>
+                <p>当前的角色：{{userInfo.role ? userInfo.role.name : null}}</p>
                 <p>分配新角色：
                     <el-select v-model="selectedRoleId" placeholder="请选择">
                         <el-option v-for="item in rolesList" :key="item.id" :label="item.name" :value="item.id">
@@ -152,9 +162,38 @@
             };
             return {
 
+                userRoleFilters: [
+                    {
+                        text: '普通用户',
+                        value: '4'
+                    },
+                    {
+                        text: 'VIP用户',
+                        value: '3'
+                    },
+                    {
+                        text: '管理员',
+                        value: '2'
+                    },
+                    {
+                        text: '超级管理员',
+                        value: '1'
+                    },
+                ],
+                userStateFilters: [
+                    {
+                        text: '运行',
+                        value: '2'
+                    },
+                    {
+                        text: '注销',
+                        value: '1'
+                    },
+                ],
+
                 // 搜索参数
                 queryParams: {
-                    query: '',
+                    username: '',
                     // 当前的页数
                     pageNum: 1,
                     // 当前每页显示多少条数据
@@ -232,6 +271,14 @@
             }
         },
         methods: {
+
+            filterState(value, row) {
+                return value === row.state;
+            },
+            filterRole(value, row) {
+                return value === row.role;
+            },
+
             // 获取后台用户列表
             async getUserList() {
                 const {data: result} = await this.$http.get(
@@ -246,20 +293,29 @@
                     return this.$message.error(result.message)
                 }
                 this.userList = result.data.content;
+                console.log(result.data.content);
                 this.total = result.data.totalElements;
             },
+
+            // 搜索用户
             async getUserBySearch() {
+                if (this.queryParams.username === '') {
+                    return this.userList.length > 1 ? this.$message.warning('搜索内容为空') : this.getUserList();
+                }
                 const {data: result} = await this.$http.get(
-                    'user/_username/'+this.queryParams.query,
+                    'user/_username/' + this.queryParams.username,
                 );
                 if (result.status === 200) {
-                    this.userList = [].push(result.data);
+                    this.userList = [];
+                    this.userList.push(result.data);
                     this.total = 1;
                 } else {
+                    this.userList = [];
                     this.total = 0;
                     return this.$message.error(result.message)
                 }
             },
+
             // 点击按钮，添加新用户
             addUser() {
                 this.$refs.addFormRef.validate(async valid => {
@@ -280,6 +336,7 @@
                     this.getUserList();
                 })
             },
+
             // 修改用户信息并提交
             editUser() {
                 this.$refs.editFormRef.validate(async valid => {
@@ -302,6 +359,7 @@
                     this.$message.success(result.message)
                 })
             },
+
             // 展示编辑用户的对话框, 获取用户信息
             async showEditDialog(id) {
                 // console.log(id)
@@ -314,6 +372,7 @@
                 this.editForm = result.data;
                 this.editDialogVisible = true
             },
+
             // 根据Id删除对应的用户信息
             async removeUserById(id) {
                 // 弹框询问用户是否删除数据
@@ -340,17 +399,27 @@
                 this.$message.success(result.message);
                 this.getUserList()
             },
+
             // 展示分配角色的对话框
             async setRole(userInfo) {
                 this.userInfo = userInfo;
                 // 在展示对话框之前，获取所有角色的列表
-                const {data: result} = await this.$http.get('role/_all');
+                const {data: result} = await this.$http.get(
+                    'role/_all',
+                    {
+                        params: {
+                            pageNum: 1,
+                            pageSize: 100
+                        }
+                    }
+                );
                 if (result.status !== 200) {
                     return this.$message.error(result.message);
                 }
-                this.rolesList = result.data;
+                this.rolesList = result.data.content;
                 this.setRoleDialogVisible = true
             },
+
             // 点击按钮，分配角色
             async saveRoleInfo() {
                 if (!this.selectedRoleId) {
@@ -358,13 +427,10 @@
                 }
 
                 const {data: result} = await this.$http.put(
-                    `users/${this.userInfo.id}/role`,
-                    {
-                        role: 1
-                    }
+                    `user/${this.userInfo.id}/role/${this.selectedRoleId}`
                 );
 
-                if (result.meta.status !== 200) {
+                if (result.status !== 200) {
                     return this.$message.error(result.message);
                 }
                 this.getUserList();
@@ -419,13 +485,16 @@
 
 <style lang="scss" scoped>
     @import "src/assets/sass/global";
+
     .el-card {
         .search-header {
             margin-bottom: 20px;
-            ::v-deep .el-button--default:hover{
+
+            ::v-deep .el-button--default:hover {
                 background-color: $bg_blue_white_global;
             }
         }
+
         .el-pagination {
             margin-top: 20px;
         }
