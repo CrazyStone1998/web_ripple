@@ -21,6 +21,7 @@ import MovieDetail from "../components/detail/MovieDetail";
 import TopRank from "../views/TopRank";
 import CelebrityDetail from "../components/detail/CelebrityDetail";
 import Demo from "../views/Demo";
+import NotFound from "../views/NotFound";
 
 
 Vue.use(VueRouter);
@@ -97,6 +98,15 @@ const routes = [
             },
         ]
     },
+    {
+        path: "/404",
+        name: "NotFound",
+        component: NotFound
+    },
+    {
+        path: "*", // 此处需特别注意置于最底部
+        redirect: "/404"
+    }
 
 ];
 

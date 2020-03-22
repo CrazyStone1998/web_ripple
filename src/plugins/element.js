@@ -12,14 +12,13 @@ import {
     Breadcrumb, BreadcrumbItem, CarouselItem, Carousel, Card, Switch, Tooltip, Slider,
     // 表格 分页
     Table, TableColumn, Pagination, Collapse, CollapseItem, CheckboxGroup, CheckboxButton, Checkbox,
-    Tag, Tree, Select, Option, Rate, Cascader, Divider, Drawer,Progress,
-
-    InfiniteScroll,
-    Upload, Backtop, Loading,Transfer
+    Tag, Tree, Select, Option, Rate, Cascader, Divider, Drawer, Progress, Step, Steps,
+    InfiniteScroll, Upload, Backtop, Loading, Transfer, TimeSelect, DatePicker
 
 
 } from "element-ui";
 
+Vue.use(DatePicker);
 Vue.use(Button);
 Vue.use(FormItem);
 Vue.use(Form);
@@ -73,6 +72,9 @@ Vue.use(Badge);
 Vue.use(PageHeader);
 Vue.use(Progress);
 Vue.use(Transfer);
+Vue.use(Steps);
+Vue.use(Step);
+Vue.use(TimeSelect);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;

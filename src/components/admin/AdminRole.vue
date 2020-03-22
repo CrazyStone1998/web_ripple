@@ -231,17 +231,17 @@
             // 搜索角色
             async getPermissionByName() {
                 if (this.queryParams.query === '') {
-                    return this.permissionList.length > 0 ? this.$message.warning('搜索内容为空') : this.getPermissionList();
+                    return this.permissionList.length > 1 ? this.$message.warning('搜索内容为空') : this.getPermissionList();
                 }
                 const {data: result} = await this.$http.get(
-                    'permission/_name/' + this.queryParams.query,
+                    'movie/_name/' + this.queryParams.query,
                 );
                 if (result.status === 200) {
-                    this.permissionList = [];
-                    this.permissionList.push(result.data);
+                    this.movieList = [];
+                    this.movieList.push(result.data);
                     this.total = 1;
                 } else {
-                    this.permissionList = [];
+                    this.movieList = [];
                     this.total = 0;
                     return this.$message.error(result.message)
                 }

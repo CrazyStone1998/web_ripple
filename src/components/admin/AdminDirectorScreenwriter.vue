@@ -16,7 +16,7 @@
             </el-row>
             <!-- 用户列表区域 -->
             <el-table :data="directorScreenwriterList" border stripe>
-                <el-table-column label="id" prop="id"></el-table-column>
+                <el-table-column label="id" prop="id" sortable></el-table-column>
                 <el-table-column label="导编" prop="name"></el-table-column>
                 <el-table-column label="外名" prop="foreign_name"></el-table-column>
                 <el-table-column label="海报" prop="cover_url">
@@ -63,7 +63,7 @@
             </el-pagination>
         </el-card>
 
-        <!-- 添加用户的对话框 -->
+        <!-- 添加导演的对话框 -->
         <el-dialog title="添加导编" :visible.sync="addDialogVisible" width="50%" @close="addObjDialogClosed">
             <!-- 内容主体区域 -->
             <el-form :model="addForm" ref="addFormRef" label-width="150px">
@@ -194,7 +194,7 @@
 
             async getDirectorScreenwriterBySearch() {
                 if (this.queryParams.query === '') {
-                    return this.userList.length > 1 ? this.$message.warning('搜索内容为空') : this.getDirectorScreenwriterList();
+                    return this.directorScreenwriterList.length > 1 ? this.$message.warning('搜索内容为空') : this.getDirectorScreenwriterList();
                 }
                 const {data: result} = await this.$http.get(
                     'directorScreenwriter/_name/' + this.queryParams.query,
@@ -210,7 +210,7 @@
                 }
             },
 
-            // 获取后台用户列表
+            // 获取后台演员列表
             async getDirectorScreenwriterList() {
                 const {data: result} = await this.$http.get(
                     'directorScreenwriter/_all',

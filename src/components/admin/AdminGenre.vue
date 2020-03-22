@@ -6,7 +6,7 @@
             <el-row class="search-header" :gutter="20">
                 <el-col :span="8">
                     <el-input placeholder="请输入内容" v-model="queryParams.query" clearable @clear="getGenreList">
-                        <el-button slot="append" icon="el-icon-search" @click="getGenreList"></el-button>
+                        <el-button slot="append" icon="el-icon-search" @click="getGenreByName"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
@@ -15,7 +15,7 @@
             </el-row>
             <!-- 类型列表区域 -->
             <el-table :data="genreList" border stripe>
-                <el-table-column label="id" prop="id"></el-table-column>
+                <el-table-column label="id" prop="id" sortable></el-table-column>
                 <el-table-column label="类型" prop="name"></el-table-column>
                 <el-table-column label="描述" prop="description"></el-table-column>
                 <el-table-column label="创建" prop="createdDate"></el-table-column>
@@ -95,7 +95,7 @@
                     // 当前的页数
                     pageNum: 1,
                     // 当前每页显示多少条数据
-                    pageSize: 2
+                    pageSize: 5
                 },
                 // 搜索返回类型数量
                 total: 0,
@@ -117,6 +117,25 @@
             };
         },
         methods:{
+
+            // 搜索角色
+            async getGenreByName() {
+                if (this.queryParams.query === '') {
+                    return this.genreList.length > 1 ? this.$message.warning('搜索内容为空') : this.getGenreList();
+                }
+                const {data: result} = await this.$http.get(
+                    'genre/_name/' + this.queryParams.query,
+                );
+                if (result.status === 200) {
+                    this.genreList = [];
+                    this.genreList.push(result.data);
+                    this.total = 1;
+                } else {
+                    this.genreList = [];
+                    this.total = 0;
+                    return this.$message.error(result.message)
+                }
+            },
 
             // 获取类型列表
             async getGenreList() {
@@ -192,7 +211,7 @@
             async removeGenreById(id) {
                 // 弹框询问用户是否删除数据
                 const confirmResult = await this.$confirm(
-                    '此操作将永久删除该用户, 是否继续?',
+                    '此操作将永久删除该类型, 是否继续?',
                     '提示',
                     {
                         confirmButtonText: '确定',
@@ -206,7 +225,7 @@
                 if (confirmResult !== 'confirm') {
                     return this.$message.info('已取消删除')
                 }
-                const {data: result} = await this.$http.delete('user/' + id);
+                const {data: result} = await this.$http.delete('genre/' + id);
 
                 if (result.status !== 200) {
                     return this.$message.error(result.message);

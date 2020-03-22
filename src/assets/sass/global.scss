@@ -23,7 +23,7 @@ $bg_yellow_global: #f5c518;
 $bg_yellow_gold_global: #fdb933;
 
 
-html, body, #app{
+html, body, #app {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -37,8 +37,13 @@ html, body, #app{
   height: 75px;
   cursor: pointer;
 }
+
 .rio {
   width: 125px;
   height: 70px;
   cursor: pointer;
+}
+
+.el-table-column {
+  text-align: center;
 }

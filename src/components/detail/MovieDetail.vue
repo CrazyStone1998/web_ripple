@@ -446,14 +446,12 @@
             },
 
             rateChart(dom_id) {
-                console.log(this.movieInfo);
                 let dom = document.getElementById(dom_id);
                 let rate_data = [];
                 let rate_list = this.movieInfo.rate_weight.split(",");
                 for (let i = 0; i < 5; i++) {
                     rate_data.push({name: (5-i) +'星', value: parseFloat(rate_list[i].slice(0, -1))});
                 }
-                console.log(rate_data);
                 let myChart = echarts.init(dom);
                 let option = {
                     tooltip: {

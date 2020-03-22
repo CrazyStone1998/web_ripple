@@ -6,7 +6,7 @@
             <el-row class="search-header" :gutter="20">
                 <el-col :span="8">
                     <el-input placeholder="请输入内容" v-model="queryParams.query" clearable @clear="getStarringList">
-                        <el-button slot="append" icon="el-icon-search" @click="getStarringList"></el-button>
+                        <el-button slot="append" icon="el-icon-search" @click="getStarringByName"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
@@ -18,9 +18,12 @@
                 <el-table-column label="id" prop="id" sortable></el-table-column>
                 <el-table-column label="演员" prop="name"></el-table-column>
                 <el-table-column label="外名" prop="foreign_name"></el-table-column>
-                <el-table-column label="海报" prop="cover_url"></el-table-column>
+                <el-table-column label="海报" prop="cover_url">
+                    <template slot-scope="scope">
+                        <el-image :src="scope.row.cover_url"></el-image>
+                    </template>
+                </el-table-column>
                 <el-table-column label="豆瓣" prop="douban_link"></el-table-column>
-                <el-table-column label="imdb" prop="imdb_link"></el-table-column>
                 <el-table-column label="操作" width="200px">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -115,7 +118,7 @@
                     // 当前的页数
                     pageNum: 1,
                     // 当前每页显示多少条数据
-                    pageSize: 2
+                    pageSize: 5
                 },
                 // 搜索返回用户数量
                 total: 0,
@@ -140,8 +143,26 @@
             };
         },
         methods:{
+            // 搜索演员
+            async getStarringByName() {
+                if (this.queryParams.query === '') {
+                    return this.starringList.length > 1 ? this.$message.warning('搜索内容为空') : this.getStarringList();
+                }
+                const {data: result} = await this.$http.get(
+                    'starring/_name/' + this.queryParams.query,
+                );
+                if (result.status === 200) {
+                    this.starringList = [];
+                    this.starringList.push(result.data);
+                    this.total = 1;
+                } else {
+                    this.starringList = [];
+                    this.total = 0;
+                    return this.$message.error(result.message)
+                }
+            },
 
-            // 获取后台用户列表
+            // 获取后台演员列表
             async getStarringList() {
                 const {data: result} = await this.$http.get(
                     'starring/_all',

@@ -1,8 +1,5 @@
 <template>
     <div class="container-header">
-        <!--加载第三方图片-->
-        <meta name="referrer" content="no-referrer"/>
-
         <el-row class="header-box">
             <el-col :span="6">
                 <el-image class="logo" :src="require('../../assets/img/logo.png')" @click="redirect_home"></el-image>
