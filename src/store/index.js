@@ -12,7 +12,14 @@ export default new Vuex.Store({
         popularRecommendList: [],
         preferenceRecommendList: [],
         coldRecommendList: [],
-        loadingCalculation: 3
+        loadingCalculation: 3,
+
+        searchQuery: {
+            content: '',
+            limit: '',
+        },
+        searchEventWatcher: false
+
     },
     mutations: {
         setUser(state, payload) {
@@ -39,6 +46,12 @@ export default new Vuex.Store({
             state.preferenceRecommendList.push(payload.totalPreferenceRecommendList.slice(8, 12));
             state.preferenceRecommendList.push(payload.totalPreferenceRecommendList.slice(12, 16));
             state.loadingCalculation -= 1;
+        },
+
+        setSearchQuery(state, payload) {
+            state.searchQuery.content = payload.content;
+            state.searchQuery.limit = payload.limit;
+            state.searchEventWatcher = !state.searchEventWatcher;
         }
     },
     actions: {},

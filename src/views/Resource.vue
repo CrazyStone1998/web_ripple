@@ -1,14 +1,12 @@
 <template>
     <el-container class="resource-container">
         <el-header class="resource-container-header" style="height: 85px">
-            <Header></Header>
+            <LibraryHeader></LibraryHeader>
         </el-header>
 
         <el-main class="resource-container-main">
-            <div class="main-content">
-                <Query></Query>
-                <Show></Show>
-            </div>
+            <Query></Query>
+
             <Footer></Footer>
         </el-main>
     </el-container>
@@ -18,15 +16,14 @@
     import Login from "./Login";
     import Footer from "../components/home/Footer";
     import Query from "../components/library/Category";
-    import Show from "../components/library/Show";
     import Home from "./Home";
     import {mapState} from "vuex";
     import UserDetail from "../components/detail/UserDetail";
-    import Header from "../components/home/Header";
+    import LibraryHeader from "../components/library/LibraryHeader";
 
     export default {
         name: "Resource",
-        components: {Header, Show, Query, Footer},
+        components: {LibraryHeader, Query, Footer},
         data() {
             return {
                 select: '',
@@ -86,6 +83,7 @@
 
 <style lang="scss" scoped>
     @import "src/assets/sass/global";
+
     .resource-container {
         height: 100%;
         background-color: $bg_black_global;
@@ -96,14 +94,6 @@
 
         .resource-container-main {
             padding: 0;
-            .main-content {
-                background-color: $bg_gray_white_global;
-                margin-left: 15%;
-                margin-right: 15%;
-                box-shadow: 0 0 50px 20px rgba(235,242,242,0.5);
-                border-radius: 30px;
-                margin-bottom: 100px;
-            }
         }
     }
 </style>

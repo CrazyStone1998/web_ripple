@@ -31,10 +31,10 @@
         },
         methods: {
             chartDemo4() {
-                var dom = document.getElementById("demo-4");
-                var myChart = echarts.init(dom);
+                let dom = document.getElementById("demo-4");
+                let myChart = echarts.init(dom);
                 let option = null;
-                var builderJson = {
+                let builderJson = {
                     "all": 10887,
                     "charts": {
                         "map": 3237,
@@ -71,7 +71,7 @@
                     "ie": 9743
                 };
 
-                var downloadJson = {
+                let downloadJson = {
                     "echarts.min.js": 17365,
                     "echarts.simple.min.js": 4079,
                     "echarts.common.min.js": 6929,

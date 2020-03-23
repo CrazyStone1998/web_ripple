@@ -10,8 +10,8 @@
 
                 <el-button class="btn-menu" icon="el-icon-s-grid" @click="drawer=!drawer">Menu</el-button>
 
-                <el-input class="search-input" v-model="searchContent" placeholder="请输入内容">
-                    <el-select v-model="limitPick" slot="prepend" placeholder="All">
+                <el-input class="search-input" v-model="queryContent" placeholder="请输入内容">
+                    <el-select v-model="limitPick" @change="genreSelectChange" slot="prepend" placeholder="All">
                         <el-option label="All" value="all"></el-option>
                         <el-option label="类型" value="genre"></el-option>
                         <el-option label="演员" value="starring"></el-option>
@@ -72,12 +72,12 @@
     import RioVideoPlayer from "../Utils/RioVideoPlayer";
 
     export default {
-        name: "Header",
+        name: "RankHeader",
         components: {RioVideoPlayer},
         data() {
             return {
                 limitPick: '',
-                searchContent: '',
+                queryContent: '',
                 drawer: false
             }
         },
@@ -106,7 +106,7 @@
             redirect_userInfo() {
                 this.$router.push(
                     {
-                        name: 'Mine',
+                        name: 'UserDetail',
                         params: {
                             username: this.username
                         }
@@ -119,7 +119,6 @@
             redirect_rank() {
                 this.$router.push(TopRank);
             },
-
             search() {
                 this.$store.commit('setSearchQuery', {
                     content: this.searchContent,

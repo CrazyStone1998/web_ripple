@@ -22,7 +22,6 @@
     import {mapState} from "vuex";
     import Header from "../components/home/Header";
 
-
     export default {
 
         name: "Home",
@@ -38,7 +37,6 @@
         }),
         watch: {
             loadingCalculation(curVal, oldVal) {
-
                 if (curVal === 0 && oldVal === 1) {
                     const loading = this.$loading();
                     loading.close();

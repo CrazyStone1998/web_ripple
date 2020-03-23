@@ -25,6 +25,7 @@
             popularRecommendList: "popularRecommendList"
         }),
         methods: {
+
             async getPopularRecommendList() {
                 if (this.$store.state.popularRecommendList.length) {
                     return;
@@ -39,7 +40,8 @@
                 } else {
                     if (this.repeatInitTimes > 0) {
                         this.repeatInitTimes -= 1;
-                        this.getPopularRecommendList();
+                        console.log("尝试第", this.repeatInitTimes, "次");
+                        setTimeout(this.getPopularRecommendList(), 500);
                     } else {
                         this.$message.error("Network failed");
                     }
@@ -58,6 +60,7 @@
             }
         },
         created() {
+
             this.getPopularRecommendList();
         }
     }
@@ -70,9 +73,11 @@
     .popular-container {
         padding-left: 3%;
         padding-right: 3%;
+        height: 80%;
 
         .el-main {
             padding: 0;
+
             .el-carousel {
                 margin-left: 150px;
                 margin-right: 150px;

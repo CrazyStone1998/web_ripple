@@ -2,13 +2,12 @@
     <el-container class="mine-detail-container">
         <el-header class="mine-detail-container-header">
             <div>
-                <svg class="logo-svg" aria-hidden="true">
+                <svg class="logo-svg" aria-hidden="true" @click="goBack">
                     <use xlink:href="#icon-logo-white"></use>
                 </svg>
             </div>
             <div>
                 <el-page-header class="page-header" @back="goBack" content="我的信息"></el-page-header>
-
             </div>
         </el-header>
 
@@ -111,11 +110,12 @@
     export default {
         name: "Mine",
         components: {Aside},
-        props: ['id', 'celebrity','genre'],
+        props: ['username'],
         data() {
             return {
                 homeLink: Home,
                 resourceLink: Resource,
+
                 mineInfo: {
                     username: '小罗伯特·唐尼',
                     phone: '13653399918',
@@ -139,6 +139,17 @@
         methods: {
             goBack() {
                 this.$router.go(-1);
+            },
+            async getMineInfo() {
+                const {data: result} = await this.$http.get(
+                    "user/" + this.username
+                );
+                if (result.status === 200) {
+                    this.$message.success(result.message);
+                    this.mineInfo = result.data;
+                } else {
+                    this.$message.error(result.message);
+                }
             }
         }
     }
@@ -159,6 +170,7 @@
                 margin-right: 50px;
                 width: 50px;
                 height: 50px;
+                cursor: pointer;
             }
             .el-page-header {
                 margin-top: 20px;

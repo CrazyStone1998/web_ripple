@@ -13,11 +13,13 @@ import {
     // 表格 分页
     Table, TableColumn, Pagination, Collapse, CollapseItem, CheckboxGroup, CheckboxButton, Checkbox,
     Tag, Tree, Select, Option, Rate, Cascader, Divider, Drawer, Progress, Step, Steps,
-    InfiniteScroll, Upload, Backtop, Loading, Transfer, TimeSelect, DatePicker
+    InfiniteScroll, Upload, Backtop, Loading, Transfer, TimeSelect, DatePicker, Tabs, TabPane
 
 
 } from "element-ui";
 
+Vue.use(TabPane);
+Vue.use(Tabs);
 Vue.use(DatePicker);
 Vue.use(Button);
 Vue.use(FormItem);

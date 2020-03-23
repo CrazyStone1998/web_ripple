@@ -1,9 +1,9 @@
 <template>
     <el-container class="top-rank-container">
         <el-header class="top-rank-container-header" style="height: 85px">
-            <Header></Header>
+            <RankHeader>
+            </RankHeader>
         </el-header>
-
         <el-main class="top-rank-container-main">
             <RankShow></RankShow>
             <Footer></Footer>
@@ -18,12 +18,12 @@
     import {mapState} from "vuex";
     import UserDetail from "../components/detail/UserDetail";
     import Resource from "./Resource";
-    import RankShow from "../components/top/RankShow";
-    import Header from "../components/home/Header";
+    import RankHeader from "../components/rank/RankHeader";
+    import RankShow from "../components/rank/RankShow";
 
     export default {
         name: "TopRank",
-        components: {Header, RankShow, Footer},
+        components: {RankHeader, RankShow, Footer},
         data() {
             return {
                 select: '',

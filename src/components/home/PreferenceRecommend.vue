@@ -15,7 +15,7 @@
                         >
                             <el-image :src="item.cover_url" fit="fill" @click="jumpToDetail(item.id, item)"></el-image>
                             <div class="movie-detail">
-                                <el-tag class="movie-name" >{{item.name}}</el-tag>
+                                <el-tag class="movie-name">{{item.name}}</el-tag>
                                 <div class="movie-rate">
                                     <svg class="rate-star" aria-hidden="true">
                                         <use xlink:href="#icon-star"></use>
@@ -24,7 +24,8 @@
                                 </div>
                             </div>
                             <div class="movie-genre-box">
-                                <el-tag class="movie-genre" v-for="(genre, index) in item.genreSet" :key="index" @click="searchByQuery">
+                                <el-tag class="movie-genre" v-for="(genre, index) in item.genreSet" :key="index"
+                                        @click="searchByQuery">
                                     {{genre.name}}
                                 </el-tag>
                             </div>
@@ -34,9 +35,10 @@
             </el-main>
             <el-aside width="22%">
                 <el-card :body-style="{paddingBottom: '0'}"
-                        class="prefer-rank">
+                         class="prefer-rank">
                     <div slot="header">
-                        <el-image class="tag-recommend" :src="require('../../assets/img/tag-recommend.png')" fit="cover"></el-image>
+                        <el-image class="tag-recommend" :src="require('../../assets/img/tag-recommend.png')"
+                                  fit="cover"></el-image>
                     </div>
                     <div v-for="(row,index) in preferenceRecommendList" :key="index">
                         <el-row
@@ -78,6 +80,7 @@
 
 <script>
     import {mapState} from "vuex";
+
     export default {
         name: "PreferenceRecommend",
         data() {
@@ -97,13 +100,14 @@
                 const {data: result} = await this.$http.get("movie/es/prefer");
                 if (result.status === 200) {
                     this.$message.success(result.message);
-                    this.$store.commit('setPreferenceRecommendList',{
+                    this.$store.commit('setPreferenceRecommendList', {
                         totalPreferenceRecommendList: result.data['resultList']
                     })
                 } else {
                     if (this.repeatInitTimes > 0) {
                         this.repeatInitTimes -= 1;
-                        this.getPopularRecommendList();
+                        console.log("尝试第", this.repeatInitTimes, "次");
+                        setTimeout(this.getPreferenceRecommendList(), 500);
                     } else {
                         this.$message.error("Network failed");
                     }
@@ -125,10 +129,10 @@
             },
 
             // 监听方法
-            mouseover($event,activeClassName) {
+            mouseover($event, activeClassName) {
                 $event.currentTarget.className += " " + activeClassName;
             },
-            mouseout($event,activeClassName) {
+            mouseout($event, activeClassName) {
                 $event.currentTarget.className =
                     $event.currentTarget.className.slice(
                         0,
@@ -144,14 +148,17 @@
 
 <style lang="scss" scoped>
     @import "src/assets/sass/global";
+
     .preference-container {
         padding-left: 11%;
         padding-right: 12%;
         padding-top: 1%;
-        height: 120%;
+        height: 140%;
+
         .el-header {
             display: flex;
             margin-bottom: 3%;
+
             .topic {
                 height: 80px;
             }
@@ -159,6 +166,7 @@
 
         .el-main {
             padding: 0;
+
             .el-card {
                 background-color: $bg_black_global;
                 border-color: transparent;
@@ -188,6 +196,7 @@
                     .movie-rate {
                         margin-top: 3%;
                     }
+
                     .rate-star {
                         width: 15px;
                         height: 15px;
@@ -197,6 +206,7 @@
 
                 .movie-genre-box {
                     display: flex;
+
                     .movie-genre {
                         margin-left: 5px;
                         color: #eeeeee;
@@ -207,6 +217,7 @@
                 }
 
             }
+
             .card-active {
                 border-color: #eeeeee;
                 background-color: #536f85;
@@ -220,19 +231,21 @@
             margin-left: 10px;
             background-color: transparent;
             border-radius: 6px;
-            border:1px dashed skyblue;
+            border: 1px dashed skyblue;
             height: 750px;
 
             .tag-recommend {
                 width: 100%;
                 height: 75px;
             }
+
             .prefer-rank {
                 background-color: transparent;
                 border-color: transparent;
                 color: #eeeeee;
 
             }
+
             .icon-prefix {
                 width: 100%;
                 height: 30px;
@@ -242,13 +255,15 @@
                 cursor: pointer;
                 color: $bg_blue_white_global;
                 font-size: large;
+
                 .rate-star {
                     width: 15px;
                     height: 15px;
                     margin-right: 5px;
                 }
+
                 /* el-divider 修改高度&虚线效果 */
-                .el-divider--horizontal{
+                .el-divider--horizontal {
                     margin-top: 70px;
                     margin-bottom: 0;
                     padding-bottom: 0;
@@ -256,8 +271,9 @@
                     border-top: 1px dashed $bg_blue_white_global;
                 }
             }
+
             .row-active {
-                background-color: rgba(255,255,255,0.2);
+                background-color: rgba(255, 255, 255, 0.2);
                 border-radius: 10px;
                 color: $bg_blue_global;
                 font-size: x-large;

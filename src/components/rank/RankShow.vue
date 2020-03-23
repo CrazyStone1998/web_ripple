@@ -2,10 +2,10 @@
     <div class="show-block">
         <el-divider content-position="left">排行榜</el-divider>
 
-        <el-menu default-active="1" mode="horizontal">
-            <el-menu-item index="1">按热度</el-menu-item>
-            <el-menu-item index="2">按评分</el-menu-item>
-            <el-menu-item index="3">按逼格</el-menu-item>
+        <el-menu default-active="popular" mode="horizontal" @change="tagPickChange">
+            <el-menu-item index="popular">按热度</el-menu-item>
+            <el-menu-item index="rate">按评分</el-menu-item>
+            <el-menu-item index="preference">按逼格</el-menu-item>
         </el-menu>
 
         <div class="top-series-content">
@@ -101,6 +101,8 @@
         data() {
             return {
                 tag: '',
+                pageNum: 1,
+                pageSize: 20,
                 rankList: [
                     [
                         {
@@ -299,21 +301,50 @@
         },
         methods: {
             async getRankList() {
-                const {data: result} = this.$http.get(
+                this.pageNum = 1;
+                this.rankList = [];
+                const {data: result} = await this.$http.get(
                     '/movie/rank/' + this.tag,
                     {
                         params: {
-                            pageNum: 1,
-                            pageSize: 50
+                            pageNum: this.pageNum,
+                            pageSize: this.pageSize
                         }
                     }
                 );
-                if (result.state === 200) {
+                if (result.status === 200) {
                     this.$message.success(result.message);
-                    this.rankList = result.data['resultList'];
+                    for (let i = 0; i < this.pageSize / 2; i++) {
+                        this.rankList.push(result.data['resultList'].slice(i * 2, i * 2 + 2));
+                    }
                 } else {
                     this.$message.error(result.message);
                 }
+            },
+            async loadRankList() {
+                this.pageNum++;
+                const {data: result} = await this.$http.get(
+                    '/movie/rank/' + this.tag,
+                    {
+                        params: {
+                            pageNum: this.pageNum,
+                            pageSize: this.pageSize
+                        }
+                    }
+                );
+                if (result.status === 200) {
+                    this.$message.success(result.message);
+                    for (let i = 0; i < this.pageSize / 2; i++) {
+                        this.rankList.push(result.data['resultList'].slice(i * 2, i * 2 + 2));
+                    }
+                } else {
+                    this.$message.error(result.message);
+                }
+            },
+
+            tagPickChange(index) {
+                console.log("event ======> tagPick change");
+                this.tag = index;
             },
             jumpToDetail(movieInfo) {
                 this.$router.push(
