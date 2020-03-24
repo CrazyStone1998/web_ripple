@@ -100,6 +100,9 @@
                 <Aside></Aside>
             </el-aside>
         </el-container>
+        <el-footer style="padding: 0">
+            <Footer></Footer>
+        </el-footer>
     </el-container>
 </template>
 
@@ -107,9 +110,10 @@
     import Aside from "../components/Utils/Aside";
     import Home from "./Home";
     import Resource from "./Resource";
+    import Footer from "../components/home/Footer";
     export default {
         name: "Mine",
-        components: {Aside},
+        components: {Footer, Aside},
         props: ['username'],
         data() {
             return {
@@ -161,10 +165,12 @@
     .mine-detail-container {
         background-color: $bg_gray_light_global;
 
+
         .mine-detail-container-header {
             display: flex;
             background-color: $bg_black_global;
             padding-left: 10%;
+
             .logo-svg {
                 margin-top: 5px;
                 margin-right: 50px;
@@ -172,13 +178,16 @@
                 height: 50px;
                 cursor: pointer;
             }
+
             .el-page-header {
                 margin-top: 20px;
                 color: $bg_white_global;
             }
+
             .el-page-header:hover {
                 color: #8ce4ec;
             }
+
             ::v-deep .el-page-header__content {
                 color: $bg_white_global;
             }

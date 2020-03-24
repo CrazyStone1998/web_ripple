@@ -103,7 +103,7 @@
     .footer-container {
         margin-top: 2%;
         width: 100%;
-        height: 50%;
+        height: 400px;
         color: #eeeeee;
         background-color: $bg_black_global;
 
