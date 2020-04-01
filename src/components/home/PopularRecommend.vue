@@ -34,6 +34,7 @@
                 const {data: result} = await this.$http.get("movie/es/popular");
                 if (result.status === 200) {
                     this.$message.success(result.message);
+                    console.log(result);
                     this.$store.commit('setPopularRecommendList', {
                         popularRecommendList: result.data["resultList"]
                     });

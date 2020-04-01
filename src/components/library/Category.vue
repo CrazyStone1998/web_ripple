@@ -1,7 +1,7 @@
 <template>
-    <div class="query-container">
-        <!--<div v-infinite-scroll="loadShowList" class="container-show">-->
-        <div class="query-container-category">
+    <div class="category-show-container">
+
+        <div class="container-category">
             <el-row class="query-category" v-for="(item,index) in categoryList" :key="index">
                 <el-col :span="6" class="query-topic-col">
                     <svg aria-hidden="true" class="icon-topic">
@@ -44,44 +44,43 @@
             </el-row>
         </div>
 
-        <el-menu class="query-sort-menu" :default-active="tagPick" mode="horizontal" @select="tagPickChange">
+        <el-menu class="content-sort-menu" :default-active="tagPick" mode="horizontal" @select="tagPickChange">
             <el-menu-item index="popular">按热度</el-menu-item>
             <el-menu-item index="date">按时间</el-menu-item>
             <el-menu-item index="preference">按喜好</el-menu-item>
         </el-menu>
 
-        <el-divider class="category-divider"></el-divider>
+        <el-divider class="category-divider-show"></el-divider>
 
-        <div class="container-show">
+        <div class="container-show"
+             v-infinite-scroll="loadShowList"
+             :infinite-scroll-disabled="disabled">
 
-            <div class="show-content-list">
-                <el-row v-for="(row,index) in showList" :key="index" class="row-show-movie">
-                    <el-col :span="6" v-for="(item,index) in row" :key="index" class="col-show-movie">
-                        <el-card
-                                :body-style="{ padding: '0px' }"
-                                shadow="hover">
-                            <el-image :src="item.cover_url" fit="fill" @click="jumpToDetail(item.id, item)"></el-image>
-                            <div class="movie-detail">
-                                <el-tag class="movie-name">{{item.name}}</el-tag>
-                                <div class="movie-rate">
-                                    <svg class="rate-star" aria-hidden="true">
-                                        <use xlink:href="#icon-star"></use>
-                                    </svg>
-                                    <i style="color: #f9f031">{{item.rate}}</i>
-                                </div>
+            <el-row v-for="(row,index) in showList" :key="index" class="row-show-movie">
+                <el-col :span="6" v-for="(item,index) in row" :key="index" class="col-show-movie">
+                    <el-card
+                            :body-style="{ padding: '0px' }"
+                            shadow="hover">
+                        <el-image :src="item.cover_url" fit="fill" @click="jumpToDetail(item.id, item)"></el-image>
+                        <div class="movie-detail">
+                            <el-tag class="movie-name">{{item.name}}</el-tag>
+                            <div class="movie-rate">
+                                <svg class="rate-star" aria-hidden="true">
+                                    <use xlink:href="#icon-star"></use>
+                                </svg>
+                                <i style="color: #f9f031">{{item.rate}}</i>
                             </div>
-                            <div class="movie-genre-box">
-                                <el-tag class="movie-genre" v-for="(genre, index) in item.genreSet" :key="index"
-                                        @click="searchByQuery">
-                                    {{genre.name}}
-                                </el-tag>
+                        </div>
+                        <div class="movie-genre-box">
+                            <el-tag class="movie-genre" v-for="(genre, index) in item.genreSet" :key="index"
+                                    @click="searchByGenre">
+                                {{genre.name}}
+                            </el-tag>
 
-                            </div>
-                        </el-card>
-                    </el-col>
-                </el-row>
-            </div>
-
+                        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
 
         </div>
 
@@ -102,7 +101,7 @@
                         topic: '类型',
                         allPick: true,
                         tags: [
-                            '剧情', '爱情', '犯罪', '奇幻', '动作', '冒险', '家庭', '音乐', '西部', '记录',
+                            '剧情', '爱情', '犯罪', '奇幻', '动作', '冒险', '家庭', '音乐', '科幻', '记录',
                             '短片', '色情', '戏剧', '惊悚', '恐怖', '历史', '运动', '战争'
                         ],
                         picks: []
@@ -136,6 +135,9 @@
                     10: '10',
                 },
 
+                loadingDisabled: false,
+                endOfTheResource: false,
+
                 pageNum: 1,
                 pageSize: 20,
 
@@ -146,13 +148,19 @@
 
             };
         },
+
+
         computed: mapState({
+
+            disabled() {
+                return this.loadingDisabled || this.endOfTheResource;
+            },
 
             searchQuery: "searchQuery",
 
             searchEventWatcher: "searchEventWatcher",
 
-            searchContent(){
+            searchContent() {
                 return {
                     content: this.searchQuery.content,
                     limit: this.searchQuery.limit,
@@ -161,12 +169,15 @@
                     datePick: this.categoryList[2].picks,
                     ratePick: this.ratePick,
                     tagPick: this.tagPick
-
                 }
             }
+
         }),
 
         methods: {
+            searchByGenre() {
+
+            },
 
             topicChange(item) {
                 console.log("event ======> category allPick change");
@@ -186,62 +197,68 @@
             tagPickChange(index) {
                 console.log("event ======> tagPick change");
                 this.tagPick = index;
-                this.getShowList();
+                this.searchShowList();
             },
 
-            async getShowList() {
-                console.log("初始化 资源库列表");
+            async searchShowList() {
+                console.log("搜索 资源库列表");
                 this.pageNum = 1;
                 this.pageSize = 20;
-                const {data: result} = await this.$http.get(
-                    "movie/es/_search",
+                this.loadingDisabled = true;
+                const {data: result} = await this.$http.post(
+                    "movie/es/_search", this.searchContent,
                     {
                         params: {
-                            searchContent: this.searchContent,
                             pageNum: this.pageNum,
                             pageSize: this.pageSize
                         }
                     }
                 );
                 if (result.status === 200) {
+                    console.log(result.data);
                     this.$message.success(result.message);
                     this.showList = [];
-                    this.showList.push(result.data["resultList"].slice(0, 4));
-                    this.showList.push(result.data["resultList"].slice(4, 8));
-                    this.showList.push(result.data["resultList"].showList(8, 12));
-                    this.showList.push(result.data["resultList"].showList(12, 16));
-                    this.showList.push(result.data["resultList"].showList(16, 20));
+                    for (let i = 0; i < 5; i++) {
+                        this.showList.push(result.data["resultList"].slice(i * 4, i * 4 + 4));
+                    }
                 } else {
                     this.$message.error(result.message);
                 }
+                this.loadingDisabled = false;
             },
 
-            loadShowList() {
-                this.$message.info("滚动更新");
-                this.pageNum += 1;
+            async loadShowList() {
+                this.$message.info("加载 资源列表");
                 console.log(this.pageNum, this.pageSize);
-                setTimeout(async () => {
-                    const {data: result} = await this.$http.get(
-                        "movie/es/_search",
-                        {
-                            params: {
-                                queryContent: this.queryContent,
-                                pageNum: this.pageNum,
-                                pageSize: this.pageSize
-                            }
+
+                this.loadingDisabled = true;
+                const {data: result} = await this.$http.post(
+                    "movie/es/_search",
+                    this.searchContent,
+                    {
+                        params: {
+                            pageNum: this.pageNum,
+                            pageSize: this.pageSize
                         }
-                    );
-                    if (result.status === 200) {
-                        this.$message.success(result.message);
-                        this.showList.push(result.data["resultList"].slice(0, 4));
-                        this.showList.push(result.data["resultList"].slice(4, 8));
-                        this.showList.push(result.data["resultList"].showList(8, 12));
-                        this.showList.push(result.data["resultList"].showList(12, 16));
-                        this.showList.push(result.data["resultList"].showList(16, 20));
-                    } else {
-                        this.$message.error(result.message);
                     }
-                }, 5000);
+                );
+                if (result.status === 200) {
+                    console.log(result.data);
+                    if (result.data["resultList"].length === 0) {
+                        this.$message.warning("没有更多了");
+                        this.endOfTheResource = true;
+                    } else {
+                        this.$message.success(result.message);
+                        this.pageNum++;
+                        for (let i = 0; i < 5; i++) {
+                            this.showList.push(result.data["resultList"].slice(i * 4, i * 4 + 4));
+                        }
+                    }
+
+                } else {
+                    this.$message.error(result.message);
+                }
+                this.loadingDisabled = false;
             },
 
             jumpToDetail(movieId, movieInfo) {
@@ -261,28 +278,24 @@
         watch: {
             searchEventWatcher(curVal, oldVal) {
                 if (curVal !== oldVal) {
-                    this.getShowList();
+                    this.searchShowList();
                 }
             }
         },
-
-        created() {
-            this.getShowList();
-        }
     }
 </script>
 
 <style lang="scss" scoped>
     @import "src/assets/sass/global";
 
-    .query-container {
+    .category-show-container {
         margin: 1% 15% 2% 15%;
         padding: 0 0 1% 0;
         border-radius: 30px;
         background-color: $bg_gray_white_global;
-        box-shadow: 0 0 50px 20px rgba(235,242,242,0.5);
+        box-shadow: 0 0 50px 20px rgba(235, 242, 242, 0.5);
 
-        .query-container-category {
+        .container-category {
             padding: 20px 0 20px 0;
             background-color: rgba(179, 179, 179, 0.3);
             border-radius: 30px;
@@ -344,7 +357,7 @@
             }
         }
 
-        .query-sort-menu {
+        .content-sort-menu {
             padding-left: 3%;
             margin-top: 1%;
             border-radius: 6px;
@@ -354,72 +367,69 @@
             margin-top: 5px;
         }
 
+
         .container-show {
+            padding-left: 3%;
+            padding-right: 3%;
 
-            .show-content-list {
-                margin-left: 5%;
-                margin-right: 5%;
+            .el-card {
+                background-color: $bg_black_global;
+                border-color: transparent;
+                margin-right: 8px;
+                margin-left: 8px;
+                margin-bottom: 5%;
+                cursor: pointer;
 
-                .el-card {
-                    background-color: $bg_black_global;
-                    border-color: transparent;
-                    margin-right: 8px;
-                    margin-left: 8px;
-                    margin-bottom: 5%;
+                .el-image {
+                    height: 300px;
+                    width: 100%;
+                }
+
+                .movie-detail {
+                    display: flex;
+                    justify-content: space-around;
+                    border: transparent;
+                    background-color: transparent;
                     cursor: pointer;
 
-                    .el-image {
-                        height: 300px;
-                        width: 100%;
-                    }
-
-                    .movie-detail {
-                        display: flex;
-                        justify-content: space-around;
-                        border: transparent;
+                    .movie-name {
+                        border-color: transparent;
                         background-color: transparent;
-                        cursor: pointer;
-
-                        .movie-name {
-                            border-color: transparent;
-                            background-color: transparent;
-                            font-size: x-large;
-                        }
-
-                        .movie-rate {
-                            margin-top: 3%;
-                        }
-
-                        .rate-star {
-                            width: 15px;
-                            height: 15px;
-                            margin-right: 5px;
-                        }
+                        font-size: x-large;
                     }
 
-                    .movie-genre-box {
-                        display: flex;
-
-                        .movie-genre {
-                            margin-left: 5px;
-                            color: #eeeeee;
-                            border-color: transparent;
-                            background-color: $bg_green_global;
-                            font-size: small;
-                        }
+                    .movie-rate {
+                        margin-top: 3%;
                     }
 
+                    .rate-star {
+                        width: 15px;
+                        height: 15px;
+                        margin-right: 5px;
+                    }
                 }
 
-                .el-card:hover {
-                    border-color: #eeeeee;
-                    background-color: #536f85;
-                    margin-right: 0;
-                    margin-left: 0;
-                    margin-bottom: 0;
+                .movie-genre-box {
+                    display: flex;
+
+                    .movie-genre {
+                        margin-left: 5px;
+                        color: #eeeeee;
+                        border-color: transparent;
+                        background-color: $bg_green_global;
+                        font-size: small;
+                    }
                 }
+
             }
 
+            .el-card:hover {
+                border-color: #eeeeee;
+                background-color: #536f85;
+                margin-right: 0;
+                margin-left: 0;
+                margin-bottom: 0;
+            }
         }
 
 

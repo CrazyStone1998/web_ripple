@@ -10,7 +10,7 @@
 
                 <el-button class="btn-menu" icon="el-icon-s-grid" @click="drawer=!drawer">Menu</el-button>
 
-                <el-input class="search-input" v-model="query_content" placeholder="请输入内容">
+                <el-input class="search-input" v-model="searchContent" placeholder="请输入内容">
                     <el-select v-model="searchGenreSelect" @change="genreSelectChange" slot="prepend" placeholder="All">
                         <el-option label="All" value="all"></el-option>
                         <el-option label="类型" value="genre"></el-option>
@@ -78,7 +78,7 @@
             return {
                 searchGenreSelect: '',
                 drawer: false,
-                query_content: ''
+                searchContent: this.$store.state.searchQuery.content,
             }
         },
         computed: mapState({
@@ -122,8 +122,11 @@
             genreSelectChange(curVal) {
                 console.log(curVal);
             },
-
             search() {
+                this.$store.commit('setSearchQuery',{
+                    content: this.searchContent,
+                    limit: this.searchGenreSelect
+                });
             },
         }
     }

@@ -102,11 +102,12 @@
     export default {
         name: "UserDetail",
         components: {Aside},
-        props: ['id', 'user'],
+        props: ['userId', 'user'],
         data() {
             return {
                 homeLink: Home,
                 resourceLink: Resource,
+
                 userInfo: {
                     username: '小罗伯特·唐尼',
                     phone: '13653399918',

@@ -5,6 +5,12 @@
         </el-header>
 
         <el-main class="home-container-main">
+            <el-backtop target=".home-container-main" :bottom="100" :right="100"
+                        style="background-color: transparent;width: 50px;height: 50px">
+                <svg aria-hidden="true">
+                    <use xlink:href="#icon-top"></use>
+                </svg>
+            </el-backtop>
             <PopularRecommend></PopularRecommend>
             <PreferenceRecommend></PreferenceRecommend>
             <CoolRecommend></CoolRecommend>
@@ -44,9 +50,7 @@
             }
         },
 
-        methods: {
-
-        },
+        methods: {},
         beforeCreate() {
             if (this.$store.state.loadingCalculation) {
                 const loading = this.$loading({

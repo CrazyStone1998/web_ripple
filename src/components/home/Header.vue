@@ -77,7 +77,7 @@
         data() {
             return {
                 limitPick: '',
-                searchContent: '',
+                searchContent: this.$store.state.searchQuery.content,
                 drawer: false
             }
         },
@@ -125,7 +125,7 @@
                     content: this.searchContent,
                     limit: this.limitPick
                 });
-                this.push(TopRank);
+                this.$router.push(Resource);
             },
         }
     }

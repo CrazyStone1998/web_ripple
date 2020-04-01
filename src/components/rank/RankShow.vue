@@ -2,13 +2,15 @@
     <div class="show-block">
         <el-divider content-position="left">排行榜</el-divider>
 
-        <el-menu default-active="popular" mode="horizontal" @change="tagPickChange">
+        <el-menu default-active="popular" mode="horizontal" @select="tagPickChange">
             <el-menu-item index="popular">按热度</el-menu-item>
             <el-menu-item index="rate">按评分</el-menu-item>
             <el-menu-item index="preference">按逼格</el-menu-item>
         </el-menu>
 
-        <div class="top-series-content">
+        <div class="top-series-content"
+             v-infinite-scroll="loadRankList"
+             :infinite-scroll-disabled="disabled">
             <el-row v-for="(row,index) in rankList" :key="index">
                 <el-col :span="12" v-for="(movieInfo,index) in row" :key="index">
                     <el-card class="item-card"
@@ -37,7 +39,7 @@
                                     <span class="movie-detail-tag-content"
                                           v-for="(item,index) in movieInfo.directorSet"
                                           :key="index">
-                                             {{item}}
+                                             {{item.name}}
                                             </span>
                                 </div>
                                 <div class="detail-block">
@@ -45,15 +47,15 @@
                                     <span class="movie-detail-tag-content"
                                           v-for="(item,index) in movieInfo.screenwriterSet"
                                           :key="index">
-                                                {{item}}
+                                                {{item.name}}
                                             </span>
                                 </div>
                                 <div class="detail-block">
                                     <span class="movie-detail-tag">演员 : </span>
                                     <span class="movie-detail-tag-content"
-                                          v-for="(item,index) in movieInfo.starringSet"
+                                          v-for="(item,index) in movieInfo.starringSet.slice(0,3)"
                                           :key="index">
-                                                {{item}}
+                                                {{item.name}}
                                             </span>
                                 </div>
                                 <div class="detail-block">
@@ -61,7 +63,7 @@
                                     <span class="movie-detail-tag-content"
                                           v-for="(item,index) in movieInfo.genreSet"
                                           :key="index">
-                                                {{item}}
+                                                {{item.name}}
                                             </span>
                                 </div>
                                 <div class="detail-block">
@@ -82,7 +84,7 @@
                                     <span class="movie-detail-tag">简介 : </span>
                                 </div>
                                 <div class="detail-block">
-                                    <div class="movie-introduction" v-html="movieInfo.introduction"></div>
+                                    <div class="movie-introduction" v-html="movieInfo.profile"></div>
                                 </div>
 
                             </el-col>
@@ -100,213 +102,31 @@
         name: "RankShow",
         data() {
             return {
-                tag: '',
+                tagPick: 'popular',
                 pageNum: 1,
                 pageSize: 20,
-                rankList: [
-                    [
-                        {
-                            id: 1,
-                            name: "冰雪奇缘",
-                            foreign_name: "Frozen",
-                            length: 181,
-                            language: "英语 / 冰岛语",
-                            area: "美国",
-                            release_date: "2013-12-21",
-                            box_office: 2000000.05,
-                            cover_url: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2166640945.jpg",
-                            rate: 9.5,
-                            votes: 50000000,
-                            weight: "14%,25%,52%,25%,12%",
-                            imdb_link: "",
-                            douban_link: "https://movie.douban.com/subject/4202982/",
-                            rottenTomatoes_link: "",
-                            directorSet: ["Lee", "Buck"],
-                            screenwriterSet: ["Lee", "Buce"],
-                            starringSet: ["门泽尔", "安娜"],
-                            genreSet: ["动画", "音乐", "家庭"],
-                            introduction: "在四面环海、风景如画的阿伦黛尔王国，生活着两位可爱美丽的小公主，艾莎和安娜。艾莎天生具有制造冰雪的能力，随着年龄的增长，她的能力越来越强，甚至险些夺走妹妹的生命。为此国王紧闭宫门，也中断了两姐妹的联系。悲哀的海难过后，艾莎（伊迪娜·门泽尔 Idina Menzel 配音 ）终于到了加冕的年龄，各国王公齐来祝贺。艾莎战战兢兢，唯恐被人识破隐藏了多年的秘密。然而当听说安娜（克里斯汀·贝尔 Kristen Bell 配音）将要和初次见面的南埃尔斯王子汉斯（圣蒂诺·方塔纳 Santino Fontana 配音）结婚时，依然情绪失控露出了马脚。在此之后她逃到山中，构建了属于自己的冰雪王国，而阿伦黛尔也陷入可怕的寒冷之中。",
-                            trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
-                        },
-                        {
-                            id: 1,
-                            name: "冰雪奇缘",
-                            foreign_name: "Frozen",
-                            length: 181,
-                            language: "英语 / 冰岛语",
-                            area: "美国",
-                            release_date: "2013-12-21",
-                            box_office: 2000000.05,
-                            cover_url: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2166640945.jpg",
-                            rate: 9.5,
-                            votes: 50000000,
-                            weight: "14%,25%,52%,25%,12%",
-                            imdb_link: "",
-                            douban_link: "https://movie.douban.com/subject/4202982/",
-                            rottenTomatoes_link: "",
-                            directorSet: ["Lee", "Buck"],
-                            screenwriterSet: ["Lee", "Buce"],
-                            starringSet: ["门泽尔", "安娜"],
-                            genreSet: ["动画", "音乐", "家庭"],
-                            introduction: "在四面环海、风景如画的阿伦黛尔王国，生活着两位可爱美丽的小公主，艾莎和安娜。艾莎天生具有制造冰雪的能力，随着年龄的增长，她的能力越来越强，甚至险些夺走妹妹的生命。为此国王紧闭宫门，也中断了两姐妹的联系。悲哀的海难过后，艾莎（伊迪娜·门泽尔 Idina Menzel 配音 ）终于到了加冕的年龄，各国王公齐来祝贺。艾莎战战兢兢，唯恐被人识破隐藏了多年的秘密。然而当听说安娜（克里斯汀·贝尔 Kristen Bell 配音）将要和初次见面的南埃尔斯王子汉斯（圣蒂诺·方塔纳 Santino Fontana 配音）结婚时，依然情绪失控露出了马脚。在此之后她逃到山中，构建了属于自己的冰雪王国，而阿伦黛尔也陷入可怕的寒冷之中。",
-                            trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
-                        }
-                    ],
-                    [
-                        {
-                            id: 1,
-                            name: "冰雪奇缘",
-                            foreign_name: "Frozen",
-                            length: 181,
-                            language: "英语 / 冰岛语",
-                            area: "美国",
-                            release_date: "2013-12-21",
-                            box_office: 2000000.05,
-                            cover_url: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2166640945.jpg",
-                            rate: 9.5,
-                            votes: 50000000,
-                            weight: "14%,25%,52%,25%,12%",
-                            imdb_link: "",
-                            douban_link: "https://movie.douban.com/subject/4202982/",
-                            rottenTomatoes_link: "",
-                            directorSet: ["Lee", "Buck"],
-                            screenwriterSet: ["Lee", "Buce"],
-                            starringSet: ["门泽尔", "安娜"],
-                            genreSet: ["动画", "音乐", "家庭"],
-                            introduction: "在四面环海、风景如画的阿伦黛尔王国，生活着两位可爱美丽的小公主，艾莎和安娜。艾莎天生具有制造冰雪的能力，随着年龄的增长，她的能力越来越强，甚至险些夺走妹妹的生命。为此国王紧闭宫门，也中断了两姐妹的联系。悲哀的海难过后，艾莎（伊迪娜·门泽尔 Idina Menzel 配音 ）终于到了加冕的年龄，各国王公齐来祝贺。艾莎战战兢兢，唯恐被人识破隐藏了多年的秘密。然而当听说安娜（克里斯汀·贝尔 Kristen Bell 配音）将要和初次见面的南埃尔斯王子汉斯（圣蒂诺·方塔纳 Santino Fontana 配音）结婚时，依然情绪失控露出了马脚。在此之后她逃到山中，构建了属于自己的冰雪王国，而阿伦黛尔也陷入可怕的寒冷之中。",
-                            trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
-                        },
-                        {
-                            id: 1,
-                            name: "冰雪奇缘",
-                            foreign_name: "Frozen",
-                            length: 181,
-                            language: "英语 / 冰岛语",
-                            area: "美国",
-                            release_date: "2013-12-21",
-                            box_office: 2000000.05,
-                            cover_url: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2166640945.jpg",
-                            rate: 9.5,
-                            votes: 50000000,
-                            weight: "14%,25%,52%,25%,12%",
-                            imdb_link: "",
-                            douban_link: "https://movie.douban.com/subject/4202982/",
-                            rottenTomatoes_link: "",
-                            directorSet: ["Lee", "Buck"],
-                            screenwriterSet: ["Lee", "Buce"],
-                            starringSet: ["门泽尔", "安娜"],
-                            genreSet: ["动画", "音乐", "家庭"],
-                            introduction: "在四面环海、风景如画的阿伦黛尔王国，生活着两位可爱美丽的小公主，艾莎和安娜。艾莎天生具有制造冰雪的能力，随着年龄的增长，她的能力越来越强，甚至险些夺走妹妹的生命。为此国王紧闭宫门，也中断了两姐妹的联系。悲哀的海难过后，艾莎（伊迪娜·门泽尔 Idina Menzel 配音 ）终于到了加冕的年龄，各国王公齐来祝贺。艾莎战战兢兢，唯恐被人识破隐藏了多年的秘密。然而当听说安娜（克里斯汀·贝尔 Kristen Bell 配音）将要和初次见面的南埃尔斯王子汉斯（圣蒂诺·方塔纳 Santino Fontana 配音）结婚时，依然情绪失控露出了马脚。在此之后她逃到山中，构建了属于自己的冰雪王国，而阿伦黛尔也陷入可怕的寒冷之中。",
-                            trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
-                        }
-                    ],
-                    [
-                        {
-                            id: 1,
-                            name: "冰雪奇缘",
-                            foreign_name: "Frozen",
-                            length: 181,
-                            language: "英语 / 冰岛语",
-                            area: "美国",
-                            release_date: "2013-12-21",
-                            box_office: 2000000.05,
-                            cover_url: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2166640945.jpg",
-                            rate: 9.5,
-                            votes: 50000000,
-                            weight: "14%,25%,52%,25%,12%",
-                            imdb_link: "",
-                            douban_link: "https://movie.douban.com/subject/4202982/",
-                            rottenTomatoes_link: "",
-                            directorSet: ["Lee", "Buck"],
-                            screenwriterSet: ["Lee", "Buce"],
-                            starringSet: ["门泽尔", "安娜"],
-                            genreSet: ["动画", "音乐", "家庭"],
-                            introduction: "在四面环海、风景如画的阿伦黛尔王国，生活着两位可爱美丽的小公主，艾莎和安娜。艾莎天生具有制造冰雪的能力，随着年龄的增长，她的能力越来越强，甚至险些夺走妹妹的生命。为此国王紧闭宫门，也中断了两姐妹的联系。悲哀的海难过后，艾莎（伊迪娜·门泽尔 Idina Menzel 配音 ）终于到了加冕的年龄，各国王公齐来祝贺。艾莎战战兢兢，唯恐被人识破隐藏了多年的秘密。然而当听说安娜（克里斯汀·贝尔 Kristen Bell 配音）将要和初次见面的南埃尔斯王子汉斯（圣蒂诺·方塔纳 Santino Fontana 配音）结婚时，依然情绪失控露出了马脚。在此之后她逃到山中，构建了属于自己的冰雪王国，而阿伦黛尔也陷入可怕的寒冷之中。",
-                            trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
-                        },
-                        {
-                            id: 1,
-                            name: "冰雪奇缘",
-                            foreign_name: "Frozen",
-                            length: 181,
-                            language: "英语 / 冰岛语",
-                            area: "美国",
-                            release_date: "2013-12-21",
-                            box_office: 2000000.05,
-                            cover_url: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2166640945.jpg",
-                            rate: 9.5,
-                            votes: 50000000,
-                            weight: "14%,25%,52%,25%,12%",
-                            imdb_link: "",
-                            douban_link: "https://movie.douban.com/subject/4202982/",
-                            rottenTomatoes_link: "",
-                            directorSet: ["Lee", "Buck"],
-                            screenwriterSet: ["Lee", "Buce"],
-                            starringSet: ["门泽尔", "安娜"],
-                            genreSet: ["动画", "音乐", "家庭"],
-                            introduction: "在四面环海、风景如画的阿伦黛尔王国，生活着两位可爱美丽的小公主，艾莎和安娜。艾莎天生具有制造冰雪的能力，随着年龄的增长，她的能力越来越强，甚至险些夺走妹妹的生命。为此国王紧闭宫门，也中断了两姐妹的联系。悲哀的海难过后，艾莎（伊迪娜·门泽尔 Idina Menzel 配音 ）终于到了加冕的年龄，各国王公齐来祝贺。艾莎战战兢兢，唯恐被人识破隐藏了多年的秘密。然而当听说安娜（克里斯汀·贝尔 Kristen Bell 配音）将要和初次见面的南埃尔斯王子汉斯（圣蒂诺·方塔纳 Santino Fontana 配音）结婚时，依然情绪失控露出了马脚。在此之后她逃到山中，构建了属于自己的冰雪王国，而阿伦黛尔也陷入可怕的寒冷之中。",
-                            trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
-                        }
-                    ],
-                    [
-                        {
-                            id: 1,
-                            name: "冰雪奇缘",
-                            foreign_name: "Frozen",
-                            length: 181,
-                            language: "英语 / 冰岛语",
-                            area: "美国",
-                            release_date: "2013-12-21",
-                            box_office: 2000000.05,
-                            cover_url: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2166640945.jpg",
-                            rate: 9.5,
-                            votes: 50000000,
-                            weight: "14%,25%,52%,25%,12%",
-                            imdb_link: "",
-                            douban_link: "https://movie.douban.com/subject/4202982/",
-                            rottenTomatoes_link: "",
-                            directorSet: ["Lee", "Buck"],
-                            screenwriterSet: ["Lee", "Buce"],
-                            starringSet: ["门泽尔", "安娜"],
-                            genreSet: ["动画", "音乐", "家庭"],
-                            introduction: "在四面环海、风景如画的阿伦黛尔王国，生活着两位可爱美丽的小公主，艾莎和安娜。艾莎天生具有制造冰雪的能力，随着年龄的增长，她的能力越来越强，甚至险些夺走妹妹的生命。为此国王紧闭宫门，也中断了两姐妹的联系。悲哀的海难过后，艾莎（伊迪娜·门泽尔 Idina Menzel 配音 ）终于到了加冕的年龄，各国王公齐来祝贺。艾莎战战兢兢，唯恐被人识破隐藏了多年的秘密。然而当听说安娜（克里斯汀·贝尔 Kristen Bell 配音）将要和初次见面的南埃尔斯王子汉斯（圣蒂诺·方塔纳 Santino Fontana 配音）结婚时，依然情绪失控露出了马脚。在此之后她逃到山中，构建了属于自己的冰雪王国，而阿伦黛尔也陷入可怕的寒冷之中。",
-                            trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
-                        },
-                        {
-                            id: 1,
-                            name: "冰雪奇缘",
-                            foreign_name: "Frozen",
-                            length: 181,
-                            language: "英语 / 冰岛语",
-                            area: "美国",
-                            release_date: "2013-12-21",
-                            box_office: 2000000.05,
-                            cover_url: "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2166640945.jpg",
-                            rate: 9.5,
-                            votes: 50000000,
-                            weight: "14%,25%,52%,25%,12%",
-                            imdb_link: "",
-                            douban_link: "https://movie.douban.com/subject/4202982/",
-                            rottenTomatoes_link: "",
-                            directorSet: ["Lee", "Buck"],
-                            screenwriterSet: ["Lee", "Buce"],
-                            starringSet: ["门泽尔", "安娜"],
-                            genreSet: ["动画", "音乐", "家庭"],
-                            introduction: "在四面环海、风景如画的阿伦黛尔王国，生活着两位可爱美丽的小公主，艾莎和安娜。艾莎天生具有制造冰雪的能力，随着年龄的增长，她的能力越来越强，甚至险些夺走妹妹的生命。为此国王紧闭宫门，也中断了两姐妹的联系。悲哀的海难过后，艾莎（伊迪娜·门泽尔 Idina Menzel 配音 ）终于到了加冕的年龄，各国王公齐来祝贺。艾莎战战兢兢，唯恐被人识破隐藏了多年的秘密。然而当听说安娜（克里斯汀·贝尔 Kristen Bell 配音）将要和初次见面的南埃尔斯王子汉斯（圣蒂诺·方塔纳 Santino Fontana 配音）结婚时，依然情绪失控露出了马脚。在此之后她逃到山中，构建了属于自己的冰雪王国，而阿伦黛尔也陷入可怕的寒冷之中。",
-                            trailer: "http://vt1.doubanio.com/202003021544/fe4f0ca7a20ced73c8fad9d40561ec1a/view/movie/M/301490453.mp4"
-                        }
-                    ]
-                ]
+
+                loadingDisabled: false,
+                endOfTheResource: false,
+
+                rankList: []
+            }
+        },
+        computed: {
+            disabled() {
+                return this.loadingDisabled || this.endOfTheResource;
             }
         },
         methods: {
             async getRankList() {
+                console.log("排序 rank");
+
                 this.pageNum = 1;
-                this.rankList = [];
                 const {data: result} = await this.$http.get(
-                    '/movie/rank/' + this.tag,
+                    '/movie/es/_rank',
                     {
                         params: {
+                            sortKernel: this.tagPick,
                             pageNum: this.pageNum,
                             pageSize: this.pageSize
                         }
@@ -314,26 +134,7 @@
                 );
                 if (result.status === 200) {
                     this.$message.success(result.message);
-                    for (let i = 0; i < this.pageSize / 2; i++) {
-                        this.rankList.push(result.data['resultList'].slice(i * 2, i * 2 + 2));
-                    }
-                } else {
-                    this.$message.error(result.message);
-                }
-            },
-            async loadRankList() {
-                this.pageNum++;
-                const {data: result} = await this.$http.get(
-                    '/movie/rank/' + this.tag,
-                    {
-                        params: {
-                            pageNum: this.pageNum,
-                            pageSize: this.pageSize
-                        }
-                    }
-                );
-                if (result.status === 200) {
-                    this.$message.success(result.message);
+                    this.rankList = [];
                     for (let i = 0; i < this.pageSize / 2; i++) {
                         this.rankList.push(result.data['resultList'].slice(i * 2, i * 2 + 2));
                     }
@@ -342,10 +143,43 @@
                 }
             },
 
+            async loadRankList() {
+                console.log("加载 资源");
+
+                this.loadingDisabled = true;
+                const {data: result} = await this.$http.get(
+                    '/movie/es/_rank',
+                    {
+                        params: {
+                            pageNum: this.pageNum,
+                            pageSize: this.pageSize,
+                            sortKernel: this.tagPick
+                        }
+                    }
+                );
+                if (result.status === 200) {
+                    if (result.data['resultList'].length === 0) {
+                        this.$message.warning("到头了");
+                        this.endOfTheResource = true;
+                    } else {
+                        this.$message.success(result.message);
+                        this.pageNum++;
+                        for (let i = 0; i < this.pageSize / 2; i++) {
+                            this.rankList.push(result.data['resultList'].slice(i * 2, i * 2 + 2));
+                        }
+                    }
+                } else {
+                    this.$message.error(result.message);
+                }
+                this.loadingDisabled = false;
+            },
+
             tagPickChange(index) {
                 console.log("event ======> tagPick change");
-                this.tag = index;
+                this.tagPick = index;
+                this.getRankList();
             },
+
             jumpToDetail(movieInfo) {
                 this.$router.push(
                     {
@@ -358,9 +192,7 @@
                 )
             }
         },
-        created() {
-            this.getRankList();
-        }
+
     }
 </script>
 <style lang="scss" scoped>

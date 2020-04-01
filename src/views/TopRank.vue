@@ -5,6 +5,12 @@
             </RankHeader>
         </el-header>
         <el-main class="top-rank-container-main">
+            <el-backtop target=".top-rank-container-main" :bottom="100" :right="100"
+                        style="background-color: transparent;width: 50px;height: 50px">
+                <svg aria-hidden="true">
+                    <use xlink:href="#icon-top"></use>
+                </svg>
+            </el-backtop>
             <RankShow></RankShow>
             <Footer></Footer>
         </el-main>
@@ -12,69 +18,13 @@
 </template>
 
 <script>
-    import Login from "./Login";
     import Footer from "../components/home/Footer";
-    import Home from "./Home";
-    import {mapState} from "vuex";
-    import UserDetail from "../components/detail/UserDetail";
-    import Resource from "./Resource";
     import RankHeader from "../components/rank/RankHeader";
     import RankShow from "../components/rank/RankShow";
 
     export default {
         name: "TopRank",
         components: {RankHeader, RankShow, Footer},
-        data() {
-            return {
-                select: '',
-                drawer: false,
-                query_content: '',
-
-            }
-        },
-        computed: mapState({
-            loginState: "loginState",
-            username: "username",
-            userIcon: "userIcon"
-        }),
-        methods: {
-
-            search() {
-
-            },
-            logout() {
-                console.log("user ======> logout");
-                this.$store.commit('delUser');
-                this.$router.push(Login);
-                console.log("logout && redirect")
-            },
-            redirect_login() {
-                this.$router.push(Login);
-            },
-            redirect_userInfo() {
-                this.$router.push(UserDetail);
-            },
-
-            homeLink() {
-                this.$router.push(Home);
-            },
-            resourceLink() {
-                this.$router.push(Resource);
-            },
-
-            // 监听方法
-            mouseover($event, activeClassName) {
-                $event.currentTarget.className += " " + activeClassName;
-            },
-            mouseout($event, activeClassName) {
-                $event.currentTarget.className =
-                    $event.currentTarget.className.slice(
-                        0,
-                        $event.currentTarget.className.indexOf(" " + activeClassName)
-                    )
-            }
-
-        }
     }
 </script>
 

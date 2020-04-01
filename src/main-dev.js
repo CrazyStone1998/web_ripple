@@ -1,5 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
+import VueRouter from "vue-router";
 import router from "./router";
 import store from "./store";
 import axios from "axios";
@@ -42,6 +43,13 @@ axios.interceptors.response.use(config => {
 
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false;
+
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
+  return originalPush.call(this, location).catch(err => err)
+};
+
 
 new Vue({
   router,

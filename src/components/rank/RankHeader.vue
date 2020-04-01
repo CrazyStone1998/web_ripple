@@ -10,7 +10,7 @@
 
                 <el-button class="btn-menu" icon="el-icon-s-grid" @click="drawer=!drawer">Menu</el-button>
 
-                <el-input class="search-input" v-model="queryContent" placeholder="请输入内容">
+                <el-input class="search-input" v-model="searchContent" placeholder="请输入内容">
                     <el-select v-model="limitPick" @change="genreSelectChange" slot="prepend" placeholder="All">
                         <el-option label="All" value="all"></el-option>
                         <el-option label="类型" value="genre"></el-option>
@@ -77,7 +77,7 @@
         data() {
             return {
                 limitPick: '',
-                queryContent: '',
+                searchContent: '',
                 drawer: false
             }
         },
@@ -87,6 +87,9 @@
             userIcon: 'userIcon',
         }),
         methods: {
+            genreSelectChange() {
+
+            },
             logout() {
                 console.log("********");
                 console.log(this.username, " ======> logout");
@@ -124,7 +127,7 @@
                     content: this.searchContent,
                     limit: this.limitPick
                 });
-                this.push(TopRank);
+                this.$router.push(Resource);
             },
         }
     }

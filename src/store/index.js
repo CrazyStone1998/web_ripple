@@ -52,7 +52,7 @@ export default new Vuex.Store({
             state.searchQuery.content = payload.content;
             state.searchQuery.limit = payload.limit;
             state.searchEventWatcher = !state.searchEventWatcher;
-        }
+        },
     },
     actions: {},
     modules: {}

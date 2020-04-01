@@ -38,28 +38,35 @@
                         <el-divider></el-divider>
                         <div class="movie-detail-block">
                             <span class="movie-detail-tag">导演 : </span>
-                            <span class="movie-detail-tag-content" v-for="(item,index) in movieInfo.directorSet"
-                                  :key="index">
+                            <span class="movie-detail-tag-content"
+                                  v-for="(item,index) in movieInfo.directorSet"
+                                  :key="index"
+                                  @click="jumpToCelebrityDetail(item.id,item,'导演')">
                                 {{item.name}}
                             </span>
                         </div>
                         <div class="movie-detail-block">
                             <span class="movie-detail-tag">编剧 : </span>
-                            <span class="movie-detail-tag-content" v-for="(item,index) in movieInfo.screenwriterSet"
-                                  :key="index">
+                            <span class="movie-detail-tag-content"
+                                  v-for="(item,index) in movieInfo.screenwriterSet"
+                                  :key="index"
+                                  @click="jumpToCelebrityDetail(item.id,item,'编剧')">
                                 {{item.name}}
                             </span>
                         </div>
                         <div class="movie-detail-block">
                             <span class="movie-detail-tag">演员 : </span>
-                            <span class="movie-detail-tag-content" v-for="(item,index) in movieInfo.starringSet.slice(0,5)"
-                                  :key="index">
+                            <span class="movie-detail-tag-content"
+                                  v-for="(item,index) in movieInfo.starringSet.slice(0,5)"
+                                  :key="index"
+                                  @click="jumpToCelebrityDetail(item.id,item,'演员')">
                                 {{item.name}}
                             </span>
                         </div>
                         <div class="movie-detail-block">
                             <span class="movie-detail-tag">类型 : </span>
-                            <span class="movie-detail-tag-content" v-for="(item,index) in movieInfo.genreSet"
+                            <span class="movie-detail-tag-content"
+                                  v-for="(item,index) in movieInfo.genreSet"
                                   :key="index">
                                 {{item.name}}
                             </span>
@@ -98,13 +105,13 @@
                 <el-divider content-position="left" class="movie-detail-divider">简介</el-divider>
 
                 <el-row>
-                    <span class="movie-detail-introduction">{{movieInfo.introduction}}"</span>
+                    <span class="movie-detail-introduction">{{movieInfo.profile}}"</span>
                 </el-row>
 
                 <el-divider content-position="left">资源</el-divider>
                 <el-row class="movie-detail-resource">
                     <el-col :span="16" class="movie-detail-mp4">
-                        <RioVideoPlayer :video_src="'http://vt1.doubanio.com/202003192308/31cef8f54686e776edffb05a73fca3ef/view/movie/M/402530176.mp4'" :cover_url="'https://img9.doubanio.com/view/photo/sqxs/public/p2575977024.webp'"></RioVideoPlayer>
+                        <RioVideoPlayer :video_src="movieInfo.trailer" :cover_url="movieInfo.cover_url"></RioVideoPlayer>
                     </el-col>
                     <el-col :span="8">
                         <el-image :src="movieInfo.cover_url"></el-image>
@@ -127,10 +134,16 @@
                     <el-card class="comment-card" v-for="item in commentList" :key="item.id">
                         <el-row class="comment-card-header">
                             <el-col :span="2">
-                                <el-avatar :src="item.user.icon" class="comment-user-avatar"></el-avatar>
+                                <el-avatar :src="item.user.icon"
+                                           class="comment-user-avatar"
+                                           @click.native="jumpToUserDetail(item.user.id,item.user)"
+                                ></el-avatar>
                             </el-col>
                             <el-col :span="2">
-                                <el-tag class="comment-user-name">{{item.user.username}}</el-tag>
+                                <el-tag class="comment-user-name"
+                                        @click.native="jumpToUserDetail(item.user.id,item.user)">
+                                    {{item.user.username}}
+                                </el-tag>
                             </el-col>
                             <el-col :span="6">
 
@@ -177,10 +190,16 @@
                     <el-card class="review-card" v-for="item in reviewList" :key="item.id">
                         <el-row class="review-card-header">
                             <el-col :span="2">
-                                <el-avatar :src="item.user.icon" class="review-user-avatar"></el-avatar>
+                                <el-avatar :src="item.user.icon"
+                                           class="review-user-avatar"
+                                           @click.native="jumpToUserDetail(item.user.id,item.user)">
+                                </el-avatar>
                             </el-col>
                             <el-col :span="2">
-                                <el-tag class="review-user-name">{{item.user.username}}</el-tag>
+                                <el-tag class="review-user-name"
+                                        @click.native="jumpToUserDetail(item.user.id,item.user)">
+                                    {{item.user.username}}
+                                </el-tag>
                             </el-col>
                             <el-col :span="6">
                                 <el-rate
@@ -241,7 +260,7 @@
                                 :body-style="{ padding: '0px' }"
                                 shadow="hover"
                         >
-                            <el-image :src="item.cover_url" fit="fill" @click="jumpToDetail(item.id, item)"></el-image>
+                            <el-image :src="item.cover_url" fit="fill" @click="jumpToMovieDetail(item.id, item)"></el-image>
                             <div class="movie-detail">
                                 <el-tag class="movie-name" >{{item.name}}</el-tag>
                                 <div class="movie-rate">
@@ -270,7 +289,7 @@
     export default {
         name: "MovieDetail",
         components: {Aside, RioVideoPlayer},
-        props: ['id', 'movieInfo'],
+        props: ['movieId', 'movieInfo'],
         data() {
             return {
                 homeLink: Home,
@@ -286,10 +305,18 @@
 
             }
         },
+        watch: {
+            movieInfo() {
+                this.getAllCommentList();
+                this.getAllReviewList();
+                this.getRelatedMovieList();
+            }
+        },
         computed: {
 
         },
         methods: {
+
             async getAllCommentList() {
                 const {data: result} = await this.$http.get(
                     "/comment/" + this.movieInfo.id,
@@ -307,8 +334,6 @@
                 } else {
                     this.$message.error(result.message);
                 }
-
-
             },
 
             async getAllReviewList() {
@@ -330,6 +355,7 @@
                     this.$message.error(result.message);
                 }
             },
+
             async getRelatedMovieList() {
                 const {data: result} = await this.$http.get(
                     "/movie/es/popular",
@@ -347,6 +373,43 @@
                 } else {
                     this.$message.error(result.message);
                 }
+            },
+
+            jumpToMovieDetail(movieId, movieInfo) {
+                this.$router.push(
+                    {
+                        name: "MovieDetail",
+                        params: {
+                            movieId: movieId,
+                            movieInfo: movieInfo
+                        }
+                    }
+                )
+            },
+
+            jumpToCelebrityDetail(celebrityId, celebrityInfo, celebrityGenre) {
+                this.$router.push(
+                    {
+                        name: "CelebrityDetail",
+                        params: {
+                            celebrityId: celebrityId,
+                            celebrityInfo: celebrityInfo,
+                            celebrityGenre: celebrityGenre
+                        }
+                    }
+                )
+            },
+
+            jumpToUserDetail(userId, user) {
+                this.$router.push(
+                    {
+                        name: "UserDetail",
+                        params: {
+                            userId: userId,
+                            user: user
+                        }
+                    }
+                )
             },
 
             rateChart(dom_id) {

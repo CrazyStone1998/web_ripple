@@ -79,22 +79,26 @@ const routes = [
         path: "/detail", name: "Detail", component: Detail,
         children: [
             {
-                path: "movie/:id",
+                path: "movie/:movieId",
                 name: "MovieDetail",
                 component: MovieDetail,
-                props: route => ({id: route.params.movieId, movieInfo: route.params.movieInfo})
+                props: route => ({movieId: route.params.movieId, movieInfo: route.params.movieInfo})
             },
             {
-                path: "user/:id",
+                path: "user/:userId",
                 name: "UserDetail",
                 component: UserDetail,
-                props: route => ({id: route.params.id, user: route.params.user})
+                props: route => ({userId: route.params.userId, user: route.params.user})
             },
             {
-                path: "celebrity/:id",
-                name: "Celebrity",
+                path: "celebrity/:celebrityId",
+                name: "CelebrityDetail",
                 component: CelebrityDetail,
-                props: route => ({id: route.params.id, celebrity: route.params.celebrity})
+                props: route => ({
+                    celebrityId: route.params.celebrityId,
+                    celebrityInfo: route.params.celebrityInfo,
+                    celebrityGenre: route.params.celebrityGenre
+                })
             },
         ]
     },

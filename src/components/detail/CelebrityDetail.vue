@@ -5,7 +5,7 @@
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="homeLink">首页</el-breadcrumb-item>
                 <el-breadcrumb-item :to="resourceLink">资源库</el-breadcrumb-item>
-                <el-breadcrumb-item>{{celebrityInfo.name}}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{celebrity.name}}</el-breadcrumb-item>
             </el-breadcrumb>
             <el-divider></el-divider>
         </el-header>
@@ -14,7 +14,7 @@
             <el-main class="celebrity-detail-inner-container-main">
                 <el-row class="celebrity-detail-description">
                     <el-col :span="4">
-                        <el-image :src="celebrityInfo.cover_url" fit="fill" class="celebrity-cover"></el-image>
+                        <el-image :src="celebrity.cover_url" fit="fill" class="celebrity-cover"></el-image>
                         <div class="celebrity-share">
                             <svg aria-hidden="true" class="celebrity-icon-share">
                                 <use xlink:href="#icon-CatFootprint"></use>
@@ -34,36 +34,36 @@
                     </el-col>
                     <el-col :span="18" class="celebrity-info">
                         <div>
-                            <span class="celebrity-name">{{celebrityInfo.name}} {{celebrityInfo.foreign_name}}</span>
+                            <span class="celebrity-name">{{celebrity.name}} {{celebrity.foreign_name}}</span>
                         </div>
                         <el-divider></el-divider>
                         <div class="celebrity-detail-block">
                             <span class="celebrity-info-tag">性别 : </span>
-                            <span class="celebrity-info-content"> {{ celebrityInfo.sex }}</span>
+                            <span class="celebrity-info-content"> {{ celebrity.sex }}</span>
                         </div>
                         <div class="celebrity-detail-block">
                             <span class="celebrity-info-tag">星座 : </span>
-                            <span class="celebrity-info-content"> {{celebrityInfo.constellation}} </span>
+                            <span class="celebrity-info-content"> {{celebrity.constellation}} </span>
                         </div>
                         <div class="celebrity-detail-block">
                             <span class="celebrity-info-tag">工作 : </span>
-                            <span class="celebrity-info-content"> {{celebrityInfo.work}} </span>
+                            <span class="celebrity-info-content"> {{celebrity.work}} </span>
                         </div>
                         <div class="celebrity-detail-block">
                             <span class="celebrity-info-tag">出生日期 : </span>
-                            <span class="celebrity-info-content"> {{celebrityInfo.birth}}</span>
+                            <span class="celebrity-info-content"> {{celebrity.birth}}</span>
                         </div>
                         <div class="celebrity-detail-block">
                             <span class="celebrity-info-tag">出生地 : </span>
-                            <span class="celebrity-info-content"> {{celebrityInfo.hometown}} </span>
+                            <span class="celebrity-info-content"> {{celebrity.hometown}} </span>
                         </div>
                         <div class="celebrity-detail-block">
                             <span class="celebrity-info-tag">豆瓣 : </span>
-                            <span class="celebrity-info-content">{{celebrityInfo.douban_link}}</span>
+                            <span class="celebrity-info-content">{{celebrity.douban_link}}</span>
                         </div>
                         <div class="celebrity-detail-block">
                             <span class="celebrity-info-tag">Imdb : </span>
-                            <span class="celebrity-info-content">{{celebrityInfo.imdb_link}}</span>
+                            <span class="celebrity-info-content">{{celebrity.imdb_link}}</span>
                         </div>
                     </el-col>
                 </el-row>
@@ -71,18 +71,18 @@
                 <el-divider content-position="left" class="celebrity-detail-divider">简介</el-divider>
 
                 <el-row>
-                    <span class="celebrity-info-introduction">{{celebrityInfo.introduction}}</span></el-row>
+                    <span class="celebrity-info-introduction">{{celebrity.introduction}}</span></el-row>
 
                 <el-divider content-position="left">近况</el-divider>
                 <el-row class="celebrity-info-resource">
-                    <el-col :span="4" v-for="(img,index) in celebrityInfo.photos" :key="index">
+                    <el-col :span="4" v-for="(img,index) in celebrity.photos" :key="index">
                         <el-image :src="img" class="celebrity-recent-img"></el-image>
                     </el-col>
                 </el-row>
 
                 <el-divider content-position="left">获奖</el-divider>
                 <el-row class="celebrity-info-resource">
-                    <div class="celebrity-info-awards" v-for="(prize,index) in celebrityInfo.awards" :key="index">
+                    <div class="celebrity-info-awards" v-for="(prize,index) in celebrity.awards" :key="index">
                         {{prize.date}}-{{prize.name}}-{{prize.prize}}-{{prize.movie}}
                     </div>
                 </el-row>
@@ -110,17 +110,18 @@
     export default {
         name: "CelebrityDetail",
         components: {Aside},
-        props: ['id', 'celebrity','genre'],
+        props: ['celebrityId', 'celebrityInfo','celebrityGenre'],
         data() {
             return {
                 homeLink: Home,
                 resourceLink: Resource,
-                celebrityGenre: ['用户', '演员', '导演', '编剧'],
-                celebrityInfo: {
-                    name: '小罗伯特·唐尼',
+                // celebrityGenre: ['用户', '演员', '导演', '编剧'],
+
+                celebrity: {
+                    name: this.celebrityInfo.name,
                     foreign_name: 'Robert Downey Jr.',
                     sex: '男',
-                    work: this.genre,
+                    work: this.celebrityGenre,
                     cover_url: 'https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p56339.webp',
                     constellation: '白羊座',
                     birth: '1965-04-04',

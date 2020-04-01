@@ -9,7 +9,8 @@
             <el-divider></el-divider>
             <el-row class="popular-movie-row" v-for="(row, index) in this.recentMovieList" :key="index">
                 <el-col :span="8" v-for="(movie,index) in row" :key="index">
-                    <el-image @click="jumpToDetail(movie.id, movie)" class="popular-movie-display" :src="movie.cover_url"></el-image>
+                    <el-image class="popular-movie-display" :src="movie.cover_url"
+                              @click.native="jumpToDetail(movie.id, movie)"></el-image>
                 </el-col>
             </el-row>
         </div>
@@ -26,7 +27,8 @@
                 <span class="more">换一批>>></span>
             </div>
             <el-divider></el-divider>
-            <el-row class="recent-movie-row" v-for="(movie,index) in this.popularMovieList" :key="index">
+            <el-row class="recent-movie-row" v-for="(movie,index) in this.popularMovieList" :key="index"
+                    @click.native="jumpToDetail(movie.id, movie)">
                 <el-col :span="6">
                     <svg aria-hidden="true" style="width: 25px;height: 25px">
                         <use xlink:href="#icon-CatFootprint-copy"></use>
@@ -137,6 +139,7 @@
         },
         methods: {
             jumpToDetail(movieId, movieInfo) {
+                console.log(this.$route.path);
                 this.$router.push(
                     {
                         name: "MovieDetail",
@@ -147,6 +150,7 @@
                     }
                 )
             },
+
             async getRecentMovieList() {
                 const {data: result} = await this.$http.get(
                     'movie/es/popular',
