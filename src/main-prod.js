@@ -21,7 +21,7 @@ NProgress.inc(0.2);
 NProgress.configure({easing: 'ease', speed: 500, showSpinner: false});
 
 // 请求 baseURL
-axios.defaults.baseURL = "http://127.0.0.1:8000/";
+axios.defaults.baseURL = "http://172.0.0.3:8000/";
 
 // 请求头拦截器，添加Header
 // 在request拦截器中,展示进度条 NProgress.start()

@@ -111,6 +111,7 @@
                 <el-divider content-position="left">资源</el-divider>
                 <el-row class="movie-detail-resource">
                     <el-col :span="16" class="movie-detail-mp4">
+
                         <RioVideoPlayer :video_src="movieInfo.trailer" :cover_url="movieInfo.cover_url"></RioVideoPlayer>
                     </el-col>
                     <el-col :span="8">
@@ -348,7 +349,6 @@
                 );
                 if (result.status === 200) {
                     this.$message.success(result.message);
-                    console.log(result);
                     this.reviewList = result.data["resultList"];
 
                 } else {

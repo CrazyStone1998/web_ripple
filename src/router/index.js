@@ -22,6 +22,7 @@ import TopRank from "../views/TopRank";
 import CelebrityDetail from "../components/detail/CelebrityDetail";
 import Demo from "../views/Demo";
 import NotFound from "../views/NotFound";
+import test from "../views/test";
 
 
 Vue.use(VueRouter);
@@ -29,6 +30,9 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: "/demo", component: Demo
+    },
+    {
+        path: "/test", component: test
     },
 
     // 基础路由
@@ -110,7 +114,8 @@ const routes = [
     {
         path: "*", // 此处需特别注意置于最底部
         redirect: "/404"
-    }
+    },
+
 
 ];
 

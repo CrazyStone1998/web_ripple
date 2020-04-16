@@ -123,7 +123,7 @@
                 console.log(curVal);
             },
             search() {
-                this.$store.commit('setSearchQuery',{
+                this.$store.commit('setSearchQuery', {
                     content: this.searchContent,
                     limit: this.searchGenreSelect
                 });
