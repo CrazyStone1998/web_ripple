@@ -3,7 +3,7 @@ module.exports = {
         // 发布模式
         config.when(process.env.NODE_ENV === 'production', config => {
             config.entry('app').clear().add('./src/main-prod.js');
-            // config.set('externals',{t
+            // config.set('externals',{
             //     vue: 'Vue',
             //     'vue-router': 'VueRouter',
             //     axios: 'axios',

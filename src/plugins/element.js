@@ -14,8 +14,6 @@ import {
     Table, TableColumn, Pagination, Collapse, CollapseItem, CheckboxGroup, CheckboxButton, Checkbox,
     Tag, Tree, Select, Option, Rate, Cascader, Divider, Drawer, Progress, Step, Steps,
     InfiniteScroll, Upload, Backtop, Loading, Transfer, TimeSelect, DatePicker, Tabs, TabPane
-
-
 } from "element-ui";
 
 Vue.use(TabPane);
