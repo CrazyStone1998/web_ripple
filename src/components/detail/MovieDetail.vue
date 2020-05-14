@@ -237,7 +237,8 @@
                     </el-card>
                     <el-button>加 载 更 多 >>></el-button>
                 </el-row>
-                <Editor></Editor>
+                <el-divider></el-divider>
+                <Editor style="margin-bottom: 70px"></Editor>
 
             </el-main>
             <el-aside width="350px" class="inner-container-movie-detail-aside">

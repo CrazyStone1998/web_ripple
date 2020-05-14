@@ -1,7 +1,23 @@
 <template>
     <div>
         <div id="editorElem" style="text-align:center;"></div>
-        {{editorContent}}
+        <el-row style="margin-top: 20px">
+            <el-col span="20">
+                <el-rate style="display:flex; justify-content: flex-end;"
+                        :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                        :show-text="true"
+                        :texts="['极差','极差','极差','失望','失望', '一般','一般','一般', '满意', '惊喜']"
+                        :allow-half="true"
+                        :high-threshold="8"
+                        :low-threshold="5"
+                        :max="10"
+                        v-model="value">
+                </el-rate>
+            </el-col>
+            <el-col span="4">
+                <el-button type="primary">提交</el-button>
+            </el-col>
+        </el-row>
     </div>
 </template>
 <script>
@@ -10,6 +26,8 @@
         name: "Editor",
         data() {
             return {
+                value: 1,
+                iconClasses: ['icon-rate-face-1', 'icon-rate-face-2', 'icon-rate-face-3'],// 等同于 { 2: 'icon-rate-face-1', 4: { value: 'icon-rate-face-2', excluded: true }, 5: 'icon-rate-face-3' }
                 editorContent: ""
             };
         },
@@ -127,7 +145,7 @@
         }
     };
 </script>
-<style >
+<style scoped>
     /* table 样式 */
     table {
         border-top: 1px solid #ccc;
