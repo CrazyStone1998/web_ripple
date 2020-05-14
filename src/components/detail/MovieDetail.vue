@@ -237,6 +237,7 @@
                     </el-card>
                     <el-button>加 载 更 多 >>></el-button>
                 </el-row>
+                <Editor></Editor>
 
             </el-main>
             <el-aside width="350px" class="inner-container-movie-detail-aside">
@@ -286,10 +287,11 @@
     import echarts from 'echarts';
     import RioVideoPlayer from "../Utils/RioVideoPlayer";
     import Aside from "../Utils/Aside";
+    import Editor from "../Utils/Editor";
 
     export default {
         name: "MovieDetail",
-        components: {Aside, RioVideoPlayer},
+        components: {Editor, Aside, RioVideoPlayer},
         props: ['movieId', 'movieInfo'],
         data() {
             return {

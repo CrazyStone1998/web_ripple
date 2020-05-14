@@ -5,7 +5,6 @@
                 <el-avatar :size="130" :src="icon"></el-avatar>
                 <!--登录表单区域-->
                 <el-form ref="login_form_ref" :model="login_form" :rules="login_form_rules" class="login_form">
-
                     <el-form-item prop="username">
                         <el-input
                                 class="account"
@@ -58,6 +57,21 @@
         <el-footer>
             <FooterSimple></FooterSimple>
         </el-footer>
+
+        <!-- 添加验证码 验证框-->
+        <el-dialog title="验证码" :visible.sync="captchaVisible" style="text-align: center">
+            <div>
+                <el-input v-model="captcha_input" placeholder="请输入验证码"></el-input>
+                <label>{{captcha}}</label>
+            </div>
+
+            <!-- 底部区域 -->
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="captchaVisible = false">取 消</el-button>
+                <el-button type="primary" @click="captcha_login">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </el-container>
 </template>
 
@@ -71,8 +85,11 @@
         components: {FooterSimple},
         data() {
             return {
+                captchaVisible: false,
                 checked: false,
                 icon: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+                captcha: "",
+                captcha_input: "",
                 login_form: {
                     username: "",
                     password: ""
@@ -98,24 +115,46 @@
                         console.log("登录信息校验失败，请正确填写表格");
                         this.$message.error("登录信息校验失败，请正确填写表格")
                     } else { // 校验通过
-                        const {data: result} = await this.$http.post("login", this.login_form);
+
+                        const {data: result} = await this.$http.get("captcha",{
+                            params:{
+                                username: this.login_form.username
+                            }
+                        });
                         if (result.status === 200) { // 登录成功
-                            console.log("登录成功\n Authorization: " + result.data.Authorization);
-                            console.log("********");
-                            window.sessionStorage.setItem("Authorization", result.data.Authorization);
-                            this.$message.success(result.message);
-
-                            // 登录跳转
-                            // this.redirect_home(this.login_form.username, result.data.icon);
-                            this.redirect_home(this.login_form.username, 'http://tupian.qqw21.com/article/UploadPic/2020-2/2020231257963915.jpg');
-
+                            this.captcha = result.data;
+                            this.captchaVisible = true;
                         } else { // 登录失败
-                            console.log("登录失败 : " + result.message);
                             console.log("********");
                             this.$message.error(result.message);
                         }
+
                     }
                 });
+            },
+            async captcha_login() {
+                if (this.captcha === this.captcha_input) {
+                    const {data: result} = await this.$http.post("login", this.login_form);
+                    if (result.status === 200) { // 登录成功
+                        console.log("登录成功\n Authorization: " + result.data.Authorization);
+                        console.log("********");
+                        window.sessionStorage.setItem("Authorization", result.data.Authorization);
+                        this.$message.success(result.message);
+
+                        // 登录跳转
+                        // this.redirect_home(this.login_form.username, result.data.icon);
+                        this.redirect_home(this.login_form.username, 'http://tupian.qqw21.com/article/UploadPic/2020-2/2020231257963915.jpg');
+
+                    } else { // 登录失败
+                        console.log("登录失败 : " + result.message);
+                        console.log("********");
+                        this.$message.error(result.message);
+                    }
+                } else {
+                    this.captcha_input = "";
+                    this.$message.error("验证码错误，请重新输入！");
+                }
+
             },
             redirect_register() {
                 this.$router.push(Register);
@@ -195,6 +234,18 @@
                     margin-top: 8%;
                     margin-right: 5%;
                 }
+            }
+        }
+
+        ::v-deep .el-dialog {
+            width: 20%;
+            margin-top: 50%;
+            border-radius: 6px;
+            font-size: x-large;
+            .el-input {
+
+                width: 60%;
+                margin-right: 30px;
             }
         }
     }

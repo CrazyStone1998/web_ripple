@@ -5,7 +5,10 @@
                 <!--上传头像-->
                 <el-upload
                         class="avatar-uploader"
-                        action="https://jsonplaceholder.typicode.com/posts/"
+                        ref="upload"
+                        list-type="picture"
+                        :action="oss_url"
+                        :data="oss_data"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
@@ -116,7 +119,18 @@
                 }
                 return callback(new Error("请确认密码"))
             };
+
             return {
+                // Oss上传
+                oss_data: {
+                    policy: '',
+                    signature: '',
+                    key: '',
+                    ossaccessKeyId: '',
+                    dir: '',
+                    host: ''
+                },
+                oss_url: 'http://landyaos.oss-cn-beijing.aliyuncs.com/',
                 // 头像地址
                 icon_url: "",
                 // 同意政策
@@ -193,20 +207,34 @@
             handleAvatarSuccess(res, file) {
                 this.icon_url = URL.createObjectURL(file.raw);
             },
-            beforeAvatarUpload(file) {
-                this.icon_url = "http://tiebapic.baidu.com/forum/pic/item/167295160924ab182b6a505722fae6cd7b890b62.jpg";
-                console.log(file);
-                // const isJPG = file.type === 'image/jpeg';
-                // const isLt2M = file.size / 1024 / 1024 < 2;
-                //
-                // if (!isJPG) {
-                //     this.$message.error('上传头像图片只能是 JPG 格式!');
-                // }
-                // if (!isLt2M) {
-                //     this.$message.error('上传头像图片大小不能超过 2MB!');
-                // }
-                // return isJPG && isLt2M;
-                return true;
+            // handleAvatarSuccess() {
+            //
+            // },
+            async beforeAvatarUpload(file) {
+                this.icon_url = URL.createObjectURL(file.raw);
+                this.registerForm.icon = "https://landyaos.oss-cn-beijing.aliyuncs.com/avatar/" + file.name;
+
+                const {data: result} = await this.$http.get("aliyun/oss/policy");
+                console.log('1.5')
+                if (result.status === 200) { // 登录成功
+                    console.log('执行到这里 upload   2')
+                    this.$message.success(result.message);
+                    this.oss_data.policy = result.data.policy;
+                    this.oss_data.signature = result.data.signature;
+                    this.oss_data.ossaccessKeyId = result.data.accessKeyId;
+                    this.oss_data.key = result.data.dir + '/${filename}';
+                    console.log(this.oss_data.key);
+                    this.oss_data.dir = result.data.dir;
+                    this.oss_data.host = result.data.host;
+                    console.log(this.oss_data);
+                    return true;
+                } else { // 登录失败
+                    this.$message.error(result.message);
+                    console.log(result.message);
+                    console.log("********");
+                    return false;
+                }
+
             }
         }
     }

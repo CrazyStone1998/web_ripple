@@ -20,20 +20,12 @@ import UserDetail from "../components/detail/UserDetail";
 import MovieDetail from "../components/detail/MovieDetail";
 import TopRank from "../views/TopRank";
 import CelebrityDetail from "../components/detail/CelebrityDetail";
-import Demo from "../views/Demo";
 import NotFound from "../views/NotFound";
-import test from "../views/test";
 
 
 Vue.use(VueRouter);
 
 const routes = [
-    {
-        path: "/demo", component: Demo
-    },
-    {
-        path: "/test", component: test
-    },
 
     // 基础路由
     {

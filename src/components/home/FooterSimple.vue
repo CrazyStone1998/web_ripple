@@ -14,6 +14,6 @@
     @import "src/assets/sass/global";
     .copyright {
         background-color: transparent;
-        color: $bg_black_global;
+        color: $bg_white_global;
     }
 </style>
