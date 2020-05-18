@@ -211,19 +211,15 @@
             //
             // },
             async beforeAvatarUpload(file) {
-                this.icon_url = URL.createObjectURL(file.raw);
+                // this.icon_url = URL.createObjectURL(file.raw);
                 this.registerForm.icon = "https://landyaos.oss-cn-beijing.aliyuncs.com/avatar/" + file.name;
-
                 const {data: result} = await this.$http.get("aliyun/oss/policy");
-                console.log('1.5')
                 if (result.status === 200) { // 登录成功
-                    console.log('执行到这里 upload   2')
                     this.$message.success(result.message);
                     this.oss_data.policy = result.data.policy;
                     this.oss_data.signature = result.data.signature;
                     this.oss_data.ossaccessKeyId = result.data.accessKeyId;
                     this.oss_data.key = result.data.dir + '/${filename}';
-                    console.log(this.oss_data.key);
                     this.oss_data.dir = result.data.dir;
                     this.oss_data.host = result.data.host;
                     console.log(this.oss_data);
