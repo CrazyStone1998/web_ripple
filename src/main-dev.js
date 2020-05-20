@@ -6,15 +6,12 @@ import store from "./store";
 import axios from "axios";
 import "./plugins/element.js";
 import "./plugins/videoPlayer"
-import "./assets/js/globalArgs";
-
 import "./assets/sass/global.scss";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "./assets/js/iconfont";
 import "./assets/sass/fonts.scss";
-
-
+import "./registerServiceWorker";
 
 // 简单配置
 NProgress.inc(0.2);
@@ -40,7 +37,6 @@ axios.interceptors.response.use(config => {
   return config
 });
 
-
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false;
 
@@ -49,7 +45,6 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
   return originalPush.call(this, location).catch(err => err)
 };
-
 
 new Vue({
   router,

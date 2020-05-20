@@ -21,15 +21,44 @@ import MovieDetail from "../components/detail/MovieDetail";
 import TopRank from "../views/TopRank";
 import CelebrityDetail from "../components/detail/CelebrityDetail";
 import NotFound from "../views/NotFound";
+import Mobile from "../views/Mobile";
+import MIndex from "../components/webapp/MIndex";
+import MResource from "../components/webapp/MResource";
+import MRank from "../components/webapp/MRank";
+import MMine from "../components/webapp/MMine";
+import MLogin from "../components/webapp/MLogin";
+import MRegister from "../components/webapp/MRegister";
+import MDetail from "../components/webapp/MDetail";
 
 
 Vue.use(VueRouter);
 
 const routes = [
-
-    // 基础路由
+    // mobile
     {
-        path: "/", redirect: Home
+        path: "/mobile", name: "Mobile", redirect: MIndex, component: Mobile, children: [
+            {path: "index", name: "MIndex", component: MIndex},
+            {path: "resource", name: "MResource", component: MResource},
+            {path: "rank", name: "MRank", component: MRank},
+            {path: "mine", name: "MMine", component: MMine},
+            {
+                path: "detail/:movieId", name: "MDetail", component: MDetail,
+                props: route => ({movieId: route.params.movieId, movieInfo: route.params.movieInfo})
+            },
+        ]
+    },
+    {
+      path: "/mobile/login", name: "MLogin", component: MLogin
+    },
+    {
+        path: "/mobile/register", name: "MRegister", component: MRegister
+    },
+
+
+
+    // pc
+    {
+        path: "/pc", name: "Home", component: Home
     },
 
     {
@@ -98,17 +127,17 @@ const routes = [
             },
         ]
     },
+
     {
         path: "/404",
         name: "NotFound",
         component: NotFound
     },
+
     {
         path: "*", // 此处需特别注意置于最底部
         redirect: "/404"
     },
-
-
 ];
 
 const router = new VueRouter({

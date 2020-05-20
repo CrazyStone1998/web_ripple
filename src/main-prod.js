@@ -6,8 +6,7 @@ import store from "./store";
 import axios from "axios";
 import "./plugins/element.js";
 import "./plugins/videoPlayer"
-import "./assets/js/globalArgs";
-
+import "./registerServiceWorker";
 import "./assets/sass/global.scss";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";

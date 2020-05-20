@@ -15,8 +15,8 @@ module.exports = {
             }
         ],
         // 展开运算符,发布产品时候的插件数组
-        // 'transform-remove-console',
-        ...prodPlugins
+        'transform-remove-console',
+        // ...prodPlugins
 
     ]
 };

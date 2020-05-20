@@ -4,10 +4,8 @@
 </template>
 
 <script>
-    import RioVideoPlayer from "./RioVideoPlayer";
     export default {
         name: "Drawer",
-        components: {RioVideoPlayer}
     }
 </script>
 
